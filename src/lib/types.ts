@@ -45,5 +45,5 @@ export const DROP_CATEGORY_LABELS: Record<DropCategory, string> = {
 // { label: '2 hours', minutes: 120 }, { label: '4 hours', minutes: 240 }, { label: 'End of day', minutes: 720 }
 export const TTL_OPTIONS = [
   { label: '1 min (test)', minutes: 1 },
-  { label: '3 min (test)', minutes: 3 },
+  { label: '15 min (test)', minutes: 15 },
 ] as const;
