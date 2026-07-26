@@ -1,0 +1,93 @@
+-- north-star-neighbors schema
+-- Run against a Neon Postgres database. Requires the postgis extension.
+
+create extension if not exists postgis;
+create extension if not exists pgcrypto; -- gen_random_uuid()
+
+-- Pre-approved public/civic zones. Drops must be anchored to one of these
+-- rather than an arbitrary (potentially private-residence) coordinate.
+-- Nationwide coverage comes from a live OSM Overpass lookup (src/lib/overpass.ts);
+-- each anchor actually used gets upserted here by osm_id, both as a cache and
+-- so `drops.anchor_id` keeps a real foreign key to reference.
+create table if not exists civic_anchors (
+  id uuid primary key default gen_random_uuid(),
+  osm_id text unique,
+  name text not null,
+  category text not null check (category in ('library', 'transit_hub', 'community_center', 'park_plaza', 'fire_station')),
+  address text,
+  location geography(point, 4326) not null
+);
+
+create index if not exists civic_anchors_location_idx on civic_anchors using gist (location);
+
+create table if not exists drops (
+  id uuid primary key default gen_random_uuid(),
+  anchor_id uuid not null references civic_anchors(id),
+  location geography(point, 4326) not null,
+  categories text[] not null,
+  details text check (char_length(details) <= 140),
+  -- Required (enforced in createDrop) visual confirmation of the supplies.
+  -- Re-encoded client-side (strips EXIF/GPS) before upload; purged
+  -- automatically with the row on complete/cancel/expire.
+  photo bytea,
+  photo_content_type text,
+  status text not null default 'AVAILABLE' check (status in ('AVAILABLE', 'CLAIMED', 'COMPLETED', 'HIDDEN')),
+  provider_handle text not null,
+  provider_token_hash text not null,
+  claimant_handle text,
+  claimant_token_hash text,
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now(),
+  claimed_at timestamptz,
+  completed_at timestamptz
+);
+
+create index if not exists drops_location_idx on drops using gist (location);
+create index if not exists drops_status_idx on drops (status);
+create index if not exists drops_expires_at_idx on drops (expires_at);
+
+create table if not exists flags (
+  id uuid primary key default gen_random_uuid(),
+  drop_id uuid not null references drops(id) on delete cascade,
+  device_hash text not null,
+  created_at timestamptz not null default now(),
+  unique (drop_id, device_hash)
+);
+
+-- Aggregate, pseudonymous trust score. Keyed by a hash of the client-held
+-- reputation token so no PII or stable device identifier is stored.
+create table if not exists reputation (
+  handle_token_hash text primary key,
+  handle text not null,
+  positive_count int not null default 0,
+  negative_count int not null default 0,
+  completed_count int not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+-- Lightweight rolling-window rate limiting, keyed by a client-held device
+-- hash (never a raw IP or fingerprint persisted long-term).
+create table if not exists request_log (
+  id bigserial primary key,
+  actor_hash text not null,
+  action text not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists request_log_actor_action_idx on request_log (actor_hash, action, created_at);
+
+-- Seed: well-known public civic anchors across the Twin Cities metro.
+-- Coordinates are approximate landmark locations, not exact building entries.
+insert into civic_anchors (name, category, address, location) values
+  ('Minneapolis Central Library', 'library', '300 Nicollet Mall, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2723, 44.9773), 4326)::geography),
+  ('East Lake Library', 'library', '2727 E Lake St, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2478, 44.9484), 4326)::geography),
+  ('Saint Paul Central Library', 'library', '90 W 4th St, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.0958, 44.9445), 4326)::geography),
+  ('Rondo Community Outreach Library', 'library', '461 N Dale St, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.1180, 44.9556), 4326)::geography),
+  ('Union Depot', 'transit_hub', '214 4th St E, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.0879, 44.9486), 4326)::geography),
+  ('Nicollet Mall Station', 'transit_hub', 'Nicollet Mall, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2707, 44.9757), 4326)::geography),
+  ('Franklin Avenue Station', 'transit_hub', '31 Franklin Ave W, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2465, 44.9625), 4326)::geography),
+  ('Brian Coyle Community Center', 'community_center', '420 15th Ave S, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2477, 44.9686), 4326)::geography),
+  ('Government Plaza', 'park_plaza', '300 S 6th St, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2654, 44.9772), 4326)::geography),
+  ('Brooklyn Park Community Activity Center', 'community_center', '5600 85th Ave N, Brooklyn Park, MN', ST_SetSRID(ST_MakePoint(-93.3599, 45.1017), 4326)::geography),
+  ('Coon Rapids Community Center', 'community_center', '11155 Robinson Dr NW, Coon Rapids, MN', ST_SetSRID(ST_MakePoint(-93.3030, 45.1732), 4326)::geography)
+on conflict do nothing;

@@ -1,65 +1,180 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useCallback, useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Map, TWIN_CITIES_CENTER } from '@/components/Map';
+import { DropDrawer } from '@/components/DropDrawer';
+import { DropDialog } from '@/components/DropDialog';
+import { Button } from '@/components/ui/button';
+import { useIdentity } from '@/hooks/useIdentity';
+import { useMyDrops } from '@/hooks/useMyDrops';
+import { expireDrop } from '@/app/actions';
+import type { DropSummary } from '@/lib/types';
+
+const POLL_MS = 6000;
+
+function HomePageInner() {
+  const identity = useIdentity();
+  const { records, add, remove, byId } = useMyDrops();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [publicDrops, setPublicDrops] = useState<Record<string, DropSummary>>({});
+  const [myDropDetails, setMyDropDetails] = useState<Record<string, DropSummary>>({});
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [userCenter, setUserCenter] = useState<[number, number] | null>(null);
+  const [dropOpen, setDropOpen] = useState(false);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserCenter([pos.coords.longitude, pos.coords.latitude]),
+      () => {
+        // Denied or unavailable — silently keep the Twin Cities default view.
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    // Reading a URL param to sync a one-time UI action, not a local computation.
+    if (searchParams.get('drop') === '1') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDropOpen(true);
+      router.replace('/');
+    }
+  }, [searchParams, router]);
+
+  const refreshPublic = useCallback(async () => {
+    const res = await fetch('/api/drops');
+    if (!res.ok) return;
+    const data: { drops: DropSummary[] } = await res.json();
+    setPublicDrops(Object.fromEntries(data.drops.map((d) => [d.id, d])));
+  }, []);
+
+  const refreshMine = useCallback(async () => {
+    const results = await Promise.all(
+      records.map(async (r) => {
+        const res = await fetch(`/api/drops/${r.dropId}`);
+        if (!res.ok) return null;
+        const data: { drop: DropSummary } = await res.json();
+        return data.drop;
+      }),
+    );
+    const found = results.filter((d): d is DropSummary => d !== null);
+    setMyDropDetails(Object.fromEntries(found.map((d) => [d.id, d])));
+
+    for (const r of records) {
+      if (!found.some((d) => d.id === r.dropId)) remove(r.dropId);
+    }
+  }, [records, remove]);
+
+  useEffect(() => {
+    // Polling an external source (the live pins API), not a local computation.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    refreshPublic();
+    const id = setInterval(refreshPublic, POLL_MS);
+    return () => clearInterval(id);
+  }, [refreshPublic]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    refreshMine();
+    const id = setInterval(refreshMine, POLL_MS);
+    return () => clearInterval(id);
+  }, [refreshMine]);
+
+  const combined: Record<string, DropSummary> = { ...publicDrops, ...myDropDetails };
+  const drops = Object.values(combined);
+  const selected = selectedId ? combined[selectedId] : null;
+  const myRecord = selectedId ? byId(selectedId) : null;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="relative h-[calc(100vh-56px)] w-full">
+      <Map
+        markers={drops.map((d) => ({
+          id: d.id,
+          lat: d.lat,
+          lng: d.lng,
+          isMine: !!byId(d.id),
+          createdAt: d.createdAt,
+          expiresAt: d.expiresAt,
+          categories: d.categories,
+        }))}
+        onMarkerClick={setSelectedId}
+        onMarkerExpire={(id) => {
+          setPublicDrops((prev) => {
+            const next = { ...prev };
+            delete next[id];
+            return next;
+          });
+          setMyDropDetails((prev) => {
+            const next = { ...prev };
+            delete next[id];
+            return next;
+          });
+          remove(id);
+          expireDrop(id);
+        }}
+        center={userCenter ?? TWIN_CITIES_CENTER}
+        zoom={userCenter ? 13 : 11}
+      />
+
+      <Button
+        onClick={() => setDropOpen(true)}
+        className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 h-auto rounded-full bg-mn-blue px-6 py-3 text-base font-medium text-white shadow-lg hover:bg-mn-blue/90"
+      >
+        + Add Drop
+      </Button>
+
+      {drops.length === 0 && (
+        <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1.5 text-sm text-muted-foreground shadow">
+          No active pickups right now
+        </div>
+      )}
+
+      <DropDialog
+        open={dropOpen}
+        onOpenChange={setDropOpen}
+        center={userCenter ?? TWIN_CITIES_CENTER}
+        identity={identity}
+        onDropped={(record) => {
+          add(record);
+          refreshPublic();
+          refreshMine();
+        }}
+      />
+
+      {selected && identity && (
+        <DropDrawer
+          drop={selected}
+          identity={identity}
+          myRecord={myRecord}
+          onClose={() => setSelectedId(null)}
+          onClaimed={(record) => {
+            add(record);
+            refreshPublic();
+            refreshMine();
+          }}
+          onCompleted={(dropId) => {
+            remove(dropId);
+            setSelectedId(null);
+            refreshPublic();
+          }}
+          onCancelled={(dropId) => {
+            remove(dropId);
+            setSelectedId(null);
+            refreshPublic();
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      )}
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense>
+      <HomePageInner />
+    </Suspense>
   );
 }
