@@ -1,12 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Open_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
-// Matches mn.gov's own body font.
+// Matches state civic typography standards
 const openSans = Open_Sans({
   variable: "--font-open-sans",
   subsets: ["latin"],
@@ -16,6 +14,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: '#003865',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: "North Star Neighbors",
@@ -32,24 +38,22 @@ export default function RootLayout({
       lang="en"
       className={`${openSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         <header className="flex h-14 shrink-0 items-center justify-between bg-mn-blue px-4 shadow-sm">
-          <Link href="/" className="font-semibold text-white">
-            North Star Neighbors - Mutual Aid Network
+          <Link href="/" className="font-semibold text-white text-sm sm:text-base truncate mr-2">
+            North Star Neighbors
           </Link>
-          <nav className="flex gap-4 text-sm font-medium text-white/85">
-            <Link href="/?drop=1" className="hover:text-mn-green">
+          <nav className="flex gap-3 sm:gap-4 text-sm font-medium text-white/85 shrink-0">
+            <Link href="/?drop=1" className="hover:text-mn-green transition-colors">
               Add Drop
             </Link>
-            <Link href="/manage" className="hover:text-mn-green">
+            <Link href="/manage" className="hover:text-mn-green transition-colors">
               My Drops
             </Link>
           </nav>
         </header>
         <main className="flex flex-1 flex-col">{children}</main>
         <Toaster position="top-center" />
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

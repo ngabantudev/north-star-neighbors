@@ -2,8 +2,8 @@ import { sql } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(_req: Request, ctx: RouteContext<'/api/drops/[id]/photo'>) {
-  const { id } = await ctx.params;
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   const rows = await sql`
     select photo, photo_content_type

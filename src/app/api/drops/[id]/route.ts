@@ -6,8 +6,8 @@ export const dynamic = 'force-dynamic';
 // Detail lookup by id, used by the provider/claimant who already hold the id
 // locally (from creating or claiming the pin) to poll status even after the
 // pin has been masked from the public list. Never returns token hashes.
-export async function GET(_req: Request, ctx: RouteContext<'/api/drops/[id]'>) {
-  const { id } = await ctx.params;
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   const rows = await sql`
     select
