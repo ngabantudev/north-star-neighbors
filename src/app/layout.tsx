@@ -3,6 +3,7 @@ import { Open_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 // Matches mn.gov's own body font.
 const openSans = Open_Sans({
@@ -46,6 +47,7 @@ export default function RootLayout({
         </header>
         <main className="flex flex-1 flex-col">{children}</main>
         <Toaster position="top-center" />
+        <Analytics />
       </body>
     </html>
   );
