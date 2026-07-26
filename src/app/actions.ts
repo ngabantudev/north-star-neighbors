@@ -4,12 +4,10 @@ import { sql } from '@/lib/db';
 import { hashToken } from '@/lib/crypto';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { queryNearbyAnchors } from '@/lib/overpass';
-import type { DropCategory } from '@/lib/types';
+import { TTL_MIN_MINUTES, TTL_MAX_MINUTES, type DropCategory } from '@/lib/types';
 
 const ANCHOR_TOLERANCE_METERS = 200;
 const FLAG_THRESHOLD = 3;
-// TEST VALUES (1/3 min) — see src/lib/types.ts TTL_OPTIONS for the swap-back note.
-const VALID_TTL_MINUTES = [1, 3];
 const VALID_CATEGORIES: DropCategory[] = ['produce', 'coats', 'medical', 'water', 'baby', 'general'];
 const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 
@@ -44,7 +42,7 @@ export async function createDrop(input: {
   if (!(await checkRateLimit(input.deviceHash, 'create_drop'))) {
     return fail('Too many drops created recently. Try again later.');
   }
-  if (!VALID_TTL_MINUTES.includes(input.ttlMinutes)) return fail('Invalid expiry.');
+  if (input.ttlMinutes < TTL_MIN_MINUTES || input.ttlMinutes > TTL_MAX_MINUTES) return fail('Invalid expiry.');
   if (input.categories.length === 0 || !input.categories.every((c) => VALID_CATEGORIES.includes(c))) {
     return fail('Select at least one valid category.');
   }

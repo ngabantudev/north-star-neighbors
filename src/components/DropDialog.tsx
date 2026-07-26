@@ -24,14 +24,14 @@ import { checkImage } from '@/lib/nsfwCheck';
 import { Map } from '@/components/Map';
 import type { Identity } from '@/hooks/useIdentity';
 import type { MyDropRecord } from '@/components/DropDrawer';
-import { DROP_CATEGORY_LABELS, TTL_OPTIONS, type CivicAnchor, type DropCategory } from '@/lib/types';
+import { DROP_CATEGORY_LABELS, TTL_PRESETS, TTL_MIN_MINUTES, TTL_MAX_MINUTES, type CivicAnchor, type DropCategory } from '@/lib/types';
 import { formatDistance } from '@/lib/distance';
 
 const dropFormSchema = z.object({
   categories: z.array(z.string()).min(1, 'Select at least one category'),
   amount: z.number({ error: 'Required' }).min(1, 'Must be at least 1'),
   description: z.string().trim().min(1, 'Required').max(100, 'Keep it short'),
-  ttlMinutes: z.number({ error: 'Select an expiry' }),
+  ttlMinutes: z.number({ error: 'Select an expiry' }).min(TTL_MIN_MINUTES, `Min ${TTL_MIN_MINUTES} min`).max(TTL_MAX_MINUTES, `Max ${TTL_MAX_MINUTES} min`),
 });
 
 type DropFormValues = z.infer<typeof dropFormSchema>;
@@ -90,7 +90,7 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
       categories: [],
       amount: 1,
       description: '',
-      ttlMinutes: undefined as unknown as number,
+      ttlMinutes: 15,
     },
     mode: 'onChange',
   });
@@ -101,7 +101,7 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
       categories: [],
       amount: 1,
       description: '',
-      ttlMinutes: undefined as unknown as number,
+      ttlMinutes: 15,
     });
     setSubmitError(null);
     setPhoto({ status: 'idle' });
@@ -427,16 +427,53 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
               control={form.control}
               name="ttlMinutes"
               render={({ field }) => (
-                <ToggleGroup
-                  value={field.value !== undefined ? [String(field.value)] : []}
-                  onValueChange={(value) => field.onChange(value[0] ? Number(value[0]) : undefined)}
-                >
-                  {TTL_OPTIONS.map((opt) => (
-                    <ToggleGroupItem key={opt.minutes} value={String(opt.minutes)} variant="outline" className={TOGGLE_SELECTED}>
-                      {opt.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="shrink-0"
+                      onClick={() => field.onChange(Math.max(TTL_MIN_MINUTES, (field.value ?? 15) - 5))}
+                    >
+                      −5
+                    </Button>
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      min={TTL_MIN_MINUTES}
+                      max={TTL_MAX_MINUTES}
+                      step={5}
+                      value={field.value ?? 15}
+                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                      className="w-20 shrink-0 text-center"
+                    />
+                    <span className="text-sm text-muted-foreground">min</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="shrink-0"
+                      onClick={() => field.onChange(Math.min(TTL_MAX_MINUTES, (field.value ?? 15) + 5))}
+                    >
+                      +5
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {TTL_PRESETS.map((preset) => (
+                      <Button
+                        key={preset.minutes}
+                        type="button"
+                        variant={field.value === preset.minutes ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => field.onChange(preset.minutes)}
+                        className={field.value === preset.minutes ? 'bg-mn-blue hover:bg-mn-blue/90' : ''}
+                      >
+                        {preset.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               )}
             />
           </div>
