@@ -13,6 +13,17 @@ import { createHash } from 'node:crypto';
 // not how precisely someone's real position is revealed (it never is).
 const ANCHOR_TOLERANCE_METERS = 500;
 const FLAG_THRESHOLD = 3;
+// Providers with an established, mostly-positive completion history get a
+// higher bar before flags auto-hide their drop, so a handful of bad-faith
+// flags can't silently take down someone with a real track record. This
+// reads the reputation row that's already accumulated on every completed
+// pickup (see completeDrop) — never shown in the UI, purely a server-side
+// abuse-mitigation signal, and trivially reset by clearing localStorage like
+// the rest of this app's identity, so it's a mild deterrent, not real
+// Sybil resistance.
+const TRUSTED_FLAG_THRESHOLD = 6;
+const TRUST_MIN_COMPLETED = 5;
+const TRUST_MAX_NEGATIVE_RATIO = 0.25;
 const VALID_CATEGORIES: DropCategory[] = ['produce', 'coats', 'medical', 'water', 'baby', 'general'];
 const MAX_PHOTO_BYTES = 3 * 1024 * 1024;
 
@@ -239,6 +250,22 @@ export async function completeDrop(input: {
   return { ok: true, data: null };
 }
 
+/** Higher flag threshold for a drop whose provider has an established,
+ *  mostly-positive completion history — see the constants above. */
+async function flagThresholdFor(dropId: string): Promise<number> {
+  const rows = await sql`
+    select r.completed_count, r.negative_count
+    from drops d
+    left join reputation r on r.handle_token_hash = d.provider_token_hash
+    where d.id = ${dropId}
+  `;
+  const row = rows[0] as { completed_count: number | null; negative_count: number | null } | undefined;
+  if (!row?.completed_count || row.completed_count < TRUST_MIN_COMPLETED) return FLAG_THRESHOLD;
+
+  const negativeRatio = (row.negative_count ?? 0) / row.completed_count;
+  return negativeRatio <= TRUST_MAX_NEGATIVE_RATIO ? TRUSTED_FLAG_THRESHOLD : FLAG_THRESHOLD;
+}
+
 export async function flagDrop(input: { dropId: string; deviceHash: string }): Promise<ActionResult<{ hidden: boolean }>> {
   if (!(await checkRateLimit(input.deviceHash, 'flag_drop'))) {
     return fail('Too many reports recently. Try again later.');
@@ -259,14 +286,16 @@ export async function flagDrop(input: { dropId: string; deviceHash: string }): P
     metadata: { flagCount: count },
   });
 
+  const threshold = await flagThresholdFor(input.dropId);
+
   let hidden = false;
-  if (count >= FLAG_THRESHOLD) {
+  if (count >= threshold) {
     await sql`update drops set status = 'HIDDEN' where id = ${input.dropId} and status != 'HIDDEN'`;
     void writeLedger({
       actorHandle: 'anonymous',
       eventType: 'HIDDEN',
       dropId: input.dropId,
-      metadata: { flagCount: count },
+      metadata: { flagCount: count, threshold },
     });
     hidden = true;
   }

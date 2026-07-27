@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Open_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
+import { IdentityBadge } from "@/components/IdentityBadge";
 import "./globals.css";
 
 // Matches state civic typography standards
@@ -43,13 +44,14 @@ export default function RootLayout({
           <Link href="/" className="font-semibold text-white text-sm sm:text-base truncate mr-2">
             North Star Neighbors
           </Link>
-          <nav className="flex gap-3 sm:gap-4 text-sm font-medium text-white/85 shrink-0">
+          <nav className="flex items-center gap-3 sm:gap-4 text-sm font-medium text-white/85 shrink-0">
             <Link href="/?drop=1" className="hover:text-mn-green transition-colors">
               Add Drop
             </Link>
             <Link href="/manage" className="hover:text-mn-green transition-colors">
               My Drops
             </Link>
+            <IdentityBadge />
           </nav>
         </header>
         <main className="flex flex-1 flex-col">{children}</main>
