@@ -104,7 +104,7 @@ and the community flag/report circuit breaker below.
 
 ## Supply photos
 
-Attaching a photo is optional. When one is attached:
+Attaching a photo is **required**. When one is attached:
 
 1. It's resized/recompressed through a `<canvas>` client-side
    (`src/lib/imageCompress.ts`) — this also strips EXIF/GPS/device metadata
