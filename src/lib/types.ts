@@ -2,7 +2,7 @@ export type DropCategory = 'produce' | 'coats' | 'medical' | 'water' | 'baby' | 
 
 export type DropStatus = 'AVAILABLE' | 'CLAIMED' | 'COMPLETED' | 'HIDDEN';
 
-export type AnchorCategory = 'library' | 'transit_hub' | 'community_center' | 'park_plaza' | 'fire_station';
+export type AnchorCategory = 'library' | 'transit_hub' | 'community_center' | 'park_plaza' | 'fire_station' | 'grocery';
 
 export interface CivicAnchor {
   id: string;

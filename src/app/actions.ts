@@ -7,7 +7,11 @@ import { queryNearbyAnchors } from '@/lib/overpass';
 import { TTL_MIN_MINUTES, TTL_MAX_MINUTES, type DropCategory } from '@/lib/types';
 import { createHash } from 'node:crypto';
 
-const ANCHOR_TOLERANCE_METERS = 200;
+// Widening this doesn't weaken the anti-doxxing guarantee below: whatever
+// anchor gets matched, its own coordinate is what gets stored, never the
+// submitter's — so this only controls how far a qualifying anchor may be,
+// not how precisely someone's real position is revealed (it never is).
+const ANCHOR_TOLERANCE_METERS = 500;
 const FLAG_THRESHOLD = 3;
 const VALID_CATEGORIES: DropCategory[] = ['produce', 'coats', 'medical', 'water', 'baby', 'general'];
 const MAX_PHOTO_BYTES = 3 * 1024 * 1024;

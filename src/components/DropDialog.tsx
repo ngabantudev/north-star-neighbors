@@ -39,7 +39,7 @@ type DropFormValues = z.infer<typeof dropFormSchema>;
 // Selected-state highlight for both toggle groups: bold blue, not the default muted gray.
 const TOGGLE_SELECTED = 'data-[pressed]:bg-mn-blue data-[pressed]:text-white data-[pressed]:border-mn-blue';
 
-type NearestState = 'loading' | 'none' | CivicAnchor;
+type CandidatesState = 'loading' | 'none' | CivicAnchor[];
 type GeocodeState = 'loading' | 'none' | string;
 // Photo is captured live from getUserMedia only — never a file picker, so
 // what gets uploaded can't be an old photo pulled from the gallery.
@@ -61,9 +61,10 @@ interface DropDialogProps {
 }
 
 export function DropDialog({ open, onOpenChange, center, identity, onDropped }: DropDialogProps) {
-  const [nearest, setNearest] = useState<NearestState>('loading');
+  const [candidates, setCandidates] = useState<CandidatesState>('loading');
+  // Array to match ToggleGroup's value shape; single-select in practice (never more than 1 entry).
+  const [selectedAnchorId, setSelectedAnchorId] = useState<string[]>([]);
   const [geocode, setGeocode] = useState<GeocodeState>('loading');
-  const [showLocationPreview, setShowLocationPreview] = useState(false);
   const [photo, setPhoto] = useState<PhotoState>({ status: 'idle' });
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -105,18 +106,23 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
     });
     setSubmitError(null);
     setPhoto({ status: 'idle' });
-    setShowLocationPreview(false);
 
     if (!center) {
-      setNearest('none');
+      setCandidates('none');
+      setSelectedAnchorId([]);
       setGeocode('none');
       return;
     }
-    setNearest('loading');
-    fetch(`/api/anchors?lat=${center[1]}&lng=${center[0]}&limit=1`)
+    setCandidates('loading');
+    setSelectedAnchorId([]);
+    fetch(`/api/anchors?lat=${center[1]}&lng=${center[0]}&limit=5`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data: { anchors: CivicAnchor[] } | null) => {
-        setNearest(data?.anchors[0] ?? 'none');
+        const anchors = data?.anchors ?? [];
+        setCandidates(anchors.length > 0 ? anchors : 'none');
+        // Pre-select the nearest as a convenient default — the person still has
+        // to actively keep or change it, it's never a hidden auto-choice.
+        setSelectedAnchorId(anchors.length > 0 ? [anchors[0].id] : []);
       });
 
     setGeocode('loading');
@@ -178,7 +184,10 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
   const description = form.watch('description');
   const ttlMinutes = form.watch('ttlMinutes');
 
-  const hasAnchor = nearest !== 'loading' && nearest !== 'none';
+  const selectedAnchor: CivicAnchor | null = Array.isArray(candidates)
+    ? (candidates.find((a) => a.id === selectedAnchorId[0]) ?? null)
+    : null;
+  const hasAnchor = !!selectedAnchor;
   const hasPhoto = photo.status === 'ready';
   const hasCategories = categories.length > 0;
   const hasDescription = description.trim().length > 0 && !!amount;
@@ -186,7 +195,7 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
 
   const missing: string[] = [];
   if (!hasPhoto) missing.push('a photo');
-  if (!hasAnchor) missing.push('a nearby public site');
+  if (!hasAnchor) missing.push('a meetup location');
   if (!hasCategories) missing.push('a category');
   if (!hasDescription) missing.push('an amount and description');
   if (!hasTtl) missing.push('an expiry time');
@@ -194,8 +203,8 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
   const canSubmit = !submitting && !!identity && missing.length === 0;
 
   async function onSubmit(values: DropFormValues) {
-    if (!identity || !hasAnchor || photo.status !== 'ready') return;
-    const anchor = nearest as CivicAnchor;
+    if (!identity || !selectedAnchor || photo.status !== 'ready') return;
+    const anchor = selectedAnchor;
 
     setSubmitError(null);
     setSubmitting(true);
@@ -292,32 +301,46 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
           </div>
 
           <div className="rounded-lg border border-border p-3">
-            <p className="text-sm font-medium">Suggested meetup location</p>
+            <p className="text-sm font-medium">Meetup location (required)</p>
             <p className="text-xs text-muted-foreground">
-              Your device location is used only to find the nearest one — that public site is always where the
-              pin goes, never your exact location.
+              Pick which public site to use — the nearest one is pre-selected as a default, but you choose.
+              Whichever you pick, that site&apos;s own coordinates are what gets stored, never your exact location.
             </p>
-            {nearest === 'loading' && (
-              <p className="mt-1 text-sm text-muted-foreground">Using your location to find a nearby public site…</p>
+            {candidates === 'loading' && (
+              <p className="mt-2 text-sm text-muted-foreground">Finding nearby public sites…</p>
             )}
-            {hasAnchor && (
+            {Array.isArray(candidates) && (
               <>
-                <button
-                  type="button"
-                  onClick={() => setShowLocationPreview((v) => !v)}
-                  className="mt-1 flex items-center gap-1.5 text-sm text-mn-sky underline-offset-2 hover:underline"
+                <ToggleGroup
+                  value={selectedAnchorId}
+                  onValueChange={(value) => setSelectedAnchorId(value)}
+                  orientation="vertical"
+                  className="mt-2 w-full"
                 >
-                  <MapPin size={14} className="shrink-0" />
-                  {(nearest as CivicAnchor).name} · {formatDistance((nearest as CivicAnchor).distanceMeters ?? 0)} away
-                  {' — '}
-                  {showLocationPreview ? 'hide map' : 'show on map'}
-                </button>
-                {showLocationPreview && (
+                  {candidates.map((a) => (
+                    <ToggleGroupItem
+                      key={a.id}
+                      value={a.id}
+                      variant="outline"
+                      className={`${TOGGLE_SELECTED} w-full justify-start gap-1.5`}
+                    >
+                      <MapPin size={14} className="shrink-0" />
+                      {a.name} · {formatDistance(a.distanceMeters ?? 0)} away
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+                {selectedAnchor && (
                   <div className="mt-2 h-40 overflow-hidden rounded-lg ring-1 ring-border">
                     <Map
-                      markers={[{ id: 'suggested', lat: (nearest as CivicAnchor).lat, lng: (nearest as CivicAnchor).lng }]}
-                      center={[(nearest as CivicAnchor).lng, (nearest as CivicAnchor).lat]}
-                      zoom={15}
+                      markers={candidates.map((a) => ({
+                        id: a.id,
+                        lat: a.lat,
+                        lng: a.lng,
+                        isMine: a.id === selectedAnchor.id,
+                      }))}
+                      onMarkerClick={(id) => setSelectedAnchorId([id])}
+                      center={[selectedAnchor.lng, selectedAnchor.lat]}
+                      zoom={14}
                       showControls={false}
                       className="h-full w-full"
                     />
@@ -325,11 +348,11 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
                 )}
               </>
             )}
-            {nearest === 'none' && (
+            {candidates === 'none' && (
               <>
                 <p className="text-sm text-destructive">
-                  No approved public site (library, transit station, fire station, or community center) was
-                  found near you.
+                  No approved public site (library, transit station, fire station, community center, park,
+                  grocery store, or nonprofit office) was found near you.
                 </p>
                 {geocode !== 'loading' && geocode !== 'none' && (
                   <p className="mt-1 text-xs text-muted-foreground">

@@ -8,10 +8,16 @@ const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
 const TAG_QUERIES: { tag: string; value: string; category: AnchorCategory }[] = [
   { tag: 'amenity', value: 'library', category: 'library' },
   { tag: 'amenity', value: 'community_centre', category: 'community_center' },
+  { tag: 'amenity', value: 'social_facility', category: 'community_center' },
+  { tag: 'office', value: 'ngo', category: 'community_center' },
   { tag: 'amenity', value: 'fire_station', category: 'fire_station' },
   { tag: 'railway', value: 'station', category: 'transit_hub' },
   { tag: 'amenity', value: 'bus_station', category: 'transit_hub' },
   { tag: 'public_transport', value: 'station', category: 'transit_hub' },
+  { tag: 'leisure', value: 'park', category: 'park_plaza' },
+  { tag: 'leisure', value: 'playground', category: 'park_plaza' },
+  { tag: 'shop', value: 'supermarket', category: 'grocery' },
+  { tag: 'shop', value: 'convenience', category: 'grocery' },
 ];
 
 export interface OsmAnchor extends CivicAnchor {
