@@ -76,6 +76,70 @@ create table if not exists request_log (
 
 create index if not exists request_log_actor_action_idx on request_log (actor_hash, action, created_at);
 
+-- Immutable append-only audit ledger: every state transition is recorded here
+-- cryptographically pinned to a pseudonymous handle and high-precision timestamp.
+-- Never updated, never deleted. Powers the public activity feed.
+create table if not exists activity_ledger (
+  id bigserial primary key,
+  actor_handle text not null,
+  event_type text not null check (event_type in (
+    'DROPPED', 'CLAIMED', 'FULFILLED', 'CANCELED', 'FLAGGED', 'HIDDEN', 'EXPIRED'
+  )),
+  drop_id uuid not null,
+  anchor_name text,
+  categories text[],
+  details_hash text,            -- SHA-256 of the plaintext details; reproducible without storing raw text
+  event_metadata jsonb,         -- extensible bag: TTL minutes, flag count, rating, etc.
+  occurred_at timestamptz not null default now()
+);
+
+create index if not exists activity_ledger_occurred_at_idx
+  on activity_ledger (occurred_at desc);
+create index if not exists activity_ledger_anchor_idx
+  on activity_ledger (anchor_name);
+create index if not exists activity_ledger_event_type_idx
+  on activity_ledger (event_type);
+
+-- Database-side self-cleaning TTL triggers: every write to drops triggers
+-- atomic cleanup of expired rows. Also prunes request_log to a rolling 24h.
+create or replace function cleanup_expired_drops()
+returns trigger
+language plpgsql
+as $$
+begin
+  delete from drops where expires_at < now();
+  return null;
+end;
+$$;
+
+drop trigger if exists trg_cleanup_expired_drops_insert on drops;
+create trigger trg_cleanup_expired_drops_insert
+  after insert on drops
+  for each statement
+  execute function cleanup_expired_drops();
+
+drop trigger if exists trg_cleanup_expired_drops_update on drops;
+create trigger trg_cleanup_expired_drops_update
+  after update on drops
+  for each statement
+  execute function cleanup_expired_drops();
+
+create or replace function cleanup_old_request_log()
+returns trigger
+language plpgsql
+as $$
+begin
+  delete from request_log where created_at < now() - interval '24 hours';
+  return null;
+end;
+$$;
+
+drop trigger if exists trg_cleanup_old_request_log on request_log;
+create trigger trg_cleanup_old_request_log
+  after insert on request_log
+  for each statement
+  execute function cleanup_old_request_log();
+
 -- Seed: well-known public civic anchors across the Twin Cities metro.
 -- Coordinates are approximate landmark locations, not exact building entries.
 insert into civic_anchors (name, category, address, location) values

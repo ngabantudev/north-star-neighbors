@@ -5,6 +5,7 @@ import { hashToken } from '@/lib/crypto';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { queryNearbyAnchors } from '@/lib/overpass';
 import { TTL_MIN_MINUTES, TTL_MAX_MINUTES, type DropCategory } from '@/lib/types';
+import { createHash } from 'node:crypto';
 
 const ANCHOR_TOLERANCE_METERS = 200;
 const FLAG_THRESHOLD = 3;
@@ -15,6 +16,39 @@ type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
 function fail<T>(error: string): ActionResult<T> {
   return { ok: false, error };
+}
+
+/** One-way hash of drop details for the immutable ledger — proves a drop was
+ *  described a certain way without exposing plaintext in the public log. */
+function hashDetails(details: string): string {
+  return createHash('sha256').update(details.trim()).digest('hex');
+}
+
+/** Append a row to the append-only activity ledger. Only call from inside
+ *  server actions that have already validated the state transition. */
+async function writeLedger(event: {
+  actorHandle: string;
+  eventType: 'DROPPED' | 'CLAIMED' | 'FULFILLED' | 'CANCELED' | 'FLAGGED' | 'HIDDEN' | 'EXPIRED';
+  dropId: string;
+  anchorName?: string;
+  categories?: DropCategory[];
+  details?: string;
+  metadata?: Record<string, unknown>;
+}): Promise<void> {
+  await sql`
+    insert into activity_ledger (
+      actor_handle, event_type, drop_id, anchor_name, categories,
+      details_hash, event_metadata
+    ) values (
+      ${event.actorHandle},
+      ${event.eventType},
+      ${event.dropId},
+      ${event.anchorName ?? null},
+      ${event.categories ?? null},
+      ${event.details ? hashDetails(event.details) : null},
+      ${event.metadata ? JSON.stringify(event.metadata) : null}::jsonb
+    )
+  `;
 }
 
 export async function registerIdentity(handle: string, token: string): Promise<ActionResult<null>> {
@@ -93,7 +127,19 @@ export async function createDrop(input: {
     returning id
   `;
 
-  return { ok: true, data: { dropId: (rows[0] as { id: string }).id } };
+  const dropId = (rows[0] as { id: string }).id;
+
+  void writeLedger({
+    actorHandle: input.providerHandle,
+    eventType: 'DROPPED',
+    dropId,
+    anchorName: anchor.name,
+    categories: input.categories,
+    details: input.details,
+    metadata: { ttlMinutes: input.ttlMinutes },
+  });
+
+  return { ok: true, data: { dropId } };
 }
 
 export async function claimDrop(input: {
@@ -116,6 +162,12 @@ export async function claimDrop(input: {
   `;
 
   if (rows.length === 0) return fail('This pickup was already claimed or is no longer available.');
+
+  void writeLedger({
+    actorHandle: input.claimantHandle,
+    eventType: 'CLAIMED',
+    dropId: input.dropId,
+  });
 
   return { ok: true, data: { claimToken: input.claimantToken } };
 }
@@ -168,6 +220,16 @@ export async function completeDrop(input: {
     `;
   }
 
+  const actorHandle =
+    tokenHash === drop.provider_token_hash ? drop.provider_handle : drop.claimant_handle!;
+
+  void writeLedger({
+    actorHandle,
+    eventType: 'FULFILLED',
+    dropId: input.dropId,
+    metadata: { positiveRating: input.positiveRating },
+  });
+
   await sql`delete from drops where id = ${input.dropId}`;
 
   return { ok: true, data: null };
@@ -186,9 +248,22 @@ export async function flagDrop(input: { dropId: string; deviceHash: string }): P
   const rows = await sql`select count(*)::int as count from flags where drop_id = ${input.dropId}`;
   const count = (rows[0] as { count: number }).count;
 
+  void writeLedger({
+    actorHandle: 'anonymous',
+    eventType: 'FLAGGED',
+    dropId: input.dropId,
+    metadata: { flagCount: count },
+  });
+
   let hidden = false;
   if (count >= FLAG_THRESHOLD) {
     await sql`update drops set status = 'HIDDEN' where id = ${input.dropId} and status != 'HIDDEN'`;
+    void writeLedger({
+      actorHandle: 'anonymous',
+      eventType: 'HIDDEN',
+      dropId: input.dropId,
+      metadata: { flagCount: count },
+    });
     hidden = true;
   }
 
@@ -205,6 +280,13 @@ export async function cancelDrop(input: { dropId: string; token: string; deviceH
   `;
   if (rows.length === 0) return fail('Not authorized for this pickup.');
 
+  void writeLedger({
+    actorHandle: 'anonymous',
+    eventType: 'CANCELED',
+    dropId: input.dropId,
+    metadata: { canceledByTokenHash: tokenHash.slice(0, 12) + '...' },
+  });
+
   return { ok: true, data: null };
 }
 
@@ -215,6 +297,13 @@ export async function cancelDrop(input: { dropId: string; token: string; deviceH
  * client clock can't delete a still-live pin early.
  */
 export async function expireDrop(dropId: string): Promise<ActionResult<null>> {
-  await sql`delete from drops where id = ${dropId} and expires_at < now()`;
+  const rows = await sql`delete from drops where id = ${dropId} and expires_at < now() returning id`;
+  if (rows.length > 0) {
+    void writeLedger({
+      actorHandle: 'system',
+      eventType: 'EXPIRED',
+      dropId,
+    });
+  }
   return { ok: true, data: null };
 }
