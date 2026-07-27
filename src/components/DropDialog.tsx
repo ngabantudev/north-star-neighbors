@@ -90,7 +90,7 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
       categories: [],
       amount: 1,
       description: '',
-      ttlMinutes: 15,
+      ttlMinutes: 30,
     },
     mode: 'onChange',
   });
@@ -101,7 +101,7 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
       categories: [],
       amount: 1,
       description: '',
-      ttlMinutes: 15,
+      ttlMinutes: 30,
     });
     setSubmitError(null);
     setPhoto({ status: 'idle' });
@@ -434,17 +434,17 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
                       variant="outline"
                       size="icon"
                       className="shrink-0"
-                      onClick={() => field.onChange(Math.max(TTL_MIN_MINUTES, (field.value ?? 15) - 5))}
+                      onClick={() => field.onChange(Math.max(TTL_MIN_MINUTES, (field.value ?? 30) - 30))}
                     >
-                      −5
+                      −30
                     </Button>
                     <Input
                       type="number"
                       inputMode="numeric"
                       min={TTL_MIN_MINUTES}
                       max={TTL_MAX_MINUTES}
-                      step={5}
-                      value={field.value ?? 15}
+                      step={30}
+                      value={field.value ?? 30}
                       onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
                       className="w-20 shrink-0 text-center"
                     />
@@ -454,9 +454,9 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
                       variant="outline"
                       size="icon"
                       className="shrink-0"
-                      onClick={() => field.onChange(Math.min(TTL_MAX_MINUTES, (field.value ?? 15) + 5))}
+                      onClick={() => field.onChange(Math.min(TTL_MAX_MINUTES, (field.value ?? 30) + 30))}
                     >
-                      +5
+                      +30
                     </Button>
                   </div>
                   <div className="flex flex-wrap gap-1.5">

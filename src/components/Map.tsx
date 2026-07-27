@@ -76,7 +76,7 @@ export function Map({
   onMarkerClick,
   onMarkerExpire,
   center,
-  zoom = 12,
+  zoom = 10,
   draggableMarker,
   showControls = true,
   className,
