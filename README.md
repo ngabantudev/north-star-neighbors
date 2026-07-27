@@ -62,9 +62,13 @@ npm run dev
 ## State machine
 
 ```
-AVAILABLE --claim--> CLAIMED --complete--> (purged + rating)
-    |                  |
-    +------cancel--------+---> (purged, "Cancel & Alert")
+Provider creates:  --> AVAILABLE 
+                         │     │
+       Receiver claims:  │     └──> CLAIMED --complete--> (purged + rating)
+                         │              │
+    Receiver cancels:    │              └──> (reverts to AVAILABLE + original TTL)
+                         │
+    Provider cancels:    └──> (purged immediately, "Cancel & Alert")
 
 flag x3 distinct devices --> HIDDEN
 countdown hits zero (client-triggered) or cron sweep --> purged
