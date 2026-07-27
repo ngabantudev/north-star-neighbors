@@ -134,7 +134,9 @@ function HomePageInner() {
           expireDrop(id);
         }}
         center={userCenter ?? TWIN_CITIES_CENTER}
-        zoom={userCenter ? 13 : 11}
+        // Stay city-wide even once geolocation resolves — pan to the user's
+        // area, don't zoom in past a glanceable view (Google Maps-style).
+        zoom={11}
         onMapInstance={setMapInstance}
       />
 
