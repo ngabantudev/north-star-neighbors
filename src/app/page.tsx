@@ -23,10 +23,9 @@ const DENSITY_LEGEND = [
   { color: 'rgba(147, 51, 234, 0.85)', label: 'Unmet demand' },
 ] as const;
 
-const DENSITY_LABEL: Record<string, string> = {
+const DENSITY_LABEL: Record<'off' | 'grid', string> = {
   off: 'Show density',
   grid: 'Density: Grid',
-  anchors: 'Density: Anchors',
 };
 
 function HomePageInner() {
@@ -42,7 +41,7 @@ function HomePageInner() {
   const [dropOpen, setDropOpen] = useState(false);
   const [mapInstance, setMapInstance] = useState<MaplibreMap | null>(null);
   const density = useDensity();
-  useDensityOverlay({ map: mapInstance, view: density.view, grid: density.grid, anchors: density.anchors });
+  useDensityOverlay({ map: mapInstance, view: density.view, grid: density.grid });
 
   useEffect(() => {
     if (!navigator.geolocation) return;

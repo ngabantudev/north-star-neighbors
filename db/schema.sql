@@ -164,10 +164,9 @@ where not exists (select 1 from civic_anchors existing where existing.name = v.n
 
 -- ---------------------------------------------------------------------------
 -- Real-Time Transaction Density & Demand-Supply Indexing
--- Two PostGIS-first aggregation functions that bucket drop/claim activity
--- into spatial grid cells or anchor-level neighborhood zones. Each returns
--- a GeoJSON FeatureCollection ready for MapLibre with zero client-side math.
--- See /api/density/grid and /api/density/anchors for the HTTP endpoints.
+-- A PostGIS-first aggregation function that buckets drop/claim activity into
+-- spatial grid cells. Returns a GeoJSON FeatureCollection ready for MapLibre
+-- with zero client-side math. See /api/density/grid for the HTTP endpoint.
 -- ---------------------------------------------------------------------------
 
 create or replace function grid_density_geojson(
@@ -230,62 +229,6 @@ as $$
       ) as feature
       from merged
       where supply_count > 0 or demand_count > 0
-    )
-  select jsonb_build_object(
-    'type', 'FeatureCollection',
-    'features', coalesce(jsonb_agg(feature), '[]'::jsonb)
-  )
-  from features;
-$$;
-
-create or replace function anchor_density_geojson(
-  demand_window_hours double precision default 4
-)
-returns jsonb
-language sql
-stable
-as $$
-  with
-    supply as (
-      select
-        d.anchor_id,
-        count(*)::int as supply_count
-      from drops d
-      where d.status = 'AVAILABLE' and d.expires_at > now()
-      group by d.anchor_id
-    ),
-    demand as (
-      select
-        ca.id as anchor_id,
-        count(*)::int as demand_count
-      from activity_ledger al
-      join civic_anchors ca on ca.name = al.anchor_name
-      where al.event_type = 'CLAIMED'
-        and al.occurred_at > now() - (demand_window_hours * interval '1 hour')
-      group by ca.id
-    ),
-    features as (
-      select jsonb_build_object(
-        'type', 'Feature',
-        'geometry', ST_AsGeoJSON(ca.location::geometry)::jsonb,
-        'properties', jsonb_build_object(
-          'anchorId', ca.id,
-          'anchorName', ca.name,
-          'anchorCategory', ca.category,
-          'supplyCount', coalesce(s.supply_count, 0),
-          'demandCount', coalesce(d.demand_count, 0),
-          'demandSupplyRatio',
-            case when coalesce(s.supply_count, 0) > 0
-              then round((coalesce(d.demand_count, 0)::numeric / s.supply_count)::numeric, 2)
-              when coalesce(d.demand_count, 0) > 0 then 999
-              else 0
-            end
-        )
-      ) as feature
-      from civic_anchors ca
-      left join supply s on s.anchor_id = ca.id
-      left join demand d on d.anchor_id = ca.id
-      where coalesce(s.supply_count, 0) > 0 or coalesce(d.demand_count, 0) > 0
     )
   select jsonb_build_object(
     'type', 'FeatureCollection',
