@@ -1,29 +1,37 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { FeatureCollection } from 'geojson';
 
-export type DensityView = 'off' | 'grid';
+export type DensityView = 'off' | 'grid' | 'radar';
 
 interface DensityState {
   view: DensityView;
-  toggle: () => void;
-  /** GeoJSON FeatureCollection, null while loading or when view is 'off'. */
+  setView: (view: DensityView) => void;
+  /** GeoJSON FeatureCollection for the grid view, null while loading or inactive. */
   grid: FeatureCollection | null;
+  /** GeoJSON FeatureCollection for the radar view, null while loading or inactive. */
+  radar: FeatureCollection | null;
   loading: boolean;
   error: string | null;
 }
 
 const POLL_MS = 30000; // refresh density data every 30s
 
+const ENDPOINT_BY_VIEW: Record<'grid' | 'radar', string> = {
+  grid: '/api/density/grid',
+  radar: '/api/density/radar',
+};
+
 /**
- * Fetches demand-supply density GeoJSON from the PostGIS-backed API endpoint.
- * Only fetches when the overlay is active (view !== 'off') to avoid wasted
- * database load.
+ * Fetches demand-supply or categorical-request GeoJSON from the PostGIS-backed
+ * density API endpoints. Only fetches when the overlay is active (view !==
+ * 'off') to avoid wasted database load.
  */
 export function useDensity(): DensityState {
   const [view, setView] = useState<DensityView>('off');
   const [grid, setGrid] = useState<FeatureCollection | null>(null);
+  const [radar, setRadar] = useState<FeatureCollection | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const mountedRef = useRef(true);
@@ -33,27 +41,26 @@ export function useDensity(): DensityState {
     return () => { mountedRef.current = false; };
   }, []);
 
-  const toggle = useCallback(() => {
-    setView((prev) => (prev === 'off' ? 'grid' : 'off'));
-  }, []);
-
   useEffect(() => {
     if (view === 'off') {
       // Syncing local state to the view toggle, not a local computation.
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setGrid(null);
+      setRadar(null);
       setLoading(false);
       return;
     }
 
     let cancelled = false;
+    const endpoint = ENDPOINT_BY_VIEW[view];
+    const setData = view === 'grid' ? setGrid : setRadar;
 
     const fetchDensity = async () => {
       setLoading(true);
       try {
-        const gridRes = await fetch('/api/density/grid');
+        const res = await fetch(endpoint);
         if (!mountedRef.current || cancelled) return;
-        if (gridRes.ok) setGrid(await gridRes.json());
+        if (res.ok) setData(await res.json());
         setError(null);
       } catch (e: unknown) {
         if (!mountedRef.current || cancelled) return;
@@ -72,5 +79,5 @@ export function useDensity(): DensityState {
     };
   }, [view]);
 
-  return { view, toggle, grid, loading, error };
+  return { view, setView, grid, radar, loading, error };
 }
