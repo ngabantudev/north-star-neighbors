@@ -13,7 +13,7 @@ create table if not exists civic_anchors (
   id uuid primary key default gen_random_uuid(),
   osm_id text unique,
   name text not null,
-  category text not null check (category in ('library', 'transit_hub', 'community_center', 'park_plaza', 'fire_station')),
+  category text not null check (category in ('library', 'transit_hub', 'community_center', 'park_plaza', 'fire_station', 'grocery')),
   address text,
   location geography(point, 4326) not null
 );
@@ -142,16 +142,154 @@ create trigger trg_cleanup_old_request_log
 
 -- Seed: well-known public civic anchors across the Twin Cities metro.
 -- Coordinates are approximate landmark locations, not exact building entries.
-insert into civic_anchors (name, category, address, location) values
-  ('Minneapolis Central Library', 'library', '300 Nicollet Mall, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2723, 44.9773), 4326)::geography),
-  ('East Lake Library', 'library', '2727 E Lake St, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2478, 44.9484), 4326)::geography),
-  ('Saint Paul Central Library', 'library', '90 W 4th St, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.0958, 44.9445), 4326)::geography),
-  ('Rondo Community Outreach Library', 'library', '461 N Dale St, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.1180, 44.9556), 4326)::geography),
-  ('Union Depot', 'transit_hub', '214 4th St E, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.0879, 44.9486), 4326)::geography),
-  ('Nicollet Mall Station', 'transit_hub', 'Nicollet Mall, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2707, 44.9757), 4326)::geography),
-  ('Franklin Avenue Station', 'transit_hub', '31 Franklin Ave W, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2465, 44.9625), 4326)::geography),
-  ('Brian Coyle Community Center', 'community_center', '420 15th Ave S, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2477, 44.9686), 4326)::geography),
-  ('Government Plaza', 'park_plaza', '300 S 6th St, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2654, 44.9772), 4326)::geography),
-  ('Brooklyn Park Community Activity Center', 'community_center', '5600 85th Ave N, Brooklyn Park, MN', ST_SetSRID(ST_MakePoint(-93.3599, 45.1017), 4326)::geography),
-  ('Coon Rapids Community Center', 'community_center', '11155 Robinson Dr NW, Coon Rapids, MN', ST_SetSRID(ST_MakePoint(-93.3030, 45.1732), 4326)::geography)
-on conflict do nothing;
+-- These have no osm_id, so there's no unique constraint to key an `on conflict`
+-- off of — guard against re-running this file with a name check instead.
+insert into civic_anchors (name, category, address, location)
+select v.name, v.category, v.address, v.location
+from (
+  values
+    ('Minneapolis Central Library', 'library', '300 Nicollet Mall, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2723, 44.9773), 4326)::geography),
+    ('East Lake Library', 'library', '2727 E Lake St, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2478, 44.9484), 4326)::geography),
+    ('Saint Paul Central Library', 'library', '90 W 4th St, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.0958, 44.9445), 4326)::geography),
+    ('Rondo Community Outreach Library', 'library', '461 N Dale St, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.1180, 44.9556), 4326)::geography),
+    ('Union Depot', 'transit_hub', '214 4th St E, Saint Paul, MN', ST_SetSRID(ST_MakePoint(-93.0879, 44.9486), 4326)::geography),
+    ('Nicollet Mall Station', 'transit_hub', 'Nicollet Mall, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2707, 44.9757), 4326)::geography),
+    ('Franklin Avenue Station', 'transit_hub', '31 Franklin Ave W, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2465, 44.9625), 4326)::geography),
+    ('Brian Coyle Community Center', 'community_center', '420 15th Ave S, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2477, 44.9686), 4326)::geography),
+    ('Government Plaza', 'park_plaza', '300 S 6th St, Minneapolis, MN', ST_SetSRID(ST_MakePoint(-93.2654, 44.9772), 4326)::geography),
+    ('Brooklyn Park Community Activity Center', 'community_center', '5600 85th Ave N, Brooklyn Park, MN', ST_SetSRID(ST_MakePoint(-93.3599, 45.1017), 4326)::geography),
+    ('Coon Rapids Community Center', 'community_center', '11155 Robinson Dr NW, Coon Rapids, MN', ST_SetSRID(ST_MakePoint(-93.3030, 45.1732), 4326)::geography)
+) as v(name, category, address, location)
+where not exists (select 1 from civic_anchors existing where existing.name = v.name);
+
+-- ---------------------------------------------------------------------------
+-- Real-Time Transaction Density & Demand-Supply Indexing
+-- Two PostGIS-first aggregation functions that bucket drop/claim activity
+-- into spatial grid cells or anchor-level neighborhood zones. Each returns
+-- a GeoJSON FeatureCollection ready for MapLibre with zero client-side math.
+-- See /api/density/grid and /api/density/anchors for the HTTP endpoints.
+-- ---------------------------------------------------------------------------
+
+create or replace function grid_density_geojson(
+  cell_size double precision default 0.01,
+  demand_window_hours double precision default 4
+)
+returns jsonb
+language sql
+stable
+as $$
+  with
+    supply as (
+      select
+        ST_SnapToGrid(d.location::geometry, cell_size) as cell_geom,
+        count(*)::int as supply_count
+      from drops d
+      where d.status = 'AVAILABLE' and d.expires_at > now()
+      group by cell_geom
+    ),
+    demand as (
+      select
+        ST_SnapToGrid(ca.location::geometry, cell_size) as cell_geom,
+        count(*)::int as demand_count
+      from activity_ledger al
+      join civic_anchors ca on ca.name = al.anchor_name
+      where al.event_type = 'CLAIMED'
+        and al.occurred_at > now() - (demand_window_hours * interval '1 hour')
+      group by cell_geom
+    ),
+    merged as (
+      select
+        coalesce(s.cell_geom, d.cell_geom) as cell_geom,
+        coalesce(s.supply_count, 0) as supply_count,
+        coalesce(d.demand_count, 0) as demand_count
+      from supply s
+      full outer join demand d on s.cell_geom = d.cell_geom
+    ),
+    features as (
+      select jsonb_build_object(
+        'type', 'Feature',
+        'geometry', ST_AsGeoJSON(
+          ST_MakeEnvelope(
+            ST_X(cell_geom),
+            ST_Y(cell_geom),
+            ST_X(cell_geom) + cell_size,
+            ST_Y(cell_geom) + cell_size,
+            4326
+          )
+        )::jsonb,
+        'properties', jsonb_build_object(
+          'supplyCount', supply_count,
+          'demandCount', demand_count,
+          'demandSupplyRatio',
+            case when supply_count > 0
+              then round((demand_count::numeric / supply_count)::numeric, 2)
+              when demand_count > 0 then 999
+              else 0
+            end
+        )
+      ) as feature
+      from merged
+      where supply_count > 0 or demand_count > 0
+    )
+  select jsonb_build_object(
+    'type', 'FeatureCollection',
+    'features', coalesce(jsonb_agg(feature), '[]'::jsonb)
+  )
+  from features;
+$$;
+
+create or replace function anchor_density_geojson(
+  demand_window_hours double precision default 4
+)
+returns jsonb
+language sql
+stable
+as $$
+  with
+    supply as (
+      select
+        d.anchor_id,
+        count(*)::int as supply_count
+      from drops d
+      where d.status = 'AVAILABLE' and d.expires_at > now()
+      group by d.anchor_id
+    ),
+    demand as (
+      select
+        ca.id as anchor_id,
+        count(*)::int as demand_count
+      from activity_ledger al
+      join civic_anchors ca on ca.name = al.anchor_name
+      where al.event_type = 'CLAIMED'
+        and al.occurred_at > now() - (demand_window_hours * interval '1 hour')
+      group by ca.id
+    ),
+    features as (
+      select jsonb_build_object(
+        'type', 'Feature',
+        'geometry', ST_AsGeoJSON(ca.location::geometry)::jsonb,
+        'properties', jsonb_build_object(
+          'anchorId', ca.id,
+          'anchorName', ca.name,
+          'anchorCategory', ca.category,
+          'supplyCount', coalesce(s.supply_count, 0),
+          'demandCount', coalesce(d.demand_count, 0),
+          'demandSupplyRatio',
+            case when coalesce(s.supply_count, 0) > 0
+              then round((coalesce(d.demand_count, 0)::numeric / s.supply_count)::numeric, 2)
+              when coalesce(d.demand_count, 0) > 0 then 999
+              else 0
+            end
+        )
+      ) as feature
+      from civic_anchors ca
+      left join supply s on s.anchor_id = ca.id
+      left join demand d on d.anchor_id = ca.id
+      where coalesce(s.supply_count, 0) > 0 or coalesce(d.demand_count, 0) > 0
+    )
+  select jsonb_build_object(
+    'type', 'FeatureCollection',
+    'features', coalesce(jsonb_agg(feature), '[]'::jsonb)
+  )
+  from features;
+$$;

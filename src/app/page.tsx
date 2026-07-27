@@ -2,16 +2,32 @@
 
 import { useCallback, useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import type { Map as MaplibreMap } from 'maplibre-gl';
 import { Map, TWIN_CITIES_CENTER } from '@/components/Map';
 import { DropDrawer } from '@/components/DropDrawer';
 import { DropDialog } from '@/components/DropDialog';
 import { Button } from '@/components/ui/button';
 import { useIdentity } from '@/hooks/useIdentity';
 import { useMyDrops } from '@/hooks/useMyDrops';
+import { useDensity } from '@/hooks/useDensity';
+import { useDensityOverlay } from '@/components/DensityOverlay';
 import { expireDrop } from '@/app/actions';
 import type { DropSummary } from '@/lib/types';
 
 const POLL_MS = 6000;
+
+const DENSITY_LEGEND = [
+  { color: 'rgba(22, 163, 74, 0.85)', label: 'Well supplied' },
+  { color: 'rgba(234, 179, 8, 0.85)', label: 'Balanced' },
+  { color: 'rgba(220, 38, 38, 0.85)', label: 'High demand' },
+  { color: 'rgba(147, 51, 234, 0.85)', label: 'Unmet demand' },
+] as const;
+
+const DENSITY_LABEL: Record<string, string> = {
+  off: 'Show density',
+  grid: 'Density: Grid',
+  anchors: 'Density: Anchors',
+};
 
 function HomePageInner() {
   const identity = useIdentity();
@@ -24,6 +40,9 @@ function HomePageInner() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [userCenter, setUserCenter] = useState<[number, number] | null>(null);
   const [dropOpen, setDropOpen] = useState(false);
+  const [mapInstance, setMapInstance] = useState<MaplibreMap | null>(null);
+  const density = useDensity();
+  useDensityOverlay({ map: mapInstance, view: density.view, grid: density.grid, anchors: density.anchors });
 
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -117,6 +136,7 @@ function HomePageInner() {
         }}
         center={userCenter ?? TWIN_CITIES_CENTER}
         zoom={userCenter ? 13 : 11}
+        onMapInstance={setMapInstance}
       />
 
       <Button
@@ -125,6 +145,22 @@ function HomePageInner() {
       >
         + Add Drop
       </Button>
+
+      <div className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2">
+        <Button onClick={density.toggle} variant="secondary" className="rounded-full shadow-lg">
+          {DENSITY_LABEL[density.view]}
+        </Button>
+        {density.view !== 'off' && (
+          <div className="flex flex-col gap-1 rounded-lg bg-white/90 px-3 py-2 text-xs text-muted-foreground shadow">
+            {DENSITY_LEGEND.map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
+                {item.label}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {drops.length === 0 && (
         <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-white/90 px-4 py-1.5 text-sm text-muted-foreground shadow">

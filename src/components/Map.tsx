@@ -52,6 +52,9 @@ interface MapProps {
   /** Off for small preview maps, where zoom/geolocate controls would be cramped. Defaults to true. */
   showControls?: boolean;
   className?: string;
+  /** Fires with the live MapLibre instance once created, and with null on teardown.
+   *  Lets parents (e.g. the density overlay) attach without this component knowing about them. */
+  onMapInstance?: (map: MaplibreMap | null) => void;
 }
 
 function urgencyStyle(fractionRemaining: number): { background: string; scale: number } {
@@ -80,6 +83,7 @@ export function Map({
   draggableMarker,
   showControls = true,
   className,
+  onMapInstance,
 }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MaplibreMap | null>(null);
@@ -89,9 +93,14 @@ export function Map({
   const timingRefs = useRef<Record<string, MarkerTiming>>({});
   const dragMarkerRef = useRef<MaplibreMarker | null>(null);
   const onMarkerExpireRef = useRef(onMarkerExpire);
+  const onMapInstanceRef = useRef(onMapInstance);
 
   useEffect(() => {
     onMarkerExpireRef.current = onMarkerExpire;
+  });
+
+  useEffect(() => {
+    onMapInstanceRef.current = onMapInstance;
   });
 
   useEffect(() => {
@@ -108,6 +117,7 @@ export function Map({
       map.addControl(new GeolocateControl({ positionOptions: { enableHighAccuracy: true } }), 'top-right');
     }
     mapRef.current = map;
+    onMapInstanceRef.current?.(map);
 
     // Tearing this instance down (below) aborts its in-flight tile/style
     // requests, which MapLibre reports as an 'error' event on its way out —
@@ -124,6 +134,7 @@ export function Map({
       torndown = true;
       map.remove();
       mapRef.current = null;
+      onMapInstanceRef.current?.(null);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
