@@ -134,9 +134,11 @@ function HomePageInner() {
           expireDrop(id);
         }}
         center={userCenter ?? TWIN_CITIES_CENTER}
-        // Stay city-wide even once geolocation resolves — pan to the user's
-        // area, don't zoom in past a glanceable view (Google Maps-style).
-        zoom={11}
+        // Metro-wide by default, everywhere in the US — pan to the user's
+        // area once geolocation resolves, but stay zoomed out enough to see
+        // their whole metro at a glance (Google Maps-style), not just a
+        // Twin-Cities-specific value.
+        zoom={9}
         onMapInstance={setMapInstance}
       />
 
