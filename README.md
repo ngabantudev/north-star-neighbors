@@ -1,5 +1,7 @@
 # North Star Neighbors
 
+**Philosophy & Core Directive:** Absolute street-level survival logistics, maximum privacy and safety for vulnerable folks, and zero liability. No invasive tracking, no user PII collection, and zero compromises on community safety. The app should feel playful, active, and alive—like discovering kindness in action.
+
 Anonymous, map-first mutual aid logistics for post-disruption recovery in the
 Twin Cities. Providers drop supply pins at pre-approved public sites;
 receivers claim and complete pickups through a fixed state machine — no
