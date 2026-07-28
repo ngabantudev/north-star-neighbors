@@ -22,7 +22,7 @@ Anonymous, map-first mutual aid logistics for post-disruption recovery in the Tw
 3. **Hybrid Hubs & Curbside "Dead Drops":** Providers can choose between vetted public civic anchors (libraries, transit stops) or local residential curbside drop points. Curbside drops automatically apply a secure spatial address masking offset to protect private home addresses.
 4. **One-Tap Mode Selector & Shortest-Path Routing:** When claiming a drop, users instantly select their transport mode (`🚶 Walking`, `🚲 Biking`, `🚗 Rolling`) to draw a privacy-respecting shortest-path route without tracking device sensors.
 5. **Institutional Anchor Integration:** Pre-vetted permanent community organizations (food shelves, shelters) map directly into the base layer via static configurations with operating hours, bulk stock metadata, and automated overflow routing.
-6. **Live Ticker & Public Ledger:** A scrolling activity strip under the header streams community transactions at millisecond precision (`12:03:45.892 PM · Blue Loon logged a drop · East Lake Library`), and `/ledger` opens the same append-only record as a filterable, drill-down history — proof the network is alive and honest, with nothing in it that could identify anyone.
+6. **Live Activity Notifications & Public Ledger:** Community transactions announce themselves as they happen — chat-style chips stacked in the corner of the map, each stamped to the millisecond (`12:03:45.892 PM · Blue Loon logged a drop · East Lake Library`), fading out on their own without ever being dismissed by hand. `/ledger` opens the same append-only record as a filterable, drill-down history: proof the network is alive and honest, with nothing in it that could identify anyone.
 
 ---
 

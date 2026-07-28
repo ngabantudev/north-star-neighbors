@@ -105,33 +105,40 @@
   top: 4.5rem;
 }
 
-/* Live activity ticker. The marquee element holds two identical copies of the
-   feed, so translating a full -50% lands exactly on the start of the second
-   copy and loops with no visible seam. Duration is set inline from the item
-   count (src/components/LiveTicker.tsx). */
-@keyframes nsn-marquee {
+/* Live activity notifications. Each chip runs two animations: it slides in on
+   mount, then fades itself out after --nsn-notify-life (set inline from
+   LIFETIME_MS in src/components/ActivityNotifications.tsx). Doing the expiry
+   as a delayed animation rather than a timer means the overlay never
+   re-renders just to advance a clock — React only removes the node afterwards,
+   once it's already invisible. */
+@keyframes nsn-notify-in {
   from {
-    transform: translateX(0);
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
-    transform: translateX(-50%);
+    opacity: 1;
+    transform: none;
   }
 }
 
-.nsn-marquee {
-  animation-name: nsn-marquee;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+@keyframes nsn-notify-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
 }
 
-/* Hovering is how you catch an entry long enough to click it. */
-.nsn-marquee:hover {
-  animation-play-state: paused;
+.nsn-notify {
+  animation:
+    nsn-notify-in 240ms ease-out both,
+    nsn-notify-out 400ms ease-in var(--nsn-notify-life) forwards;
 }
 
+/* Still has to disappear on schedule — just without the motion. */
 @media (prefers-reduced-motion: reduce) {
-  .nsn-marquee {
-    animation: none;
+  .nsn-notify {
+    animation: nsn-notify-out 1ms linear var(--nsn-notify-life) forwards;
   }
 }
 

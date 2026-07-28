@@ -172,9 +172,7 @@ function HomePageInner() {
   const myRecord = selectedId ? byId(selectedId) : null;
 
   return (
-    // Viewport minus the 56px header, the 32px live ticker, and (below md) the
-    // 4rem bottom tab bar — the map fills exactly what's left, never scrolls.
-    <div className="relative h-[calc(100vh-56px-32px-4rem-env(safe-area-inset-bottom))] w-full md:h-[calc(100vh-56px-32px)]">
+    <div className="relative h-[calc(100vh-56px-4rem-env(safe-area-inset-bottom))] w-full md:h-[calc(100vh-56px)]">
       <Map
         markers={drops.map((d) => ({
           id: d.id,

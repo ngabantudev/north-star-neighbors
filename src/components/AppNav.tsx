@@ -16,8 +16,8 @@ import { useWeatherLayer } from '@/components/WeatherLayerProvider';
  *  - below md: a fixed bottom tab bar (Map / My Drops / Add Drop / Weather /
  *    Profile) in the style of a native mobile app, with Add Drop as a raised
  *    center FAB. The public ledger is deliberately not a sixth tab — five is
- *    already the limit for thumb-sized targets, and the LIVE chip on the
- *    activity ticker directly above links straight to it.
+ *    already the limit for thumb-sized targets, and the "Live ledger" chip on
+ *    the activity notification overlay links straight to it.
  * Both variants read the same WeatherLayerProvider context, so switching
  * viewport size (or simply having both mounted, one hidden via CSS) never
  * doubles the poll, and toggling Weather from either variant flips the same
