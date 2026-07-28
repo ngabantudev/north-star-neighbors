@@ -18,8 +18,13 @@ import { useTemperatureLayer } from '@/components/TemperatureLayer';
 import { useWeatherLayer } from '@/components/WeatherLayerProvider';
 import { useWeatherMap } from '@/hooks/useWeatherMap';
 import { expireDrop } from '@/app/actions';
-import type { DropSummary, TravelMode } from '@/lib/types';
-import { RADAR_CATEGORY_COLORS, RADAR_CATEGORY_LABELS, type DropSummary, type RadarCategory } from '@/lib/types';
+import {
+  RADAR_CATEGORY_COLORS,
+  RADAR_CATEGORY_LABELS,
+  type DropSummary,
+  type RadarCategory,
+  type TravelMode,
+} from '@/lib/types';
 import { TEMPERATURE_GRADIENT_CSS } from '@/lib/temperatureColor';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
 
