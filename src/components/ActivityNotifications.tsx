@@ -129,7 +129,9 @@ export function ActivityNotifications() {
 
   return (
     <>
-      <div className="pointer-events-none fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-3 z-20 flex w-[min(20rem,calc(100vw-1.5rem))] flex-col gap-1.5 md:bottom-4 md:left-4">
+      {/* Top-left of the map, clearing the h-14 site header. Fixed rather than
+          in the layout flow, so no page has to budget height for it. */}
+      <div className="pointer-events-none fixed left-3 top-17 z-20 flex w-[min(20rem,calc(100vw-1.5rem))] flex-col gap-1.5 md:left-4 md:top-18">
         {/* Solid navy + pulsing logo green — the site header's own colorway,
             so the overlay reads as part of the app and not a browser toast. */}
         <Link

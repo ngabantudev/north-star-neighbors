@@ -8,23 +8,13 @@ import { Map, TWIN_CITIES_CENTER } from '@/components/Map';
 import { DropDrawer } from '@/components/DropDrawer';
 import { DropDialog } from '@/components/DropDialog';
 import { Button } from '@/components/ui/button';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useIdentity } from '@/hooks/useIdentity';
 import { useMyDrops } from '@/hooks/useMyDrops';
-import { useDensity, type DensityView } from '@/hooks/useDensity';
-import { useDensityOverlay } from '@/components/DensityOverlay';
-import { useRadarOverlay } from '@/components/RadarOverlay';
 import { useTemperatureLayer } from '@/components/TemperatureLayer';
 import { useWeatherLayer } from '@/components/WeatherLayerProvider';
 import { useWeatherMap } from '@/hooks/useWeatherMap';
 import { expireDrop } from '@/app/actions';
-import {
-  RADAR_CATEGORY_COLORS,
-  RADAR_CATEGORY_LABELS,
-  type DropSummary,
-  type RadarCategory,
-  type TravelMode,
-} from '@/lib/types';
+import { type DropSummary, type TravelMode } from '@/lib/types';
 import { TEMPERATURE_GRADIENT_CSS } from '@/lib/temperatureColor';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
 
@@ -33,24 +23,6 @@ import type { LatLngBounds } from '@/lib/weatherMapPoints';
 // events into one request instead of firing on every settle.
 const VIEWPORT_DEBOUNCE_MS = 400;
 const POLL_MS = 6000;
-
-const GRID_LEGEND = [
-  { color: 'rgba(22, 163, 74, 0.85)', label: 'Well supplied' },
-  { color: 'rgba(234, 179, 8, 0.85)', label: 'Balanced' },
-  { color: 'rgba(220, 38, 38, 0.85)', label: 'High demand' },
-  { color: 'rgba(147, 51, 234, 0.85)', label: 'Unmet demand' },
-] as const;
-
-const RADAR_LEGEND = (Object.keys(RADAR_CATEGORY_COLORS) as RadarCategory[]).map((category) => ({
-  color: RADAR_CATEGORY_COLORS[category],
-  label: RADAR_CATEGORY_LABELS[category],
-}));
-
-const VIEW_LABEL: Record<DensityView, string> = {
-  off: 'Off',
-  grid: 'Grid',
-  radar: 'Radar',
-};
 
 function HomePageInner() {
   const identity = useIdentity();
@@ -65,10 +37,6 @@ function HomePageInner() {
   const [dropOpen, setDropOpen] = useState(false);
   const [mapInstance, setMapInstance] = useState<MaplibreMap | null>(null);
   const [routeLine, setRouteLine] = useState<{ from: [number, number]; to: [number, number]; mode: TravelMode } | null>(null);
-  const density = useDensity();
-  useDensityOverlay({ map: mapInstance, view: density.view, grid: density.grid });
-  useRadarOverlay({ map: mapInstance, view: density.view, radar: density.radar });
-
   const weatherLayer = useWeatherLayer();
   const [viewportBounds, setViewportBounds] = useState<LatLngBounds | null>(null);
   const weatherMap = useWeatherMap({ bounds: viewportBounds, enabled: weatherLayer.active });
@@ -215,34 +183,6 @@ function HomePageInner() {
       >
         + Add Drop
       </Button>
-
-      <div className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2">
-        <ToggleGroup
-          value={[density.view]}
-          onValueChange={(value) => {
-            const next = value[0] as DensityView | undefined;
-            if (next) density.setView(next);
-          }}
-          variant="outline"
-          className="rounded-full bg-white/90 p-1 shadow-lg"
-        >
-          {(Object.keys(VIEW_LABEL) as DensityView[]).map((view) => (
-            <ToggleGroupItem key={view} value={view} className="rounded-full px-3">
-              {VIEW_LABEL[view]}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-        {density.view !== 'off' && (
-          <div className="flex flex-col gap-1 rounded-lg bg-white/90 px-3 py-2 text-xs text-muted-foreground shadow">
-            {(density.view === 'grid' ? GRID_LEGEND : RADAR_LEGEND).map((item) => (
-              <div key={item.label} className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
-                {item.label}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
       <div className="absolute left-1/2 top-16 z-20 flex -translate-x-1/2 flex-col items-center gap-2 md:top-4">
         {heatAlert && !heatBannerDismissed && (
