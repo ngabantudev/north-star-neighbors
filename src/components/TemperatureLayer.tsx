@@ -196,7 +196,9 @@ export function useTemperatureLayer({ map, active, points, bounds }: Temperature
         'text-ignore-placement': true,
       };
       const sharedPaint = {
-        'text-halo-color': '#ffffff',
+        // Black outline reads much better against the light-colored raster
+        // fill than a white one did — the colored fill is what should pop.
+        'text-halo-color': '#000000',
         'text-halo-width': 1.6,
       };
       const clusterAvgExpr = ['/', ['get', 'tempSum'], ['get', 'point_count']] as ExpressionSpecification;
