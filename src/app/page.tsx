@@ -12,7 +12,7 @@ import { useMyDrops } from '@/hooks/useMyDrops';
 import { useDensity } from '@/hooks/useDensity';
 import { useDensityOverlay } from '@/components/DensityOverlay';
 import { expireDrop } from '@/app/actions';
-import type { DropSummary } from '@/lib/types';
+import type { DropSummary, TravelMode } from '@/lib/types';
 
 const POLL_MS = 6000;
 
@@ -40,6 +40,7 @@ function HomePageInner() {
   const [userCenter, setUserCenter] = useState<[number, number] | null>(null);
   const [dropOpen, setDropOpen] = useState(false);
   const [mapInstance, setMapInstance] = useState<MaplibreMap | null>(null);
+  const [routeLine, setRouteLine] = useState<{ from: [number, number]; to: [number, number]; mode: TravelMode } | null>(null);
   const density = useDensity();
   useDensityOverlay({ map: mapInstance, view: density.view, grid: density.grid });
 
@@ -117,6 +118,7 @@ function HomePageInner() {
           createdAt: d.createdAt,
           expiresAt: d.expiresAt,
           categories: d.categories,
+          locationType: d.locationType,
         }))}
         onMarkerClick={setSelectedId}
         onMarkerExpire={(id) => {
@@ -140,6 +142,7 @@ function HomePageInner() {
         // Twin-Cities-specific value.
         zoom={9}
         onMapInstance={setMapInstance}
+        routeLine={routeLine}
       />
 
       <Button
@@ -188,7 +191,11 @@ function HomePageInner() {
           drop={selected}
           identity={identity}
           myRecord={myRecord}
-          onClose={() => setSelectedId(null)}
+          userCenter={userCenter}
+          onClose={() => {
+            setSelectedId(null);
+            setRouteLine(null);
+          }}
           onClaimed={(record) => {
             add(record);
             refreshPublic();
@@ -197,13 +204,18 @@ function HomePageInner() {
           onCompleted={(dropId) => {
             remove(dropId);
             setSelectedId(null);
+            setRouteLine(null);
             refreshPublic();
           }}
           onCancelled={(dropId) => {
             remove(dropId);
             setSelectedId(null);
+            setRouteLine(null);
             refreshPublic();
           }}
+          onRoute={(route) =>
+            setRouteLine(route && userCenter ? { from: userCenter, to: [route.to.lng, route.to.lat], mode: route.mode } : null)
+          }
         />
       )}
     </div>

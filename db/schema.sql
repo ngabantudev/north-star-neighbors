@@ -22,8 +22,22 @@ create index if not exists civic_anchors_location_idx on civic_anchors using gis
 
 create table if not exists drops (
   id uuid primary key default gen_random_uuid(),
-  anchor_id uuid not null references civic_anchors(id),
+  -- Null for curbside drops (no civic anchor involved); required for anchor drops.
+  anchor_id uuid references civic_anchors(id),
+  -- Public-facing coordinate. For curbside drops this is a block-grid-fuzzed
+  -- point (see src/lib/fuzz.ts), never the real pickup location.
   location geography(point, 4326) not null,
+  -- 'anchor' (default, existing behavior) or 'curbside' (residential dead drop).
+  location_type text not null default 'anchor' check (location_type in ('anchor', 'curbside')),
+  -- Real pickup coordinate for curbside drops only. Never returned by any
+  -- public read path — only by the provider/claimant-authenticated
+  -- getExactLocation server action, once a claimant has actually claimed it.
+  exact_location geography(point, 4326),
+  constraint drops_location_type_shape_check check (
+    (location_type = 'anchor' and anchor_id is not null and exact_location is null)
+    or
+    (location_type = 'curbside' and anchor_id is null and exact_location is not null)
+  ),
   categories text[] not null,
   details text check (char_length(details) <= 140),
   -- Required (enforced in createDrop) visual confirmation of the supplies.
