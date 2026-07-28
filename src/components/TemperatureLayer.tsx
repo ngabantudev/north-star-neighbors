@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import type { Map as MaplibreMap, GeoJSONSource, ImageSource } from 'maplibre-gl';
+import type { Map as MaplibreMap, GeoJSONSource, ImageSource, ExpressionSpecification } from 'maplibre-gl';
 import type { FeatureCollection } from 'geojson';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
-import { tempToRgb } from '@/lib/temperatureColor';
+import { tempToRgb, TEMPERATURE_LEGEND_STOPS } from '@/lib/temperatureColor';
 import type { WeatherMapPointReading } from '@/app/api/weather/map/route';
 
 interface TemperatureLayerProps {
@@ -105,6 +105,16 @@ function buildTemperatureCanvas(points: WeatherMapPointReading[], bounds: LatLng
   return big;
 }
 
+// Builds a MapLibre `interpolate` expression from the same stops the
+// canvas gradient uses, so label text is colored on the identical
+// cold-blue-to-hot-red scale as the background fill — one source of truth,
+// and the number itself "pops" independent of whatever the fill looks like
+// underneath it.
+function temperatureColorExpression(input: ExpressionSpecification): ExpressionSpecification {
+  const stops = TEMPERATURE_LEGEND_STOPS.flatMap(([temp, [r, g, b]]) => [temp, `rgb(${r}, ${g}, ${b})`]);
+  return ['interpolate', ['linear'], input, ...stops] as ExpressionSpecification;
+}
+
 function buildLabelsGeoJSON(points: WeatherMapPointReading[]): FeatureCollection {
   return {
     type: 'FeatureCollection',
@@ -186,10 +196,10 @@ export function useTemperatureLayer({ map, active, points, bounds }: Temperature
         'text-ignore-placement': true,
       };
       const sharedPaint = {
-        'text-color': '#111827',
         'text-halo-color': '#ffffff',
-        'text-halo-width': 1.4,
+        'text-halo-width': 1.6,
       };
+      const clusterAvgExpr = ['/', ['get', 'tempSum'], ['get', 'point_count']] as ExpressionSpecification;
 
       map.addLayer({
         id: LABEL_LAYER_CLUSTER,
@@ -198,14 +208,10 @@ export function useTemperatureLayer({ map, active, points, bounds }: Temperature
         filter: ['has', 'point_count'],
         layout: {
           ...sharedLayout,
-          'text-field': [
-            'concat',
-            ['to-string', ['round', ['/', ['get', 'tempSum'], ['get', 'point_count']]]],
-            '°',
-          ],
+          'text-field': ['concat', ['to-string', ['round', clusterAvgExpr]], '°'],
           'text-size': 15,
         },
-        paint: sharedPaint,
+        paint: { ...sharedPaint, 'text-color': temperatureColorExpression(clusterAvgExpr) },
       });
 
       map.addLayer({
@@ -218,7 +224,7 @@ export function useTemperatureLayer({ map, active, points, bounds }: Temperature
           'text-field': ['concat', ['to-string', ['round', ['get', 'tempF']]], '°'],
           'text-size': 13,
         },
-        paint: sharedPaint,
+        paint: { ...sharedPaint, 'text-color': temperatureColorExpression(['get', 'tempF'] as ExpressionSpecification) },
       });
     }
   }, [map, active, points, bounds]);
