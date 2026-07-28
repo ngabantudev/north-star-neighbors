@@ -6,10 +6,19 @@ import {
   Marker as MaplibreMarker,
   NavigationControl,
   GeolocateControl,
+  type GeoJSONSource,
 } from 'maplibre-gl';
 import { formatCountdown } from '@/lib/time';
 import { renderCategoryIconStack } from '@/lib/categoryIcons';
-import type { DropCategory } from '@/lib/types';
+import type { DropCategory, DropLocationType, TravelMode } from '@/lib/types';
+
+const ROUTE_SOURCE_ID = 'nsn-route';
+const ROUTE_LAYER_ID = 'nsn-route-line';
+const ROUTE_COLOR: Record<TravelMode, string> = {
+  walking: '#16a34a',
+  biking: '#0062b2',
+  rolling: '#7c3aed',
+};
 
 export const TWIN_CITIES_CENTER: [number, number] = [-93.265, 44.9778];
 
@@ -35,6 +44,14 @@ export interface MapMarker {
   expiresAt?: string;
   /** Shown as a small stacked-icon cluster inside the pin. */
   categories?: DropCategory[];
+  /** Curbside pins get a dashed ring to signal the location is fuzzed, not exact. */
+  locationType?: DropLocationType;
+}
+
+interface RouteLine {
+  from: [number, number];
+  to: [number, number];
+  mode: TravelMode;
 }
 
 interface MapProps {
@@ -55,6 +72,8 @@ interface MapProps {
   /** Fires with the live MapLibre instance once created, and with null on teardown.
    *  Lets parents (e.g. the density overlay) attach without this component knowing about them. */
   onMapInstance?: (map: MaplibreMap | null) => void;
+  /** Straight-line "instant routing" preview drawn client-side — no directions API call. */
+  routeLine?: RouteLine | null;
 }
 
 function urgencyStyle(fractionRemaining: number): { background: string; scale: number } {
@@ -84,6 +103,7 @@ export function Map({
   showControls = true,
   className,
   onMapInstance,
+  routeLine,
 }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MaplibreMap | null>(null);
@@ -174,7 +194,10 @@ export function Map({
       if (existing) {
         existing.setLngLat([m.lng, m.lat]);
         const pin = pinRefs.current[m.id];
-        if (pin) pin.style.borderColor = m.isMine ? '#0062b2' : '#ffffff';
+        if (pin) {
+          pin.style.borderColor = m.isMine ? '#0062b2' : '#ffffff';
+          pin.classList.toggle('nsn-pin-curbside', m.locationType === 'curbside');
+        }
         continue;
       }
 
@@ -195,7 +218,7 @@ export function Map({
       }
 
       const pin = document.createElement('div');
-      pin.className = 'nsn-pin';
+      pin.className = m.locationType === 'curbside' ? 'nsn-pin nsn-pin-curbside' : 'nsn-pin';
       pin.style.borderColor = m.isMine ? '#0062b2' : '#ffffff';
       if (m.categories && m.categories.length > 0) {
         // Counter-rotated so icons stay upright against the pin's own -45deg rotation.
@@ -277,6 +300,56 @@ export function Map({
       dragMarkerRef.current.setLngLat([draggableMarker.lng, draggableMarker.lat]);
     }
   }, [draggableMarker?.lat, draggableMarker?.lng]);
+
+  // Draws the one-tap "instant routing" straight line — a client-only,
+  // privacy-respecting distance/heading preview, not a real routed path.
+  // No device sensor tracking: the two endpoints are supplied once by the
+  // caller, not continuously polled.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const apply = () => {
+      const existingSource = map.getSource(ROUTE_SOURCE_ID);
+      if (!routeLine) {
+        if (map.getLayer(ROUTE_LAYER_ID)) map.removeLayer(ROUTE_LAYER_ID);
+        if (existingSource) map.removeSource(ROUTE_SOURCE_ID);
+        return;
+      }
+
+      const geojson: GeoJSON.Feature<GeoJSON.LineString> = {
+        type: 'Feature',
+        properties: {},
+        geometry: { type: 'LineString', coordinates: [routeLine.from, routeLine.to] },
+      };
+
+      if (existingSource && existingSource.type === 'geojson') {
+        (existingSource as GeoJSONSource).setData(geojson);
+        map.setPaintProperty(ROUTE_LAYER_ID, 'line-color', ROUTE_COLOR[routeLine.mode]);
+        return;
+      }
+
+      map.addSource(ROUTE_SOURCE_ID, { type: 'geojson', data: geojson });
+      map.addLayer({
+        id: ROUTE_LAYER_ID,
+        type: 'line',
+        source: ROUTE_SOURCE_ID,
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: {
+          'line-color': ROUTE_COLOR[routeLine.mode],
+          'line-width': 4,
+          'line-dasharray': [0.2, 1.6],
+        },
+      });
+    };
+
+    if (map.isStyleLoaded()) {
+      apply();
+    } else {
+      map.once('load', apply);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routeLine?.from[0], routeLine?.from[1], routeLine?.to[0], routeLine?.to[1], routeLine?.mode]);
 
   return <div ref={containerRef} className={className ?? 'h-full w-full'} />;
 }

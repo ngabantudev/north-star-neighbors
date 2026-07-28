@@ -1,22 +1,23 @@
 import { sql } from '@/lib/db';
-import type { DropCategory, DropSummary } from '@/lib/types';
+import type { DropCategory, DropLocationType, DropSummary } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
 // Detail lookup by id, used by the provider/claimant who already hold the id
 // locally (from creating or claiming the pin) to poll status even after the
-// pin has been masked from the public list. Never returns token hashes.
+// pin has been masked from the public list. Never returns token hashes or
+// the real curbside coordinate — see the getExactLocation server action.
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const rows = await sql`
     select
-      d.id, d.anchor_id, a.name as anchor_name,
+      d.id, d.location_type, d.anchor_id, a.name as anchor_name,
       ST_Y(d.location::geometry) as lat, ST_X(d.location::geometry) as lng,
       d.categories, d.details, (d.photo is not null) as has_photo, d.status,
       d.provider_handle, d.claimant_handle, d.expires_at, d.created_at
     from drops d
-    join civic_anchors a on a.id = d.anchor_id
+    left join civic_anchors a on a.id = d.anchor_id
     where d.id = ${id} and d.expires_at > now()
   `;
 
@@ -26,8 +27,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const row = rows[0] as {
     id: string;
-    anchor_id: string;
-    anchor_name: string;
+    location_type: DropLocationType;
+    anchor_id: string | null;
+    anchor_name: string | null;
     lat: number;
     lng: number;
     categories: DropCategory[];
@@ -42,6 +44,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const drop: DropSummary = {
     id: row.id,
+    locationType: row.location_type,
     anchorId: row.anchor_id,
     anchorName: row.anchor_name,
     lat: row.lat,

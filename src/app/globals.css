@@ -83,6 +83,12 @@
   cursor: grab;
 }
 
+/* Dashed outline signals "this pin is fuzzed to the nearest block corner,
+   not the exact pickup point" — the curbside privacy-masking cue. */
+.nsn-pin-curbside {
+  border-style: dashed;
+}
+
 .nsn-timer-badge {
   white-space: nowrap;
   border-radius: 9999px;

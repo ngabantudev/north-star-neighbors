@@ -24,9 +24,26 @@ import { checkImage } from '@/lib/nsfwCheck';
 import { Map } from '@/components/Map';
 import type { Identity } from '@/hooks/useIdentity';
 import type { MyDropRecord } from '@/components/DropDrawer';
-import { DROP_CATEGORY_LABELS, TTL_PRESETS, TTL_MIN_MINUTES, TTL_MAX_MINUTES, type CivicAnchor, type DropCategory } from '@/lib/types';
+import {
+  DROP_CATEGORY_LABELS,
+  TTL_PRESETS,
+  TTL_MIN_MINUTES,
+  TTL_MAX_MINUTES,
+  TTL_CURBSIDE_PRESETS,
+  TTL_CURBSIDE_MIN_MINUTES,
+  TTL_CURBSIDE_MAX_MINUTES,
+  type CivicAnchor,
+  type DropCategory,
+  type DropLocationType,
+} from '@/lib/types';
+import { snapToBlockCorner } from '@/lib/fuzz';
 import { formatDistance } from '@/lib/distance';
+import { haversineMeters } from '@/lib/routing';
 
+// Overall bounds across both location types — the mode-specific range
+// (30min-24hr for a public site, 6-12hr for curbside) is enforced separately
+// in `missing` below, since it depends on runtime state Zod's static schema
+// doesn't see.
 const dropFormSchema = z.object({
   categories: z.array(z.string()).min(1, 'Select at least one category'),
   amount: z.number({ error: 'Required' }).min(1, 'Must be at least 1'),
@@ -61,9 +78,14 @@ interface DropDialogProps {
 }
 
 export function DropDialog({ open, onOpenChange, center, identity, onDropped }: DropDialogProps) {
+  const [mode, setMode] = useState<DropLocationType>('anchor');
   const [candidates, setCandidates] = useState<CandidatesState>('loading');
   // Array to match ToggleGroup's value shape; single-select in practice (never more than 1 entry).
   const [selectedAnchorId, setSelectedAnchorId] = useState<string[]>([]);
+  // The curbside pickup point the user has confirmed/dragged — raw, unfuzzed.
+  // Only ever leaves the browser once, on submit; the server independently
+  // re-derives the published fuzzed point from it.
+  const [curbsideLocation, setCurbsideLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [geocode, setGeocode] = useState<GeocodeState>('loading');
   const [photo, setPhoto] = useState<PhotoState>({ status: 'idle' });
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -104,8 +126,10 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
       description: '',
       ttlMinutes: 30,
     });
+    setMode('anchor');
     setSubmitError(null);
     setPhoto({ status: 'idle' });
+    setCurbsideLocation(center ? { lat: center[1], lng: center[0] } : null);
 
     if (!center) {
       setCandidates('none');
@@ -133,6 +157,18 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, center]);
+
+  // Switching modes swaps the applicable TTL range — snap the current value
+  // into the new range rather than leaving a stale, now-invalid number.
+  function selectMode(next: DropLocationType) {
+    setMode(next);
+    const current = form.getValues('ttlMinutes');
+    if (next === 'curbside') {
+      form.setValue('ttlMinutes', TTL_CURBSIDE_PRESETS[0].minutes, { shouldValidate: true });
+    } else if (current > TTL_MAX_MINUTES || current < TTL_MIN_MINUTES) {
+      form.setValue('ttlMinutes', 30, { shouldValidate: true });
+    }
+  }
 
   async function openCamera() {
     setPhoto({ status: 'requesting' });
@@ -187,24 +223,30 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
   const selectedAnchor: CivicAnchor | null = Array.isArray(candidates)
     ? (candidates.find((a) => a.id === selectedAnchorId[0]) ?? null)
     : null;
-  const hasAnchor = !!selectedAnchor;
+  const hasLocation = mode === 'anchor' ? !!selectedAnchor : !!curbsideLocation;
   const hasPhoto = photo.status === 'ready';
   const hasCategories = categories.length > 0;
   const hasDescription = description.trim().length > 0 && !!amount;
-  const hasTtl = !!ttlMinutes;
+  const ttlInRange =
+    mode === 'curbside'
+      ? !!ttlMinutes && ttlMinutes >= TTL_CURBSIDE_MIN_MINUTES && ttlMinutes <= TTL_CURBSIDE_MAX_MINUTES
+      : !!ttlMinutes;
 
   const missing: string[] = [];
   if (!hasPhoto) missing.push('a photo');
-  if (!hasAnchor) missing.push('a meetup location');
+  if (!hasLocation) missing.push(mode === 'anchor' ? 'a meetup location' : 'a curbside location');
   if (!hasCategories) missing.push('a category');
   if (!hasDescription) missing.push('an amount and description');
-  if (!hasTtl) missing.push('an expiry time');
+  if (!ttlInRange) missing.push('a valid expiry time (6–12 hr for curbside)');
 
   const canSubmit = !submitting && !!identity && missing.length === 0;
 
+  const curbsidePreview = curbsideLocation ? snapToBlockCorner(curbsideLocation.lat, curbsideLocation.lng) : null;
+
   async function onSubmit(values: DropFormValues) {
-    if (!identity || !selectedAnchor || photo.status !== 'ready') return;
-    const anchor = selectedAnchor;
+    if (!identity || photo.status !== 'ready') return;
+    const location = mode === 'anchor' ? selectedAnchor : curbsideLocation;
+    if (!location) return;
 
     setSubmitError(null);
     setSubmitting(true);
@@ -213,8 +255,9 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
     const providerToken = identity.token;
     const photoFile = new File([photo.blob], 'supplies.jpg', { type: 'image/jpeg' });
     const result = await createDrop({
-      lat: anchor.lat,
-      lng: anchor.lng,
+      locationType: mode,
+      lat: location.lat,
+      lng: location.lng,
       categories: values.categories as DropCategory[],
       details: `${values.amount} ${values.description.trim()}`,
       ttlMinutes: values.ttlMinutes,
@@ -231,7 +274,9 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
     }
     onDropped({ dropId: result.data.dropId, token: providerToken, role: 'provider' });
     onOpenChange(false);
-    toast.success('Pin dropped — it’s live on the map now.');
+    toast.success(
+      mode === 'curbside' ? 'Curbside stash dropped — it’s live on the map now.' : 'Pin dropped — it’s live on the map now.',
+    );
   }
 
   return (
@@ -240,7 +285,8 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
         <DialogHeader>
           <DialogTitle>Drop supplies</DialogTitle>
           <DialogDescription>
-            Pins can only be placed at pre-approved public sites — never a private residence.
+            Use a pre-approved public site, or drop it curbside at your own place — your exact address is
+            always masked before it ever reaches the map.
           </DialogDescription>
         </DialogHeader>
 
@@ -300,68 +346,122 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
             )}
           </div>
 
-          <div className="rounded-lg border border-border p-3">
-            <p className="text-sm font-medium">Meetup location (required)</p>
-            <p className="text-xs text-muted-foreground">
-              Pick which public site to use — the nearest one is pre-selected as a default, but you choose.
-              Whichever you pick, that site&apos;s own coordinates are what gets stored, never your exact location.
-            </p>
-            {candidates === 'loading' && (
-              <p className="mt-2 text-sm text-muted-foreground">Finding nearby public sites…</p>
-            )}
-            {Array.isArray(candidates) && (
-              <>
-                <ToggleGroup
-                  value={selectedAnchorId}
-                  onValueChange={(value) => setSelectedAnchorId(value)}
-                  orientation="vertical"
-                  className="mt-2 w-full"
-                >
-                  {candidates.map((a) => (
-                    <ToggleGroupItem
-                      key={a.id}
-                      value={a.id}
-                      variant="outline"
-                      className={`${TOGGLE_SELECTED} w-full justify-start gap-1.5`}
-                    >
-                      <MapPin size={14} className="shrink-0" />
-                      {a.name} · {formatDistance(a.distanceMeters ?? 0)} away
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-                {selectedAnchor && (
-                  <div className="mt-2 h-40 overflow-hidden rounded-lg ring-1 ring-border">
-                    <Map
-                      markers={candidates.map((a) => ({
-                        id: a.id,
-                        lat: a.lat,
-                        lng: a.lng,
-                        isMine: a.id === selectedAnchor.id,
-                      }))}
-                      onMarkerClick={(id) => setSelectedAnchorId([id])}
-                      center={[selectedAnchor.lng, selectedAnchor.lat]}
-                      zoom={14}
-                      showControls={false}
-                      className="h-full w-full"
-                    />
-                  </div>
-                )}
-              </>
-            )}
-            {candidates === 'none' && (
-              <>
-                <p className="text-sm text-destructive">
-                  No approved public site (library, transit station, fire station, community center, park,
-                  grocery store, or nonprofit office) was found near you.
-                </p>
-                {geocode !== 'loading' && geocode !== 'none' && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    You appear to be near {geocode}.
-                  </p>
-                )}
-              </>
-            )}
+          <div>
+            <Label className="mb-1.5">Drop type</Label>
+            <ToggleGroup
+              value={[mode]}
+              onValueChange={(value) => value[0] && selectMode(value[0] as DropLocationType)}
+              orientation="horizontal"
+              className="w-full"
+            >
+              <ToggleGroupItem value="anchor" variant="outline" className={`${TOGGLE_SELECTED} flex-1 gap-1.5`}>
+                <MapPin size={14} className="shrink-0" /> Public site
+              </ToggleGroupItem>
+              <ToggleGroupItem value="curbside" variant="outline" className={`${TOGGLE_SELECTED} flex-1 gap-1.5`}>
+                🏠 My curbside
+              </ToggleGroupItem>
+            </ToggleGroup>
           </div>
+
+          {mode === 'anchor' && (
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-sm font-medium">Meetup location (required)</p>
+              <p className="text-xs text-muted-foreground">
+                Pick which public site to use — the nearest one is pre-selected as a default, but you choose.
+                Whichever you pick, that site&apos;s own coordinates are what gets stored, never your exact location.
+              </p>
+              {candidates === 'loading' && (
+                <p className="mt-2 text-sm text-muted-foreground">Finding nearby public sites…</p>
+              )}
+              {Array.isArray(candidates) && (
+                <>
+                  <ToggleGroup
+                    value={selectedAnchorId}
+                    onValueChange={(value) => setSelectedAnchorId(value)}
+                    orientation="vertical"
+                    className="mt-2 w-full"
+                  >
+                    {candidates.map((a) => (
+                      <ToggleGroupItem
+                        key={a.id}
+                        value={a.id}
+                        variant="outline"
+                        className={`${TOGGLE_SELECTED} w-full justify-start gap-1.5`}
+                      >
+                        <MapPin size={14} className="shrink-0" />
+                        {a.name} · {formatDistance(a.distanceMeters ?? 0)} away
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                  {selectedAnchor && (
+                    <div className="mt-2 h-40 overflow-hidden rounded-lg ring-1 ring-border">
+                      <Map
+                        markers={candidates.map((a) => ({
+                          id: a.id,
+                          lat: a.lat,
+                          lng: a.lng,
+                          isMine: a.id === selectedAnchor.id,
+                        }))}
+                        onMarkerClick={(id) => setSelectedAnchorId([id])}
+                        center={[selectedAnchor.lng, selectedAnchor.lat]}
+                        zoom={14}
+                        showControls={false}
+                        className="h-full w-full"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+              {candidates === 'none' && (
+                <>
+                  <p className="text-sm text-destructive">
+                    No approved public site (library, transit station, fire station, community center, park,
+                    grocery store, or nonprofit office) was found near you.
+                  </p>
+                  {geocode !== 'loading' && geocode !== 'none' && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      You appear to be near {geocode}.
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {mode === 'curbside' && (
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-sm font-medium">Curbside location (required)</p>
+              <p className="text-xs text-muted-foreground">
+                Drag the pin to your driveway or curb. Your exact address is never published — the map only ever
+                shows a fuzzed point near the nearest block corner, and it self-clears in 6–12 hours.
+              </p>
+              {curbsideLocation && (
+                <div className="mt-2 h-40 overflow-hidden rounded-lg ring-1 ring-border">
+                  <Map
+                    markers={[]}
+                    draggableMarker={{
+                      lat: curbsideLocation.lat,
+                      lng: curbsideLocation.lng,
+                      onDragEnd: (lat, lng) => setCurbsideLocation({ lat, lng }),
+                    }}
+                    center={[curbsideLocation.lng, curbsideLocation.lat]}
+                    zoom={16}
+                    showControls={false}
+                    className="h-full w-full"
+                  />
+                </div>
+              )}
+              {curbsidePreview && curbsideLocation && (
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Published as a fuzzed point ≈{' '}
+                  {formatDistance(
+                    haversineMeters(curbsideLocation.lat, curbsideLocation.lng, curbsidePreview.lat, curbsidePreview.lng),
+                  )}{' '}
+                  from your dropped pin.
+                </p>
+              )}
+            </div>
+          )}
 
           <div>
             <Label className="mb-1.5">Categories</Label>
@@ -445,59 +545,65 @@ export function DropDialog({ open, onOpenChange, center, identity, onDropped }: 
           )}
 
           <div>
-            <Label className="mb-1.5">Expires in</Label>
+            <Label className="mb-1.5">Expires in{mode === 'curbside' ? ' (6–12 hr)' : ''}</Label>
             <Controller
               control={form.control}
               name="ttlMinutes"
-              render={({ field }) => (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      className="shrink-0"
-                      onClick={() => field.onChange(Math.max(TTL_MIN_MINUTES, (field.value ?? 30) - 30))}
-                    >
-                      −30
-                    </Button>
-                    <Input
-                      type="number"
-                      inputMode="numeric"
-                      min={TTL_MIN_MINUTES}
-                      max={TTL_MAX_MINUTES}
-                      step={30}
-                      value={field.value ?? 30}
-                      onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
-                      className="w-20 shrink-0 text-center"
-                    />
-                    <span className="text-sm text-muted-foreground">min</span>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      className="shrink-0"
-                      onClick={() => field.onChange(Math.min(TTL_MAX_MINUTES, (field.value ?? 30) + 30))}
-                    >
-                      +30
-                    </Button>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {TTL_PRESETS.map((preset) => (
+              render={({ field }) => {
+                const ttlMin = mode === 'curbside' ? TTL_CURBSIDE_MIN_MINUTES : TTL_MIN_MINUTES;
+                const ttlMax = mode === 'curbside' ? TTL_CURBSIDE_MAX_MINUTES : TTL_MAX_MINUTES;
+                const presets = mode === 'curbside' ? TTL_CURBSIDE_PRESETS : TTL_PRESETS;
+                const step = mode === 'curbside' ? 60 : 30;
+                return (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-1.5">
                       <Button
-                        key={preset.minutes}
                         type="button"
-                        variant={field.value === preset.minutes ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => field.onChange(preset.minutes)}
-                        className={field.value === preset.minutes ? 'bg-mn-blue hover:bg-mn-blue/90' : ''}
+                        variant="outline"
+                        size="icon"
+                        className="shrink-0"
+                        onClick={() => field.onChange(Math.max(ttlMin, (field.value ?? ttlMin) - step))}
                       >
-                        {preset.label}
+                        −{step}
                       </Button>
-                    ))}
+                      <Input
+                        type="number"
+                        inputMode="numeric"
+                        min={ttlMin}
+                        max={ttlMax}
+                        step={step}
+                        value={field.value ?? ttlMin}
+                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                        className="w-20 shrink-0 text-center"
+                      />
+                      <span className="text-sm text-muted-foreground">min</span>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        className="shrink-0"
+                        onClick={() => field.onChange(Math.min(ttlMax, (field.value ?? ttlMin) + step))}
+                      >
+                        +{step}
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {presets.map((preset) => (
+                        <Button
+                          key={preset.minutes}
+                          type="button"
+                          variant={field.value === preset.minutes ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => field.onChange(preset.minutes)}
+                          className={field.value === preset.minutes ? 'bg-mn-blue hover:bg-mn-blue/90' : ''}
+                        >
+                          {preset.label}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              }}
             />
           </div>
 

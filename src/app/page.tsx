@@ -18,6 +18,7 @@ import { useTemperatureLayer } from '@/components/TemperatureLayer';
 import { useWeatherLayer } from '@/components/WeatherLayerProvider';
 import { useWeatherMap } from '@/hooks/useWeatherMap';
 import { expireDrop } from '@/app/actions';
+import type { DropSummary, TravelMode } from '@/lib/types';
 import { RADAR_CATEGORY_COLORS, RADAR_CATEGORY_LABELS, type DropSummary, type RadarCategory } from '@/lib/types';
 import { TEMPERATURE_GRADIENT_CSS } from '@/lib/temperatureColor';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
@@ -26,7 +27,6 @@ import type { LatLngBounds } from '@/lib/weatherMapPoints';
 // temperature map for the new viewport — coalesces a burst of pan/zoom
 // events into one request instead of firing on every settle.
 const VIEWPORT_DEBOUNCE_MS = 400;
-
 const POLL_MS = 6000;
 
 const GRID_LEGEND = [
@@ -59,6 +59,7 @@ function HomePageInner() {
   const [userCenter, setUserCenter] = useState<[number, number] | null>(null);
   const [dropOpen, setDropOpen] = useState(false);
   const [mapInstance, setMapInstance] = useState<MaplibreMap | null>(null);
+  const [routeLine, setRouteLine] = useState<{ from: [number, number]; to: [number, number]; mode: TravelMode } | null>(null);
   const density = useDensity();
   useDensityOverlay({ map: mapInstance, view: density.view, grid: density.grid });
   useRadarOverlay({ map: mapInstance, view: density.view, radar: density.radar });
@@ -176,6 +177,7 @@ function HomePageInner() {
           createdAt: d.createdAt,
           expiresAt: d.expiresAt,
           categories: d.categories,
+          locationType: d.locationType,
         }))}
         onMarkerClick={setSelectedId}
         onMarkerExpire={(id) => {
@@ -199,6 +201,7 @@ function HomePageInner() {
         // Twin-Cities-specific value.
         zoom={9}
         onMapInstance={setMapInstance}
+        routeLine={routeLine}
       />
 
       <Button
@@ -290,7 +293,11 @@ function HomePageInner() {
           drop={selected}
           identity={identity}
           myRecord={myRecord}
-          onClose={() => setSelectedId(null)}
+          userCenter={userCenter}
+          onClose={() => {
+            setSelectedId(null);
+            setRouteLine(null);
+          }}
           onClaimed={(record) => {
             add(record);
             refreshPublic();
@@ -299,13 +306,18 @@ function HomePageInner() {
           onCompleted={(dropId) => {
             remove(dropId);
             setSelectedId(null);
+            setRouteLine(null);
             refreshPublic();
           }}
           onCancelled={(dropId) => {
             remove(dropId);
             setSelectedId(null);
+            setRouteLine(null);
             refreshPublic();
           }}
+          onRoute={(route) =>
+            setRouteLine(route && userCenter ? { from: userCenter, to: [route.to.lng, route.to.lat], mode: route.mode } : null)
+          }
         />
       )}
     </div>

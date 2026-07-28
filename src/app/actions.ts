@@ -4,7 +4,15 @@ import { sql } from '@/lib/db';
 import { hashToken } from '@/lib/crypto';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { queryNearbyAnchors } from '@/lib/overpass';
-import { TTL_MIN_MINUTES, TTL_MAX_MINUTES, type DropCategory } from '@/lib/types';
+import { snapToBlockCorner } from '@/lib/fuzz';
+import {
+  TTL_MIN_MINUTES,
+  TTL_MAX_MINUTES,
+  TTL_CURBSIDE_MIN_MINUTES,
+  TTL_CURBSIDE_MAX_MINUTES,
+  type DropCategory,
+  type DropLocationType,
+} from '@/lib/types';
 import { createHash } from 'node:crypto';
 
 // Widening this doesn't weaken the anti-doxxing guarantee below: whatever
@@ -78,6 +86,7 @@ export async function registerIdentity(handle: string, token: string): Promise<A
 }
 
 export async function createDrop(input: {
+  locationType?: DropLocationType; // defaults to 'anchor' for backward compatibility
   lat: number;
   lng: number;
   categories: DropCategory[];
@@ -91,7 +100,10 @@ export async function createDrop(input: {
   if (!(await checkRateLimit(input.deviceHash, 'create_drop'))) {
     return fail('Too many drops created recently. Try again later.');
   }
-  if (input.ttlMinutes < TTL_MIN_MINUTES || input.ttlMinutes > TTL_MAX_MINUTES) return fail('Invalid expiry.');
+  const locationType: DropLocationType = input.locationType ?? 'anchor';
+  const [ttlMin, ttlMax] =
+    locationType === 'curbside' ? [TTL_CURBSIDE_MIN_MINUTES, TTL_CURBSIDE_MAX_MINUTES] : [TTL_MIN_MINUTES, TTL_MAX_MINUTES];
+  if (input.ttlMinutes < ttlMin || input.ttlMinutes > ttlMax) return fail('Invalid expiry.');
   if (input.categories.length === 0 || !input.categories.every((c) => VALID_CATEGORIES.includes(c))) {
     return fail('Select at least one valid category.');
   }
@@ -100,6 +112,51 @@ export async function createDrop(input: {
   if (!input.photo || input.photo.size === 0) return fail('A photo is required.');
   if (input.photo.size > MAX_PHOTO_BYTES) return fail('Photo is too large.');
   if (!input.photo.type.startsWith('image/')) return fail('Invalid photo type.');
+  if (!Number.isFinite(input.lat) || !Number.isFinite(input.lng)) return fail('Invalid location.');
+
+  const tokenHash = hashToken(input.providerToken);
+  const photoBuffer = Buffer.from(await input.photo.arrayBuffer());
+
+  if (locationType === 'curbside') {
+    // Never trust a client-supplied fuzzed value — independently re-derive
+    // the published (fuzzed) point from the raw coordinate the client sent.
+    // The raw coordinate itself is only ever stored, never returned by any
+    // public read path (see getExactLocation below).
+    const fuzzed = snapToBlockCorner(input.lat, input.lng);
+
+    const rows = await sql`
+      insert into drops (
+        anchor_id, location, location_type, exact_location,
+        categories, details, photo, photo_content_type, expires_at,
+        provider_handle, provider_token_hash
+      ) values (
+        null,
+        ST_SetSRID(ST_MakePoint(${fuzzed.lng}, ${fuzzed.lat}), 4326)::geography,
+        'curbside',
+        ST_SetSRID(ST_MakePoint(${input.lng}, ${input.lat}), 4326)::geography,
+        ${input.categories},
+        ${input.details.trim()},
+        ${photoBuffer},
+        ${input.photo.type},
+        now() + make_interval(mins => ${input.ttlMinutes}),
+        ${input.providerHandle},
+        ${tokenHash}
+      )
+      returning id
+    `;
+    const dropId = (rows[0] as { id: string }).id;
+
+    void writeLedger({
+      actorHandle: input.providerHandle,
+      eventType: 'DROPPED',
+      dropId,
+      categories: input.categories,
+      details: input.details,
+      metadata: { ttlMinutes: input.ttlMinutes, locationType: 'curbside' },
+    });
+
+    return { ok: true, data: { dropId } };
+  }
 
   // Never trust a client-supplied anchor identity/location claim — independently
   // re-derive the nearest real public anchor from the coordinates alone. This
@@ -122,8 +179,6 @@ export async function createDrop(input: {
   `;
   const anchorId = (anchorRows[0] as { id: string }).id;
 
-  const tokenHash = hashToken(input.providerToken);
-  const photoBuffer = Buffer.from(await input.photo.arrayBuffer());
   const rows = await sql`
     insert into drops (
       anchor_id, location, categories, details, photo, photo_content_type, expires_at,
@@ -155,6 +210,40 @@ export async function createDrop(input: {
   });
 
   return { ok: true, data: { dropId } };
+}
+
+/**
+ * Reveals the real curbside pickup coordinate — gated on the caller's token
+ * hashing to either the provider or the claimant already on the drop, so an
+ * anonymous browser can never resolve a fuzzed public pin back to a real
+ * address. For anchor drops `location` is already the exact point, so this
+ * just echoes it back for a uniform "get the real pickup point" call site.
+ */
+export async function getExactLocation(input: { dropId: string; token: string }): Promise<ActionResult<{ lat: number; lng: number }>> {
+  const tokenHash = hashToken(input.token);
+  const rows = await sql`
+    select
+      d.location_type,
+      d.provider_token_hash, d.claimant_token_hash,
+      ST_Y(coalesce(d.exact_location, d.location)::geometry) as lat,
+      ST_X(coalesce(d.exact_location, d.location)::geometry) as lng
+    from drops d
+    where d.id = ${input.dropId} and d.expires_at > now()
+  `;
+  if (rows.length === 0) return fail('Pickup not found.');
+
+  const row = rows[0] as {
+    location_type: DropLocationType;
+    provider_token_hash: string;
+    claimant_token_hash: string | null;
+    lat: number;
+    lng: number;
+  };
+  if (tokenHash !== row.provider_token_hash && tokenHash !== row.claimant_token_hash) {
+    return fail('Not authorized for this pickup.');
+  }
+
+  return { ok: true, data: { lat: row.lat, lng: row.lng } };
 }
 
 export async function claimDrop(input: {
