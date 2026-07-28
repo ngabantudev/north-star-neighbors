@@ -7,6 +7,7 @@ import type { Map as MaplibreMap } from 'maplibre-gl';
 import { Map, TWIN_CITIES_CENTER } from '@/components/Map';
 import { DropDrawer } from '@/components/DropDrawer';
 import { DropDialog } from '@/components/DropDialog';
+import { CampaignBanner } from '@/components/CampaignBanner';
 import { Button } from '@/components/ui/button';
 import { useIdentity } from '@/hooks/useIdentity';
 import { useMyDrops } from '@/hooks/useMyDrops';
@@ -205,6 +206,9 @@ function HomePageInner() {
             No active pickups right now
           </div>
         )}
+        {/* Last in the stack: a heat advisory is time-critical, the statewide
+            campaign is not — it should never push an active alert down. */}
+        <CampaignBanner />
       </div>
 
       {weatherLayer.active && (
