@@ -51,13 +51,21 @@ export const LEDGER_EVENT_LABEL: Record<LedgerEventType, string> = {
   EXPIRED: 'Cache expired',
 };
 
-/** Dot/chip color per event, shared by the ticker and the ledger page. */
+/**
+ * Accent color per event — the notification chips, the ledger rows, and the
+ * drawer all key off this one map, so the feature reads as a single system.
+ * Drawn from the mn.gov palette the rest of the app is matched to (see the
+ * @theme block in globals.css) rather than a generic status ramp: new supply
+ * is the logo green, a claim is the link blue, a completed handoff is the
+ * header navy, and the two "it's gone" outcomes are a muted state red and the
+ * app's own --muted-foreground.
+ */
 export const LEDGER_EVENT_COLOR: Record<LedgerEventType, string> = {
-  DROPPED: '#71bf43',
-  CLAIMED: '#0062b2',
-  FULFILLED: '#16a34a',
-  CANCELED: '#e11d48',
-  EXPIRED: '#94a3b8',
+  DROPPED: '#71bf43', // mn-green
+  CLAIMED: '#0062b2', // mn-sky
+  FULFILLED: '#003865', // mn-blue
+  CANCELED: '#b3272d',
+  EXPIRED: '#5b6b76', // --muted-foreground
 };
 
 /**

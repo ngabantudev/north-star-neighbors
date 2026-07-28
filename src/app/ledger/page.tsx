@@ -30,19 +30,17 @@ function LedgerRow({ entry, onSelect }: { entry: LedgerEntry; onSelect: (entry: 
       <button
         type="button"
         onClick={() => onSelect(entry)}
-        className="flex w-full items-start gap-3 rounded-lg border border-slate-200 p-3 text-left transition-colors hover:border-mn-sky/40 hover:bg-slate-50"
+        // Same left accent bar as the notification chips — a row here and a
+        // chip on the map are the same event, and should look like it.
+        style={{ borderLeftColor: LEDGER_EVENT_COLOR[entry.eventType] }}
+        className="flex w-full items-start gap-3 rounded-md border border-l-4 border-slate-200 p-3 text-left transition-colors hover:border-mn-sky/40 hover:bg-slate-50"
       >
-        <span
-          className="mt-1.5 size-2 shrink-0 rounded-full"
-          style={{ background: LEDGER_EVENT_COLOR[entry.eventType] }}
-          aria-hidden="true"
-        />
         <span className="min-w-0 flex-1">
           <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
             <span className="font-mono text-xs tabular-nums text-slate-500">
               {formatLedgerClock(entry.occurredAt)}
             </span>
-            <span className="text-sm font-medium text-slate-900">{LEDGER_EVENT_LABEL[entry.eventType]}</span>
+            <span className="text-sm font-semibold text-mn-blue">{LEDGER_EVENT_LABEL[entry.eventType]}</span>
             <span className="text-xs text-slate-400">{formatLedgerDate(entry.occurredAt)}</span>
           </span>
           <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">

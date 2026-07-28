@@ -41,12 +41,12 @@ export function LedgerDrawer({ entry, onClose }: LedgerDrawerProps) {
   const isCurbside = entry.locationType === 'curbside';
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 max-h-[75vh] overflow-y-auto rounded-t-2xl border-t border-slate-200 bg-white p-5 shadow-2xl sm:inset-x-auto sm:bottom-4 sm:right-4 sm:w-[26rem] sm:rounded-2xl sm:border">
+    <div className="fixed inset-x-0 bottom-0 z-40 max-h-[75vh] overflow-y-auto rounded-t-2xl border-t border-slate-200 bg-white p-5 shadow-2xl sm:inset-x-auto sm:bottom-4 sm:right-4 sm:w-104 sm:rounded-2xl sm:border">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <EventDot eventType={entry.eventType} />
-            <h2 className="text-lg font-semibold text-slate-900">{LEDGER_EVENT_LABEL[entry.eventType]}</h2>
+            <h2 className="text-lg font-semibold text-mn-blue">{LEDGER_EVENT_LABEL[entry.eventType]}</h2>
           </div>
           <p className="mt-0.5 font-mono text-xs tabular-nums text-slate-500">
             {formatLedgerDate(entry.occurredAt)} · {formatLedgerClock(entry.occurredAt)}

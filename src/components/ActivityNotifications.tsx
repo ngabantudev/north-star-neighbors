@@ -39,24 +39,24 @@ function NotificationChip({ entry, onSelect }: { entry: LedgerEntry; onSelect: (
     <button
       type="button"
       onClick={() => onSelect(entry)}
-      style={{ '--nsn-notify-life': `${LIFETIME_MS}ms` } as React.CSSProperties}
-      className="nsn-notify pointer-events-auto flex w-full items-start gap-2 rounded-lg bg-white/75 px-2.5 py-1.5 text-left shadow-sm ring-1 ring-black/5 backdrop-blur-sm transition-colors hover:bg-white/95"
+      style={
+        {
+          '--nsn-notify-life': `${LIFETIME_MS}ms`,
+          borderLeftColor: LEDGER_EVENT_COLOR[entry.eventType],
+        } as React.CSSProperties
+      }
+      // Left accent bar rather than a dot: mn.gov leans on a colored rule to
+      // classify a notice, and at chip size it scans faster than a 6px dot.
+      className="nsn-notify pointer-events-auto block w-full rounded-md border-l-4 bg-white/90 px-2.5 py-1.5 text-left shadow-sm ring-1 ring-mn-blue/10 backdrop-blur-sm transition-colors hover:bg-white hover:ring-mn-sky/40"
     >
-      <span
-        className="mt-1.5 size-1.5 shrink-0 rounded-full"
-        style={{ background: LEDGER_EVENT_COLOR[entry.eventType] }}
-        aria-hidden="true"
-      />
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-xs text-slate-700">
-          <span className="font-semibold text-slate-900">{ledgerActorLabel(entry.actorHandle)}</span>{' '}
-          {LEDGER_EVENT_VERB[entry.eventType]}
-        </span>
-        <span className="block truncate text-[11px] text-slate-500">
-          <span className="font-mono tabular-nums">{formatLedgerClock(entry.occurredAt)}</span>
-          {' · '}
-          {ledgerZoneLabel(entry)}
-        </span>
+      <span className="block truncate text-xs text-slate-700">
+        <span className="font-semibold text-mn-blue">{ledgerActorLabel(entry.actorHandle)}</span>{' '}
+        {LEDGER_EVENT_VERB[entry.eventType]}
+      </span>
+      <span className="block truncate text-[11px] text-slate-500">
+        <span className="font-mono tabular-nums">{formatLedgerClock(entry.occurredAt)}</span>
+        {' · '}
+        <span className="text-mn-sky">{ledgerZoneLabel(entry)}</span>
       </span>
     </button>
   );
@@ -130,9 +130,11 @@ export function ActivityNotifications() {
   return (
     <>
       <div className="pointer-events-none fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-3 z-20 flex w-[min(20rem,calc(100vw-1.5rem))] flex-col gap-1.5 md:bottom-4 md:left-4">
+        {/* Solid navy + pulsing logo green — the site header's own colorway,
+            so the overlay reads as part of the app and not a browser toast. */}
         <Link
           href="/ledger"
-          className="pointer-events-auto flex w-fit items-center gap-1.5 rounded-full bg-white/75 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600 shadow-sm ring-1 ring-black/5 backdrop-blur-sm transition-colors hover:bg-white/95"
+          className="pointer-events-auto flex w-fit items-center gap-1.5 rounded-full bg-mn-blue px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-sm transition-colors hover:bg-mn-sky"
         >
           <span className="size-1.5 animate-pulse rounded-full bg-mn-green" aria-hidden="true" />
           Live ledger
