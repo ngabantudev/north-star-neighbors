@@ -76,7 +76,7 @@ export function ActivityFeed() {
           className="pointer-events-auto flex w-fit items-center gap-1.5 rounded-full bg-mn-blue px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-sm transition-colors hover:bg-mn-sky"
         >
           <span className="size-1.5 animate-pulse rounded-full bg-mn-green" aria-hidden="true" />
-          Live ledger
+          Live activity
         </Link>
 
         {/* role=log + polite: rows arrive as discrete events, so a screen
@@ -89,7 +89,7 @@ export function ActivityFeed() {
 
         {!loading && entries.length === 0 && (
           <p className="w-fit rounded-md bg-white/90 px-2.5 py-1.5 text-[11px] text-slate-500 shadow-sm ring-1 ring-mn-blue/10 backdrop-blur-sm">
-            No recorded activity yet.
+            Nothing happening right now.
           </p>
         )}
       </div>

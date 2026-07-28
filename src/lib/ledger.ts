@@ -35,20 +35,27 @@ export interface LedgerEntry {
   occurredAt: string;
 }
 
+/**
+ * Plain-language wording throughout: "drop" and "pickup" are the words the
+ * rest of the app already puts in front of people (the Add Drop button, the My
+ * Drops tab), while "cache", "handoff", and "transaction" were vocabulary only
+ * this feature used. A neighbor reading the feed shouldn't have to learn a
+ * second name for the thing they just did.
+ */
 export const LEDGER_EVENT_VERB: Record<LedgerEventType, string> = {
-  DROPPED: 'logged a drop',
-  CLAIMED: 'claimed a cache',
-  FULFILLED: 'confirmed a handoff',
-  CANCELED: 'pulled a cache',
-  EXPIRED: 'let a cache time out',
+  DROPPED: 'added a drop',
+  CLAIMED: 'claimed a drop',
+  FULFILLED: 'completed a pickup',
+  CANCELED: 'cancelled a drop',
+  EXPIRED: 'removed an expired drop',
 };
 
 export const LEDGER_EVENT_LABEL: Record<LedgerEventType, string> = {
-  DROPPED: 'Drop logged',
-  CLAIMED: 'Cache claimed',
-  FULFILLED: 'Handoff confirmed',
-  CANCELED: 'Cache pulled',
-  EXPIRED: 'Cache expired',
+  DROPPED: 'Drop added',
+  CLAIMED: 'Drop claimed',
+  FULFILLED: 'Pickup completed',
+  CANCELED: 'Drop cancelled',
+  EXPIRED: 'Drop expired',
 };
 
 /**
@@ -76,7 +83,7 @@ export const LEDGER_EVENT_COLOR: Record<LedgerEventType, string> = {
  */
 const RESERVED_ACTOR_LABELS: Record<string, string> = {
   anonymous: 'A neighbor',
-  system: 'Auto-sweep',
+  system: 'Automatic cleanup',
 };
 
 export function ledgerActorLabel(handle: string): string {
@@ -88,29 +95,26 @@ export function isHandleActor(handle: string): boolean {
   return !(handle in RESERVED_ACTOR_LABELS);
 }
 
-/** What the public is allowed to know about where a transaction happened. */
+/** What the public is allowed to know about where a drop happened. */
 export function ledgerZoneLabel(entry: Pick<LedgerEntry, 'anchorName' | 'locationType'>): string {
   if (entry.anchorName) return entry.anchorName;
-  if (entry.locationType === 'curbside') return 'Masked curbside block';
-  return 'Undisclosed zone';
+  if (entry.locationType === 'curbside') return 'Curbside — street kept private';
+  return 'Location not shared';
 }
 
 /**
- * "12:03:45.892 PM" in the reader's own timezone. Built by splicing the
- * milliseconds into the localized time string rather than hand-assembling it,
- * so 24-hour locales and the narrow no-break space some ICU versions put
- * before AM/PM both still come out right.
+ * "12:03:45 PM" in the reader's own timezone. Seconds are as fine-grained as
+ * this ever needs to be — nobody reading a neighborhood feed is distinguishing
+ * two events by their milliseconds.
  */
 export function formatLedgerClock(iso: string): string {
   const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return '--:--:--.---';
-  const localized = date.toLocaleTimeString(undefined, {
+  if (Number.isNaN(date.getTime())) return '--:--:--';
+  return date.toLocaleTimeString(undefined, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
-  const millis = String(date.getMilliseconds()).padStart(3, '0');
-  return localized.replace(/(\d{1,2}:\d{2}:\d{2})/, `$1.${millis}`);
 }
 
 /** "Jul 27" — the feed spans at most 24h, so the year is never useful. */

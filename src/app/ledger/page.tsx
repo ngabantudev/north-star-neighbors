@@ -30,8 +30,8 @@ function LedgerRow({ entry, onSelect }: { entry: LedgerEntry; onSelect: (entry: 
       <button
         type="button"
         onClick={() => onSelect(entry)}
-        // Same left accent bar as the notification chips — a row here and a
-        // chip on the map are the same event, and should look like it.
+        // Same left accent bar as the rows in the map's corner feed — a row
+        // here and a row there are the same event, and should look like it.
         style={{ borderLeftColor: LEDGER_EVENT_COLOR[entry.eventType] }}
         className="flex w-full items-start gap-3 rounded-md border border-l-4 border-slate-200 p-3 text-left transition-colors hover:border-mn-sky/40 hover:bg-slate-50"
       >
@@ -71,9 +71,9 @@ function LedgerRow({ entry, onSelect }: { entry: LedgerEntry; onSelect: (entry: 
 }
 
 /**
- * The public transaction ledger: every state transition the community has
- * made in the last {LEDGER_WINDOW_HOURS} hours, readable by anyone, with no
- * account and nothing to sign in to. Rows open a drill-down drawer.
+ * The public record: every drop, claim, and pickup the community has made in
+ * the last {LEDGER_WINDOW_HOURS} hours, readable by anyone, with no account
+ * and nothing to sign in to. Rows open a drill-down drawer.
  */
 export default function LedgerPage() {
   const [filter, setFilter] = useState<LedgerEventType | null>(null);
@@ -82,11 +82,12 @@ export default function LedgerPage() {
 
   return (
     <div className="mx-auto w-full max-w-2xl p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] sm:p-6 md:pb-6">
-      <h1 className="mb-1 text-xl font-semibold text-mn-blue">Public ledger</h1>
+      <h1 className="mb-1 text-xl font-semibold text-mn-blue">Community activity</h1>
       <p className="mb-4 text-sm text-slate-500">
-        Every drop, claim, and handoff in the last {LEDGER_WINDOW_HOURS} hours. Pseudonymous handles and public zones
-        only — no names, no addresses, no way to trace a curbside cache to a household. Entries clear themselves on the
-        same {LEDGER_WINDOW_HOURS}-hour cycle as the map.
+        Every drop, claim, and pickup from the last {LEDGER_WINDOW_HOURS}{' '}
+        hours, open for anyone to read. Neighbors show up by nickname and only public places are named — no real names,
+        no addresses, and no way to trace a curbside drop back to someone&apos;s home. Entries clear themselves after{' '}
+        {LEDGER_WINDOW_HOURS} hours, same as the map.
       </p>
 
       <div className="mb-4 flex flex-wrap gap-1.5">
@@ -109,9 +110,9 @@ export default function LedgerPage() {
       </div>
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
-      {loading && entries.length === 0 && <p className="text-sm text-slate-400">Reading the ledger…</p>}
+      {loading && entries.length === 0 && <p className="text-sm text-slate-400">Loading…</p>}
       {!loading && entries.length === 0 && !error && (
-        <p className="text-sm text-slate-400">Nothing recorded in this window yet.</p>
+        <p className="text-sm text-slate-400">Nothing has happened in the last {LEDGER_WINDOW_HOURS} hours.</p>
       )}
 
       <ul className="flex flex-col gap-2">
@@ -127,7 +128,7 @@ export default function LedgerPage() {
           disabled={loadingMore}
           className="mt-4 w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 disabled:opacity-50"
         >
-          {loadingMore ? 'Loading…' : 'Load older entries'}
+          {loadingMore ? 'Loading…' : 'Show older activity'}
         </button>
       )}
 
