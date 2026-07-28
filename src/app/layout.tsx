@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Open_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
-import { IdentityBadge } from "@/components/IdentityBadge";
+import { AppNav } from "@/components/AppNav";
+import { WeatherLayerProvider } from "@/components/WeatherLayerProvider";
 import "./globals.css";
 
 // Matches state civic typography standards
@@ -40,21 +41,15 @@ export default function RootLayout({
       className={`${openSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <header className="flex h-14 shrink-0 items-center justify-between bg-mn-blue px-4 shadow-sm">
-          <Link href="/" className="font-semibold text-white text-sm sm:text-base truncate mr-2">
-            North Star Neighbors
-          </Link>
-          <nav className="flex items-center gap-3 sm:gap-4 text-sm font-medium text-white/85 shrink-0">
-            <Link href="/?drop=1" className="hover:text-mn-green transition-colors">
-              Add Drop
+        <WeatherLayerProvider>
+          <header className="flex h-14 shrink-0 items-center justify-between bg-mn-blue px-4 shadow-sm">
+            <Link href="/" className="font-semibold text-white text-sm sm:text-base truncate mr-2">
+              North Star Neighbors
             </Link>
-            <Link href="/manage" className="hover:text-mn-green transition-colors">
-              My Drops
-            </Link>
-            <IdentityBadge />
-          </nav>
-        </header>
-        <main className="flex flex-1 flex-col">{children}</main>
+            <AppNav />
+          </header>
+          <main className="flex flex-1 flex-col">{children}</main>
+        </WeatherLayerProvider>
         <Toaster position="top-center" />
       </body>
     </html>

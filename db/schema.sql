@@ -250,3 +250,70 @@ as $$
   )
   from features;
 $$;
+
+-- ---------------------------------------------------------------------------
+-- Categorical Request Weather Radar
+-- Buckets recent CLAIMED events (the closest anonymous signal we have to "a
+-- resident needed this") into grid-cell centroid points, split by a coarse
+-- need category (warmth/food/medical/family), for a per-category heatmap
+-- overlay. See db/migrations/005_category_request_radar.sql and
+-- /api/density/radar for the HTTP endpoint.
+-- ---------------------------------------------------------------------------
+
+create or replace function category_radar_geojson(
+  cell_size double precision default 0.02,
+  window_hours double precision default 12
+)
+returns jsonb
+language sql
+stable
+as $$
+  with
+    requests as (
+      select
+        ST_SnapToGrid(ca.location::geometry, cell_size) as cell_geom,
+        case cat
+          when 'coats' then 'warmth'
+          when 'produce' then 'food'
+          when 'water' then 'food'
+          when 'medical' then 'medical'
+          when 'baby' then 'family'
+          else null
+        end as radar_category
+      from activity_ledger al
+      join civic_anchors ca on ca.name = al.anchor_name
+      cross join lateral unnest(al.categories) as cat
+      where al.event_type = 'CLAIMED'
+        and al.occurred_at > now() - (window_hours * interval '1 hour')
+    ),
+    counted as (
+      select cell_geom, radar_category, count(*)::int as request_count
+      from requests
+      where radar_category is not null
+      group by cell_geom, radar_category
+    ),
+    features as (
+      select jsonb_build_object(
+        'type', 'Feature',
+        'geometry', ST_AsGeoJSON(
+          ST_SetSRID(
+            ST_MakePoint(
+              ST_X(cell_geom) + cell_size / 2,
+              ST_Y(cell_geom) + cell_size / 2
+            ),
+            4326
+          )
+        )::jsonb,
+        'properties', jsonb_build_object(
+          'radarCategory', radar_category,
+          'requestCount', request_count
+        )
+      ) as feature
+      from counted
+    )
+  select jsonb_build_object(
+    'type', 'FeatureCollection',
+    'features', coalesce(jsonb_agg(feature), '[]'::jsonb)
+  )
+  from features;
+$$;

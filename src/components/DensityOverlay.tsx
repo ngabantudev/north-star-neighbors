@@ -31,8 +31,8 @@ export function useDensityOverlay({ map, view, grid }: DensityOverlayProps) {
   useEffect(() => {
     if (!map || !map.isStyleLoaded()) return;
 
-    // ---- CLEANUP: remove density sources & layers when "off" ----
-    if (view === 'off') {
+    // ---- CLEANUP: remove density sources & layers unless the grid view is active ----
+    if (view !== 'grid') {
       tryRemoveLayer(map, GRID_LAYER_LINE);
       tryRemoveLayer(map, GRID_LAYER_FILL);
       tryRemoveSource(map, GRID_SOURCE);
@@ -40,7 +40,7 @@ export function useDensityOverlay({ map, view, grid }: DensityOverlayProps) {
     }
 
     // ---- GRID view ----
-    if (view === 'grid' && grid) {
+    if (grid) {
       const source = map.getSource(GRID_SOURCE);
       if (source) {
         (source as GeoJSONSource).setData(grid);

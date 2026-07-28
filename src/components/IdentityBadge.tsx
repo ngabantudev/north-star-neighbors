@@ -3,15 +3,21 @@
 import { useState } from 'react';
 import { useIdentity } from '@/hooks/useIdentity';
 import { getAvatarByLabel } from '@/lib/avatar';
+import { NavTab } from '@/components/NavTab';
+
+interface IdentityBadgeProps {
+  /** Vertical icon+label tab for the mobile bottom nav, instead of the header pill. */
+  compact?: boolean;
+}
 
 /**
- * The current browser's own identity, always visible in the header. Tapping
- * it opens a profile panel: a full-width bottom sheet on mobile (same
- * slide-up treatment as DropDrawer, so it reads as an app/social surface
- * rather than a webpage), and a small anchored card near the header on
- * desktop (a typical website account-menu position).
+ * The current browser's own identity. Tapping it opens a profile panel: a
+ * full-width bottom sheet on mobile (same slide-up treatment as DropDrawer,
+ * so it reads as an app/social surface rather than a webpage), and a small
+ * anchored card near the header on desktop (a typical website account-menu
+ * position).
  */
-export function IdentityBadge() {
+export function IdentityBadge({ compact = false }: IdentityBadgeProps) {
   const identity = useIdentity();
   const [open, setOpen] = useState(false);
 
@@ -23,26 +29,36 @@ export function IdentityBadge() {
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        aria-label={`Your identity: ${identity.handle}`}
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/90 py-1 pr-1 pl-1 shadow-sm transition-transform active:scale-95 sm:pr-3 sm:pl-2.5"
-      >
-        <span
-          className="flex size-7 items-center justify-center rounded-full sm:size-6"
-          style={{ backgroundColor: `${color}1a` }}
+      {compact ? (
+        <NavTab
+          icon={Icon}
+          label="Profile"
+          active={open}
+          onClick={() => setOpen(true)}
+          aria-label={`Your identity: ${identity.handle}`}
+        />
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          aria-label={`Your identity: ${identity.handle}`}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/90 py-1 pr-1 pl-1 shadow-sm transition-transform active:scale-95 sm:pr-3 sm:pl-2.5"
         >
-          <Icon size={16} color={color} strokeWidth={2.25} />
-        </span>
-        <span className="hidden font-medium sm:inline" style={{ color }}>
-          {identity.handle}
-        </span>
-      </button>
+          <span
+            className="flex size-7 items-center justify-center rounded-full sm:size-6"
+            style={{ backgroundColor: `${color}1a` }}
+          >
+            <Icon size={16} color={color} strokeWidth={2.25} />
+          </span>
+          <span className="hidden font-medium sm:inline" style={{ color }}>
+            {identity.handle}
+          </span>
+        </button>
+      )}
 
       {open && (
         <>
           <div className="fixed inset-0 z-40 bg-black/20" onClick={() => setOpen(false)} />
-          <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t border-slate-200 bg-white p-5 pb-8 shadow-2xl sm:inset-x-auto sm:top-16 sm:right-4 sm:bottom-auto sm:w-80 sm:rounded-2xl sm:border sm:pb-5">
+          <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl border-t border-slate-200 bg-white p-5 pb-8 shadow-2xl md:inset-x-auto md:top-16 md:right-4 md:bottom-auto md:w-80 md:rounded-2xl md:border md:pb-5">
             <div className="mb-3 flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <span

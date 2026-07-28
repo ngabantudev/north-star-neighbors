@@ -38,7 +38,7 @@ export default function ManagePage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl p-4 sm:p-6">
+    <div className="mx-auto max-w-2xl p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] sm:p-6 md:pb-6">
       <h1 className="mb-1 text-xl font-semibold text-mn-blue">My drops</h1>
       <p className="mb-6 text-sm text-slate-500">
         Only this browser can manage these — the ownership token never leaves your device.
