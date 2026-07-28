@@ -70,7 +70,7 @@ interface MapProps {
   showControls?: boolean;
   className?: string;
   /** Fires with the live MapLibre instance once created, and with null on teardown.
-   *  Lets parents (e.g. the density overlay) attach without this component knowing about them. */
+   *  Lets parents (e.g. the temperature layer) attach without this component knowing about them. */
   onMapInstance?: (map: MaplibreMap | null) => void;
   /** Straight-line "instant routing" preview drawn client-side — no directions API call. */
   routeLine?: RouteLine | null;

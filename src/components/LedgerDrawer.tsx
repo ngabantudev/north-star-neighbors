@@ -31,7 +31,7 @@ function EventDot({ eventType }: { eventType: LedgerEntry['eventType'] }) {
 
 /**
  * Drill-down for one ledger row: what the public record actually says, plus
- * the rest of the event chain for the same cache. Deliberately shows the
+ * everything else that happened to the same drop. Deliberately shows the
  * withheld fields as withheld rather than omitting them — a transparency log
  * that quietly drops the private parts reads as if there weren't any.
  */
@@ -59,7 +59,7 @@ export function LedgerDrawer({ entry, onClose }: LedgerDrawerProps) {
 
       <dl className="mb-4 flex flex-col gap-3 text-sm">
         <div>
-          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Actor</dt>
+          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Who</dt>
           <dd className="mt-0.5 text-slate-800">
             {isHandleActor(entry.actorHandle) ? (
               <AvatarBadge label={entry.actorHandle} />
@@ -70,7 +70,7 @@ export function LedgerDrawer({ entry, onClose }: LedgerDrawerProps) {
         </div>
 
         <div>
-          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Zone</dt>
+          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Where</dt>
           <dd className="mt-0.5 flex flex-wrap items-center gap-2 text-slate-800">
             {zone}
             {entry.locationType && (
@@ -82,10 +82,10 @@ export function LedgerDrawer({ entry, onClose }: LedgerDrawerProps) {
         </div>
 
         <div>
-          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Categories</dt>
+          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">What</dt>
           <dd className="mt-1 flex flex-wrap gap-1.5">
             {entry.categories.length === 0 ? (
-              <span className="text-slate-400">Not recorded</span>
+              <span className="text-slate-400">Not listed</span>
             ) : (
               entry.categories.map((category) => (
                 <span
@@ -100,13 +100,15 @@ export function LedgerDrawer({ entry, onClose }: LedgerDrawerProps) {
         </div>
 
         <div>
-          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Cache reference</dt>
+          <dt className="text-xs font-medium uppercase tracking-wide text-slate-400">Drop ID</dt>
           <dd className="mt-0.5 font-mono text-xs text-slate-600">
             {entry.dropId.slice(0, 8)}
             {entry.detailsFingerprint && (
               <>
                 {' · '}
-                <span title="Truncated SHA-256 of the drop's description">sha {entry.detailsFingerprint}</span>
+                <span title="A one-way fingerprint of the description. It shows the wording hasn't been changed after the fact, without revealing what it said.">
+                  fingerprint {entry.detailsFingerprint}
+                </span>
               </>
             )}
           </dd>
@@ -116,19 +118,19 @@ export function LedgerDrawer({ entry, onClose }: LedgerDrawerProps) {
       <div className="mb-4 rounded-lg bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
         {isCurbside ? (
           <>
-            This was a curbside cache. The ledger records <span className="font-medium">that</span> it happened, never
-            where — the street, the block, and the household stay off the public record entirely.
+            This drop was at someone&apos;s curb. We record <span className="font-medium">that</span> it happened, never
+            where — the street, the block, and the home stay private.
           </>
         ) : (
           <>
-            Public civic sites are named because they are already public. Descriptions are stored only as a one-way
-            hash, and photos, coordinates, and ownership tokens never reach the ledger at all.
+            Places like libraries and community centers are named here because they&apos;re already public. Photos, exact
+            locations, and anything that could identify a neighbor are never part of this record.
           </>
         )}
       </div>
 
       <div>
-        <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">Chain for this cache</h3>
+        <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">History of this drop</h3>
         {chain.loading && <p className="text-sm text-slate-400">Loading…</p>}
         {chain.error && <p className="text-sm text-red-600">{chain.error}</p>}
         {!chain.loading && !chain.error && (

@@ -15,7 +15,7 @@ interface WeatherToggleProps {
 
 /**
  * Toggles the temperature map overlay (see TemperatureLayer.tsx) on/off —
- * same on/off-button idiom as the density Off/Grid/Radar control, rather
+ * same on/off-button idiom as the rest of the map controls, rather
  * than opening a summary popover. Still shows current temp on the button
  * itself, and a red dot when the National Weather Service has an actual
  * Heat Advisory / Excessive Heat Warning active for this location.

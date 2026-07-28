@@ -37,7 +37,7 @@ export function AppNav() {
           My Drops
         </Link>
         <Link href="/ledger" className="hover:text-mn-green transition-colors">
-          Ledger
+          Activity
         </Link>
         <WeatherToggle weather={current} active={active} onToggle={toggle} />
         <IdentityBadge />
