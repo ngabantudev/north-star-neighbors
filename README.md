@@ -22,6 +22,7 @@ Anonymous, map-first mutual aid logistics for post-disruption recovery in the Tw
 3. **Hybrid Hubs & Curbside "Dead Drops":** Providers can choose between vetted public civic anchors (libraries, transit stops) or local residential curbside drop points. Curbside drops automatically apply a secure spatial address masking offset to protect private home addresses.
 4. **One-Tap Mode Selector & Shortest-Path Routing:** When claiming a drop, users instantly select their transport mode (`🚶 Walking`, `🚲 Biking`, `🚗 Rolling`) to draw a privacy-respecting shortest-path route without tracking device sensors.
 5. **Institutional Anchor Integration:** Pre-vetted permanent community organizations (food shelves, shelters) map directly into the base layer via static configurations with operating hours, bulk stock metadata, and automated overflow routing.
+6. **Live Activity Notifications & Public Ledger:** Community transactions announce themselves as they happen — chat-style chips stacked in the corner of the map, each stamped to the millisecond (`12:03:45.892 PM · Blue Loon logged a drop · East Lake Library`), fading out on their own without ever being dismissed by hand. `/ledger` opens the same append-only record as a filterable, drill-down history: proof the network is alive and honest, with nothing in it that could identify anyone.
 
 ---
 
@@ -98,6 +99,23 @@ Attaching a photo is required:
 1. Resized and recompressed client-side via `<canvas>` (`src/lib/imageCompress.ts`), stripping all EXIF/GPS metadata before leaving the device.
 2. Verified locally against the self-hosted NSFWJS model (`src/lib/nsfwCheck.ts`).
 3. Stored as `bytea` on the `drops` row and served via `/api/drops/[id]/photo`, ensuring it is purged automatically the moment the row is deleted.
+
+---
+
+## Public ledger
+
+Every state transition is appended to `activity_ledger` (`writeLedger` in `src/app/actions.ts`) and published — unauthenticated — at `/api/ledger` and `/ledger`.
+
+What a ledger row is allowed to say:
+
+* **Who:** the pseudonymous handle only. Cancellations record `anonymous` (either party can cancel, so naming one would reveal who held the pin) and expiries record `system`.
+* **Where:** the civic anchor's name, which the public map already shows. Curbside events record only `location_type = 'curbside'` and render as *"Masked curbside block"* — the ledger never narrows a residential drop to a street.
+* **What:** the item categories, plus a 12-character prefix of the SHA-256 of the description. The digest is truncated deliberately: a 140-character field full of predictable phrases would be trivially dictionary-attackable if published whole.
+* **Never:** token hashes, plaintext details, photos, or coordinates — they are not written to the ledger at all.
+
+`FLAGGED` and `HIDDEN` stay out of the public feed (`PUBLIC_LEDGER_EVENTS` in `src/lib/ledger.ts`): a live moderation counter tells an abuser exactly how close they are to the auto-hide threshold and tells everyone else who got reported.
+
+Retention is 24 hours, enforced by a self-cleaning trigger on insert, the same rolling window as the pins themselves — publishing a permanent activity archive would undo the zero-footprint guarantee the rest of the app makes.
 
 ---
 

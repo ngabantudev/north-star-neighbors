@@ -11,10 +11,13 @@ import { useWeatherLayer } from '@/components/WeatherLayerProvider';
 /**
  * App-wide navigation, split by viewport rather than by page:
  *  - md and up: the existing horizontal header row (Add Drop / My Drops /
- *    Weather / Identity), unchanged in spirit from before this component existed.
+ *    Ledger / Weather / Identity), unchanged in spirit from before this
+ *    component existed.
  *  - below md: a fixed bottom tab bar (Map / My Drops / Add Drop / Weather /
  *    Profile) in the style of a native mobile app, with Add Drop as a raised
- *    center FAB.
+ *    center FAB. The public ledger is deliberately not a sixth tab — five is
+ *    already the limit for thumb-sized targets, and the "Live ledger" chip on
+ *    the activity notification overlay links straight to it.
  * Both variants read the same WeatherLayerProvider context, so switching
  * viewport size (or simply having both mounted, one hidden via CSS) never
  * doubles the poll, and toggling Weather from either variant flips the same
@@ -32,6 +35,9 @@ export function AppNav() {
         </Link>
         <Link href="/manage" className="hover:text-mn-green transition-colors">
           My Drops
+        </Link>
+        <Link href="/ledger" className="hover:text-mn-green transition-colors">
+          Ledger
         </Link>
         <WeatherToggle weather={current} active={active} onToggle={toggle} />
         <IdentityBadge />

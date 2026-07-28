@@ -105,6 +105,43 @@
   top: 4.5rem;
 }
 
+/* Live activity notifications. Each chip runs two animations: it slides in on
+   mount, then fades itself out after --nsn-notify-life (set inline from
+   LIFETIME_MS in src/components/ActivityNotifications.tsx). Doing the expiry
+   as a delayed animation rather than a timer means the overlay never
+   re-renders just to advance a clock — React only removes the node afterwards,
+   once it's already invisible. */
+@keyframes nsn-notify-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nsn-notify-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.nsn-notify {
+  animation:
+    nsn-notify-in 240ms ease-out both,
+    nsn-notify-out 400ms ease-in var(--nsn-notify-life) forwards;
+}
+
+/* Still has to disappear on schedule — just without the motion. */
+@media (prefers-reduced-motion: reduce) {
+  .nsn-notify {
+    animation: nsn-notify-out 1ms linear var(--nsn-notify-life) forwards;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #333333;

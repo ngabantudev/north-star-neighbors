@@ -100,7 +100,10 @@ create table if not exists activity_ledger (
     'DROPPED', 'CLAIMED', 'FULFILLED', 'CANCELED', 'FLAGGED', 'HIDDEN', 'EXPIRED'
   )),
   drop_id uuid not null,
+  -- Public civic site name for anchor drops; null for curbside, which the
+  -- public ledger renders as a masked block rather than a location.
   anchor_name text,
+  location_type text check (location_type is null or location_type in ('anchor', 'curbside')),
   categories text[],
   details_hash text,            -- SHA-256 of the plaintext details; reproducible without storing raw text
   event_metadata jsonb,         -- extensible bag: TTL minutes, flag count, rating, etc.
@@ -113,6 +116,12 @@ create index if not exists activity_ledger_anchor_idx
   on activity_ledger (anchor_name);
 create index if not exists activity_ledger_event_type_idx
   on activity_ledger (event_type);
+-- Keyset pagination for the public feed, and the per-drop event chain the
+-- drill-down drawer reads. See src/app/api/ledger/route.ts.
+create index if not exists activity_ledger_feed_idx
+  on activity_ledger (occurred_at desc, id desc);
+create index if not exists activity_ledger_drop_id_idx
+  on activity_ledger (drop_id, occurred_at desc);
 
 -- Database-side self-cleaning TTL triggers: every write to drops triggers
 -- atomic cleanup of expired rows. Also prunes request_log to a rolling 24h.
@@ -153,6 +162,27 @@ create trigger trg_cleanup_old_request_log
   after insert on request_log
   for each statement
   execute function cleanup_old_request_log();
+
+-- The ledger is public and append-only, which makes unbounded retention a
+-- permanent public activity archive — exactly what this app promises not to
+-- be. Same self-cleaning pattern, 24h window, which still covers both density
+-- functions below (4h grid, 12h radar). Keep in sync with LEDGER_WINDOW_HOURS
+-- in src/lib/ledger.ts.
+create or replace function cleanup_old_activity_ledger()
+returns trigger
+language plpgsql
+as $$
+begin
+  delete from activity_ledger where occurred_at < now() - interval '24 hours';
+  return null;
+end;
+$$;
+
+drop trigger if exists trg_cleanup_old_activity_ledger on activity_ledger;
+create trigger trg_cleanup_old_activity_ledger
+  after insert on activity_ledger
+  for each statement
+  execute function cleanup_old_activity_ledger();
 
 -- Seed: well-known public civic anchors across the Twin Cities metro.
 -- Coordinates are approximate landmark locations, not exact building entries.

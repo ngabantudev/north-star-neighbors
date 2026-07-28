@@ -3,6 +3,7 @@ import { Open_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 import { AppNav } from "@/components/AppNav";
+import { ActivityNotifications } from "@/components/ActivityNotifications";
 import { WeatherLayerProvider } from "@/components/WeatherLayerProvider";
 import "./globals.css";
 
@@ -49,6 +50,9 @@ export default function RootLayout({
             <AppNav />
           </header>
           <main className="flex flex-1 flex-col">{children}</main>
+          {/* Fixed overlay, deliberately outside the layout flow — no page
+              has to budget height for it. */}
+          <ActivityNotifications />
         </WeatherLayerProvider>
         <Toaster position="top-center" />
       </body>
