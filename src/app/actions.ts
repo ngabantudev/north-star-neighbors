@@ -48,25 +48,33 @@ function hashDetails(details: string): string {
 }
 
 /** Append a row to the append-only activity ledger. Only call from inside
- *  server actions that have already validated the state transition. */
+ *  server actions that have already validated the state transition.
+ *
+ *  Every field here is either already public or deliberately coarsened — this
+ *  is the source of truth for the public ledger (/api/ledger), so nothing that
+ *  can't be published belongs in it: no token hashes, no plaintext details, no
+ *  exact curbside coordinate. `locationType` is what lets the public feed
+ *  render a curbside event as a masked block instead of a named site. */
 async function writeLedger(event: {
   actorHandle: string;
   eventType: 'DROPPED' | 'CLAIMED' | 'FULFILLED' | 'CANCELED' | 'FLAGGED' | 'HIDDEN' | 'EXPIRED';
   dropId: string;
-  anchorName?: string;
-  categories?: DropCategory[];
+  anchorName?: string | null;
+  locationType?: DropLocationType | null;
+  categories?: DropCategory[] | null;
   details?: string;
   metadata?: Record<string, unknown>;
 }): Promise<void> {
   await sql`
     insert into activity_ledger (
-      actor_handle, event_type, drop_id, anchor_name, categories,
+      actor_handle, event_type, drop_id, anchor_name, location_type, categories,
       details_hash, event_metadata
     ) values (
       ${event.actorHandle},
       ${event.eventType},
       ${event.dropId},
       ${event.anchorName ?? null},
+      ${event.locationType ?? null},
       ${event.categories ?? null},
       ${event.details ? hashDetails(event.details) : null},
       ${event.metadata ? JSON.stringify(event.metadata) : null}::jsonb
@@ -146,13 +154,17 @@ export async function createDrop(input: {
     `;
     const dropId = (rows[0] as { id: string }).id;
 
-    void writeLedger({
+    // Awaited, not fire-and-forget: this row is what the public ledger and the
+    // live ticker read, so losing it to a torn-down serverless invocation
+    // would silently punch a hole in an "immutable, complete" audit log.
+    await writeLedger({
       actorHandle: input.providerHandle,
       eventType: 'DROPPED',
       dropId,
+      locationType: 'curbside',
       categories: input.categories,
       details: input.details,
-      metadata: { ttlMinutes: input.ttlMinutes, locationType: 'curbside' },
+      metadata: { ttlMinutes: input.ttlMinutes },
     });
 
     return { ok: true, data: { dropId } };
@@ -199,11 +211,12 @@ export async function createDrop(input: {
 
   const dropId = (rows[0] as { id: string }).id;
 
-  void writeLedger({
+  await writeLedger({
     actorHandle: input.providerHandle,
     eventType: 'DROPPED',
     dropId,
     anchorName: anchor.name,
+    locationType: 'anchor',
     categories: input.categories,
     details: input.details,
     metadata: { ttlMinutes: input.ttlMinutes },
@@ -257,20 +270,38 @@ export async function claimDrop(input: {
   }
 
   const tokenHash = hashToken(input.claimantToken);
+  // Still one atomic `update ... where status = 'AVAILABLE' returning` — the
+  // data-modifying CTE only joins the anchor name onto the row it just claimed,
+  // so the public ledger can name the zone without a second read that could
+  // race with a concurrent cancel.
   const rows = await sql`
-    update drops
-    set status = 'CLAIMED', claimant_handle = ${input.claimantHandle},
-        claimant_token_hash = ${tokenHash}, claimed_at = now()
-    where id = ${input.dropId} and status = 'AVAILABLE'
-    returning id
+    with claimed as (
+      update drops
+      set status = 'CLAIMED', claimant_handle = ${input.claimantHandle},
+          claimant_token_hash = ${tokenHash}, claimed_at = now()
+      where id = ${input.dropId} and status = 'AVAILABLE'
+      returning id, anchor_id, categories, location_type
+    )
+    select c.id, c.categories, c.location_type, a.name as anchor_name
+    from claimed c
+    left join civic_anchors a on a.id = c.anchor_id
   `;
 
   if (rows.length === 0) return fail('This pickup was already claimed or is no longer available.');
 
-  void writeLedger({
+  const claimed = rows[0] as {
+    categories: DropCategory[];
+    location_type: DropLocationType;
+    anchor_name: string | null;
+  };
+
+  await writeLedger({
     actorHandle: input.claimantHandle,
     eventType: 'CLAIMED',
     dropId: input.dropId,
+    anchorName: claimed.anchor_name,
+    locationType: claimed.location_type,
+    categories: claimed.categories,
   });
 
   return { ok: true, data: { claimToken: input.claimantToken } };
@@ -288,9 +319,12 @@ export async function completeDrop(input: {
 
   const tokenHash = hashToken(input.token);
   const rows = await sql`
-    select provider_token_hash, claimant_token_hash, provider_handle, claimant_handle
-    from drops
-    where id = ${input.dropId} and status = 'CLAIMED'
+    select
+      d.provider_token_hash, d.claimant_token_hash, d.provider_handle, d.claimant_handle,
+      d.categories, d.location_type, a.name as anchor_name
+    from drops d
+    left join civic_anchors a on a.id = d.anchor_id
+    where d.id = ${input.dropId} and d.status = 'CLAIMED'
   `;
   if (rows.length === 0) return fail('Pickup not found or not yet claimed.');
 
@@ -299,6 +333,9 @@ export async function completeDrop(input: {
     claimant_token_hash: string | null;
     provider_handle: string;
     claimant_handle: string | null;
+    categories: DropCategory[];
+    location_type: DropLocationType;
+    anchor_name: string | null;
   };
   let otherPartyHash: string | null = null;
   let otherPartyHandle: string | null = null;
@@ -327,10 +364,13 @@ export async function completeDrop(input: {
   const actorHandle =
     tokenHash === drop.provider_token_hash ? drop.provider_handle : drop.claimant_handle!;
 
-  void writeLedger({
+  await writeLedger({
     actorHandle,
     eventType: 'FULFILLED',
     dropId: input.dropId,
+    anchorName: drop.anchor_name,
+    locationType: drop.location_type,
+    categories: drop.categories,
     metadata: { positiveRating: input.positiveRating },
   });
 
@@ -368,7 +408,9 @@ export async function flagDrop(input: { dropId: string; deviceHash: string }): P
   const rows = await sql`select count(*)::int as count from flags where drop_id = ${input.dropId}`;
   const count = (rows[0] as { count: number }).count;
 
-  void writeLedger({
+  // FLAGGED/HIDDEN are recorded but never surfaced by /api/ledger — see
+  // PUBLIC_LEDGER_EVENTS for why moderation signals stay off the public feed.
+  await writeLedger({
     actorHandle: 'anonymous',
     eventType: 'FLAGGED',
     dropId: input.dropId,
@@ -380,7 +422,7 @@ export async function flagDrop(input: { dropId: string; deviceHash: string }): P
   let hidden = false;
   if (count >= threshold) {
     await sql`update drops set status = 'HIDDEN' where id = ${input.dropId} and status != 'HIDDEN'`;
-    void writeLedger({
+    await writeLedger({
       actorHandle: 'anonymous',
       eventType: 'HIDDEN',
       dropId: input.dropId,
@@ -395,17 +437,33 @@ export async function flagDrop(input: { dropId: string; deviceHash: string }): P
 export async function cancelDrop(input: { dropId: string; token: string; deviceHash: string }): Promise<ActionResult<null>> {
   const tokenHash = hashToken(input.token);
   const rows = await sql`
-    delete from drops
-    where id = ${input.dropId}
-      and (provider_token_hash = ${tokenHash} or claimant_token_hash = ${tokenHash})
-    returning id
+    with deleted as (
+      delete from drops
+      where id = ${input.dropId}
+        and (provider_token_hash = ${tokenHash} or claimant_token_hash = ${tokenHash})
+      returning id, anchor_id, categories, location_type
+    )
+    select d.categories, d.location_type, a.name as anchor_name
+    from deleted d
+    left join civic_anchors a on a.id = d.anchor_id
   `;
   if (rows.length === 0) return fail('Not authorized for this pickup.');
 
-  void writeLedger({
+  const canceled = rows[0] as {
+    categories: DropCategory[];
+    location_type: DropLocationType;
+    anchor_name: string | null;
+  };
+
+  // Actor stays 'anonymous': both the provider and the claimant can cancel, so
+  // naming one would tell the feed who was holding the pin.
+  await writeLedger({
     actorHandle: 'anonymous',
     eventType: 'CANCELED',
     dropId: input.dropId,
+    anchorName: canceled.anchor_name,
+    locationType: canceled.location_type,
+    categories: canceled.categories,
     metadata: { canceledByTokenHash: tokenHash.slice(0, 12) + '...' },
   });
 
@@ -419,12 +477,29 @@ export async function cancelDrop(input: { dropId: string; token: string; deviceH
  * client clock can't delete a still-live pin early.
  */
 export async function expireDrop(dropId: string): Promise<ActionResult<null>> {
-  const rows = await sql`delete from drops where id = ${dropId} and expires_at < now() returning id`;
+  const rows = await sql`
+    with deleted as (
+      delete from drops
+      where id = ${dropId} and expires_at < now()
+      returning id, anchor_id, categories, location_type
+    )
+    select d.categories, d.location_type, a.name as anchor_name
+    from deleted d
+    left join civic_anchors a on a.id = d.anchor_id
+  `;
   if (rows.length > 0) {
-    void writeLedger({
+    const expired = rows[0] as {
+      categories: DropCategory[];
+      location_type: DropLocationType;
+      anchor_name: string | null;
+    };
+    await writeLedger({
       actorHandle: 'system',
       eventType: 'EXPIRED',
       dropId,
+      anchorName: expired.anchor_name,
+      locationType: expired.location_type,
+      categories: expired.categories,
     });
   }
   return { ok: true, data: null };

@@ -105,6 +105,36 @@
   top: 4.5rem;
 }
 
+/* Live activity ticker. The marquee element holds two identical copies of the
+   feed, so translating a full -50% lands exactly on the start of the second
+   copy and loops with no visible seam. Duration is set inline from the item
+   count (src/components/LiveTicker.tsx). */
+@keyframes nsn-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.nsn-marquee {
+  animation-name: nsn-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Hovering is how you catch an entry long enough to click it. */
+.nsn-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nsn-marquee {
+    animation: none;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #333333;

@@ -18,8 +18,13 @@ import { useTemperatureLayer } from '@/components/TemperatureLayer';
 import { useWeatherLayer } from '@/components/WeatherLayerProvider';
 import { useWeatherMap } from '@/hooks/useWeatherMap';
 import { expireDrop } from '@/app/actions';
-import type { DropSummary, TravelMode } from '@/lib/types';
-import { RADAR_CATEGORY_COLORS, RADAR_CATEGORY_LABELS, type DropSummary, type RadarCategory } from '@/lib/types';
+import {
+  RADAR_CATEGORY_COLORS,
+  RADAR_CATEGORY_LABELS,
+  type DropSummary,
+  type RadarCategory,
+  type TravelMode,
+} from '@/lib/types';
 import { TEMPERATURE_GRADIENT_CSS } from '@/lib/temperatureColor';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
 
@@ -167,7 +172,9 @@ function HomePageInner() {
   const myRecord = selectedId ? byId(selectedId) : null;
 
   return (
-    <div className="relative h-[calc(100vh-56px-4rem-env(safe-area-inset-bottom))] w-full md:h-[calc(100vh-56px)]">
+    // Viewport minus the 56px header, the 32px live ticker, and (below md) the
+    // 4rem bottom tab bar — the map fills exactly what's left, never scrolls.
+    <div className="relative h-[calc(100vh-56px-32px-4rem-env(safe-area-inset-bottom))] w-full md:h-[calc(100vh-56px-32px)]">
       <Map
         markers={drops.map((d) => ({
           id: d.id,

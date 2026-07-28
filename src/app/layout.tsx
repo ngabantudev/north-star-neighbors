@@ -3,6 +3,7 @@ import { Open_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
 import { AppNav } from "@/components/AppNav";
+import { LiveTicker } from "@/components/LiveTicker";
 import { WeatherLayerProvider } from "@/components/WeatherLayerProvider";
 import "./globals.css";
 
@@ -48,6 +49,9 @@ export default function RootLayout({
             </Link>
             <AppNav />
           </header>
+          {/* Fixed 32px strip on every page — see TICKER_HEIGHT_PX consumers
+              (src/app/page.tsx) before changing its height. */}
+          <LiveTicker />
           <main className="flex flex-1 flex-col">{children}</main>
         </WeatherLayerProvider>
         <Toaster position="top-center" />
