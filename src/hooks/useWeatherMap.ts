@@ -4,30 +4,36 @@ import { useEffect, useRef, useState } from 'react';
 import type { WeatherMapPayload, WeatherMapPointReading } from '@/app/api/weather/map/route';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
 import { WEATHER_REFRESH_MS } from '@/lib/weatherConfig';
-import { useGeolocatedCoords } from '@/hooks/useGeolocatedCoords';
 
 interface WeatherMapState {
   points: WeatherMapPointReading[];
-  /** Geographic box the points span (+ padding) — null until the first response arrives. */
+  /** The geographic box those points span — null until the first response arrives. */
   bounds: LatLngBounds | null;
   loading: boolean;
   error: string | null;
 }
 
+interface UseWeatherMapOptions {
+  /** Current map viewport. Null while unknown — nothing fetches until it's set. */
+  bounds: LatLngBounds | null;
+  /** Only fetches while true — no reason to track/fetch for a layer nobody's viewing. */
+  enabled: boolean;
+}
+
 /**
- * Fetches current temperature at the ~18 real cities nearest the browser's
- * location (falling back to the Twin Cities if geolocation is denied), for
- * the temperature map overlay. Separate from useWeather() (the single point
- * for the toggle's own label/heat alert) since this one is a batched
- * multi-location, region-aware request.
+ * Fetches current temperature for every city within the given map viewport.
+ * The caller passes in the live MapLibre bounds (debounced on pan/zoom)
+ * rather than this hook tracking its own location, since "what's visible"
+ * is a map-viewport concept, not a geolocation one. Zoomed-out decluttering
+ * (nearby readings merging into one averaged number) happens client-side in
+ * TemperatureLayer via MapLibre's own marker clustering, not here.
  */
-export function useWeatherMap(): WeatherMapState {
+export function useWeatherMap({ bounds, enabled }: UseWeatherMapOptions): WeatherMapState {
   const [points, setPoints] = useState<WeatherMapPointReading[]>([]);
-  const [bounds, setBounds] = useState<LatLngBounds | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [responseBounds, setResponseBounds] = useState<LatLngBounds | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const mountedRef = useRef(true);
-  const { coords, resolved } = useGeolocatedCoords();
 
   useEffect(() => {
     mountedRef.current = true;
@@ -35,9 +41,9 @@ export function useWeatherMap(): WeatherMapState {
   }, []);
 
   useEffect(() => {
-    if (!resolved) return;
+    if (!enabled || !bounds) return;
     let cancelled = false;
-    const query = coords ? `?lat=${coords.lat}&lng=${coords.lng}` : '';
+    const query = `?north=${bounds.north}&south=${bounds.south}&east=${bounds.east}&west=${bounds.west}`;
 
     const fetchMap = async () => {
       setLoading(true);
@@ -47,7 +53,7 @@ export function useWeatherMap(): WeatherMapState {
         if (res.ok) {
           const data: WeatherMapPayload = await res.json();
           setPoints(data.points);
-          setBounds(data.bounds);
+          setResponseBounds(data.bounds);
         }
         setError(null);
       } catch (e: unknown) {
@@ -65,7 +71,7 @@ export function useWeatherMap(): WeatherMapState {
       cancelled = true;
       clearInterval(id);
     };
-  }, [resolved, coords]);
+  }, [enabled, bounds]);
 
-  return { points, bounds, loading, error };
+  return { points, bounds: responseBounds, loading, error };
 }

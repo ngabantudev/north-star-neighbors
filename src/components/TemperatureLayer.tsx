@@ -12,7 +12,7 @@ interface TemperatureLayerProps {
   map: MaplibreMap | null;
   /** Whether the temperature map is toggled on. */
   active: boolean;
-  /** Current readings for the ~18 cities nearest the user (see weatherMapPoints.ts). */
+  /** Current readings for every city in the map viewport (see weatherMapPoints.ts) — clustered into averaged bubbles client-side when zoomed out far enough that they'd crowd the screen. */
   points: WeatherMapPointReading[];
   /** The geographic box those points span — null until the first response arrives. */
   bounds: LatLngBounds | null;
@@ -21,7 +21,16 @@ interface TemperatureLayerProps {
 const IMAGE_SOURCE = 'nsn-temp-image';
 const IMAGE_LAYER = 'nsn-temp-raster';
 const LABEL_SOURCE = 'nsn-temp-labels';
-const LABEL_LAYER = 'nsn-temp-labels-layer';
+const LABEL_LAYER_CLUSTER = 'nsn-temp-labels-cluster';
+const LABEL_LAYER_INDIVIDUAL = 'nsn-temp-labels-individual';
+
+// Nearby readings merge into one averaged bubble once they're within this
+// many screen pixels of each other, same idea as deflock.org-style marker
+// clustering — it's driven by actual on-screen crowding at the current
+// zoom, not a fixed political boundary, so it declutters and re-splits
+// smoothly as the user zooms instead of jumping between two fixed states.
+const CLUSTER_RADIUS_PX = 50;
+const CLUSTER_MAX_ZOOM = 12;
 
 const GRID_W = 100; // interpolation grid width; height derived from the bounds' aspect ratio
 const UPSCALE = 6; // final canvas = GRID_W*UPSCALE px wide, smoothed on the way up for a soft, blended look
@@ -104,7 +113,10 @@ function buildLabelsGeoJSON(points: WeatherMapPointReading[]): FeatureCollection
       .map((p) => ({
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [p.lng, p.lat] },
-        properties: { label: `${p.name}\n${Math.round(p.tempF as number)}°` },
+        // Raw number, not a pre-formatted label: clustered points need to
+        // be summed (via clusterProperties below) and averaged at render
+        // time, which only works on a plain numeric property.
+        properties: { tempF: p.tempF },
       })),
   };
 }
@@ -114,7 +126,8 @@ export function useTemperatureLayer({ map, active, points, bounds }: Temperature
     if (!map || !map.isStyleLoaded()) return;
 
     if (!active) {
-      tryRemoveLayer(map, LABEL_LAYER);
+      tryRemoveLayer(map, LABEL_LAYER_CLUSTER);
+      tryRemoveLayer(map, LABEL_LAYER_INDIVIDUAL);
       tryRemoveSource(map, LABEL_SOURCE);
       tryRemoveLayer(map, IMAGE_LAYER);
       tryRemoveSource(map, IMAGE_SOURCE);
@@ -152,27 +165,60 @@ export function useTemperatureLayer({ map, active, points, bounds }: Temperature
     if (labelSource) {
       labelSource.setData(labelData);
     } else {
-      map.addSource(LABEL_SOURCE, { type: 'geojson', data: labelData });
+      map.addSource(LABEL_SOURCE, {
+        type: 'geojson',
+        data: labelData,
+        cluster: true,
+        clusterRadius: CLUSTER_RADIUS_PX,
+        clusterMaxZoom: CLUSTER_MAX_ZOOM,
+        // MapLibre sums this across every point folded into a cluster;
+        // dividing by the auto-provided point_count at render time (below)
+        // gives the cluster's average temperature.
+        clusterProperties: { tempSum: ['+', ['get', 'tempF']] },
+      });
+
+      const sharedLayout = {
+        'text-anchor': 'center' as const,
+        // A capped, viewport-scoped set of points — always show them
+        // rather than losing to the basemap's own labels in the shared
+        // collision index.
+        'text-allow-overlap': true,
+        'text-ignore-placement': true,
+      };
+      const sharedPaint = {
+        'text-color': '#111827',
+        'text-halo-color': '#ffffff',
+        'text-halo-width': 1.4,
+      };
+
       map.addLayer({
-        id: LABEL_LAYER,
+        id: LABEL_LAYER_CLUSTER,
         type: 'symbol',
         source: LABEL_SOURCE,
+        filter: ['has', 'point_count'],
         layout: {
-          'text-field': ['get', 'label'],
-          'text-size': 12,
-          'text-justify': 'center',
-          'text-anchor': 'center',
-          'text-line-height': 1.1,
-          // Only ~18 points total — always show them rather than losing to
-          // the basemap's own city-name labels in the shared collision index.
-          'text-allow-overlap': true,
-          'text-ignore-placement': true,
+          ...sharedLayout,
+          'text-field': [
+            'concat',
+            ['to-string', ['round', ['/', ['get', 'tempSum'], ['get', 'point_count']]]],
+            '°',
+          ],
+          'text-size': 15,
         },
-        paint: {
-          'text-color': '#111827',
-          'text-halo-color': '#ffffff',
-          'text-halo-width': 1.4,
+        paint: sharedPaint,
+      });
+
+      map.addLayer({
+        id: LABEL_LAYER_INDIVIDUAL,
+        type: 'symbol',
+        source: LABEL_SOURCE,
+        filter: ['!', ['has', 'point_count']],
+        layout: {
+          ...sharedLayout,
+          'text-field': ['concat', ['to-string', ['round', ['get', 'tempF']]], '°'],
+          'text-size': 13,
         },
+        paint: sharedPaint,
       });
     }
   }, [map, active, points, bounds]);

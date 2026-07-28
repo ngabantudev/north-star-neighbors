@@ -16,9 +16,16 @@ import { useDensityOverlay } from '@/components/DensityOverlay';
 import { useRadarOverlay } from '@/components/RadarOverlay';
 import { useTemperatureLayer } from '@/components/TemperatureLayer';
 import { useWeatherLayer } from '@/components/WeatherLayerProvider';
+import { useWeatherMap } from '@/hooks/useWeatherMap';
 import { expireDrop } from '@/app/actions';
 import { RADAR_CATEGORY_COLORS, RADAR_CATEGORY_LABELS, type DropSummary, type RadarCategory } from '@/lib/types';
 import { TEMPERATURE_GRADIENT_CSS } from '@/lib/temperatureColor';
+import type { LatLngBounds } from '@/lib/weatherMapPoints';
+
+// How long to wait after the map stops moving before re-fetching the
+// temperature map for the new viewport — coalesces a burst of pan/zoom
+// events into one request instead of firing on every settle.
+const VIEWPORT_DEBOUNCE_MS = 400;
 
 const POLL_MS = 6000;
 
@@ -57,9 +64,37 @@ function HomePageInner() {
   useRadarOverlay({ map: mapInstance, view: density.view, radar: density.radar });
 
   const weatherLayer = useWeatherLayer();
-  useTemperatureLayer({ map: mapInstance, active: weatherLayer.active, points: weatherLayer.points, bounds: weatherLayer.bounds });
+  const [viewportBounds, setViewportBounds] = useState<LatLngBounds | null>(null);
+  const weatherMap = useWeatherMap({ bounds: viewportBounds, enabled: weatherLayer.active });
+  useTemperatureLayer({ map: mapInstance, active: weatherLayer.active, points: weatherMap.points, bounds: weatherMap.bounds });
   const [heatBannerDismissed, setHeatBannerDismissed] = useState(false);
   const heatAlert = weatherLayer.active ? weatherLayer.current?.heatAlert : null;
+
+  useEffect(() => {
+    // Only track the viewport while the layer is actually visible — no
+    // reason to listen for pans/zooms nobody will see the effect of.
+    if (!mapInstance || !weatherLayer.active) return;
+
+    const readBounds = (): LatLngBounds => {
+      const b = mapInstance.getBounds();
+      return { north: b.getNorth(), south: b.getSouth(), east: b.getEast(), west: b.getWest() };
+    };
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setViewportBounds(readBounds());
+
+    let debounceId: ReturnType<typeof setTimeout> | undefined;
+    const onMoveEnd = () => {
+      if (debounceId) clearTimeout(debounceId);
+      debounceId = setTimeout(() => setViewportBounds(readBounds()), VIEWPORT_DEBOUNCE_MS);
+    };
+
+    mapInstance.on('moveend', onMoveEnd);
+    return () => {
+      mapInstance.off('moveend', onMoveEnd);
+      if (debounceId) clearTimeout(debounceId);
+    };
+  }, [mapInstance, weatherLayer.active]);
 
   useEffect(() => {
     if (!navigator.geolocation) return;
