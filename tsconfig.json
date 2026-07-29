@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "allowJs": true,
+    // The data layer is plain JSON and the components are plain JS, so
+    // callback params over imported records infer as `any` by design.
+    "noImplicitAny": false
+  }
+}

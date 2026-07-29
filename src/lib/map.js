@@ -40,13 +40,20 @@ function loadMapStyles() {
   });
 }
 
-function makeMarkerEl(anchor, category) {
+/**
+ * A site can offer several kinds of aid. The marker takes the colour and icon
+ * of its primary tag — the scarcest one, per the order in categories.js — and
+ * names the rest in its accessible label.
+ */
+function makeMarkerEl(anchor, tags) {
+  const [primary] = tags;
   const el = document.createElement('button');
   el.type = 'button';
   el.className = 'ns-marker';
-  el.style.setProperty('--marker', category.color);
-  el.setAttribute('aria-label', `${anchor.name} — ${category.label}`);
-  el.textContent = category.emoji;
+  el.style.setProperty('--marker', primary.color);
+  el.setAttribute('aria-label', `${anchor.name} — ${tags.map((t) => t.label).join(', ')}`);
+  el.textContent = primary.emoji;
+  if (tags.length > 1) el.dataset.multi = String(tags.length);
   return el;
 }
 
@@ -76,24 +83,27 @@ export async function initMap(points) {
   const markers = new Map();
 
   for (const anchor of points) {
-    const category = CATEGORY_BY_ID[anchor.category];
-    if (!category) continue;
+    const tags = (anchor.categories || []).map((id) => CATEGORY_BY_ID[id]).filter(Boolean);
+    if (!tags.length) continue;
 
-    const el = makeMarkerEl(anchor, category);
+    const el = makeMarkerEl(anchor, tags);
     el.addEventListener('click', () => revealAnchor(anchor.id));
 
     const marker = new maplibregl.Marker({ element: el })
       .setLngLat([anchor.lon, anchor.lat])
       .addTo(map);
 
-    markers.set(anchor.id, { marker, el, category: anchor.category });
+    markers.set(anchor.id, { marker, el, categories: anchor.categories });
   }
 
-  // Keep the map layers in step with the CSS-driven sidebar filters.
+  // Keep the markers in step with the CSS-driven sidebar filters. Matches the
+  // list's rule: a site shows while any one of its tags is still checked.
   const syncFilters = () => {
-    for (const { el, category } of markers.values()) {
-      const box = document.getElementById(`f-${category}`);
-      el.hidden = box ? !box.checked : false;
+    for (const { el, categories } of markers.values()) {
+      el.hidden = !categories.some((id) => {
+        const box = document.getElementById(`f-${id}`);
+        return box ? box.checked : true;
+      });
     }
   };
 

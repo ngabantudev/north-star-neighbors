@@ -2,43 +2,69 @@
 import { CATEGORY_BY_ID } from '../data/categories.js';
 
 const { anchor } = Astro.props;
-const category = CATEGORY_BY_ID[anchor.category];
+const tags = anchor.categories.map((id) => CATEGORY_BY_ID[id]).filter(Boolean);
+const primary = tags[0];
 const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${anchor.city}`);
 ---
 
 <details class="anchor" id={`anchor-${anchor.id}`} data-anchor-id={anchor.id}>
   <summary>
-    <span class="dot" style={`--dot:${category.color}`} aria-hidden="true"></span>
+    <span class="dot" style={`--dot:${primary.color}`} aria-hidden="true"></span>
     <span class="summary-text">
       <span class="name">{anchor.name}</span>
-      <span class="addr">{anchor.address}</span>
+      <span class="addr">
+        {anchor.address}{anchor.neighborhood ? ` · ${anchor.neighborhood}` : ''}
+      </span>
+      <span class="tags">
+        {tags.map((t) => (
+          <span class="tag" style={`--tag:${t.color}`}>
+            <span aria-hidden="true">{t.emoji}</span> {t.label}
+          </span>
+        ))}
+      </span>
     </span>
   </summary>
 
   <div class="body">
-    <p class="full-address">
-      {anchor.address}<br />{anchor.city}
-    </p>
+    <p class="full-address">{anchor.address}<br />{anchor.city}</p>
 
     <h4>Hours</h4>
     {anchor.hours ? (
-      <ul class="hours">
-        {anchor.hours.map((h) => (
-          <li><span class="days">{h.days}</span><span class="open">{h.open}</span></li>
-        ))}
-      </ul>
+      <>
+        <ul class="hours">
+          {anchor.hours.map((h) => <li>{h}</li>)}
+        </ul>
+        <p class="caveat">Quoted from the listing, unverified. Call ahead.</p>
+      </>
     ) : (
       <p class="unknown">
-        Not verified here. Call or check the official page before travelling.
+        The listing never states its hours. Call or check the official page
+        before travelling.
       </p>
     )}
 
-    <h4>Services</h4>
-    <ul class="services">
-      {anchor.services.map((s) => <li>{s}</li>)}
-    </ul>
+    {anchor.services.length > 0 && (
+      <>
+        <h4>Services</h4>
+        <ul class="services">
+          {anchor.services.map((s) => <li>{s}</li>)}
+        </ul>
+      </>
+    )}
 
-    {anchor.notes && <p class="notes">{anchor.notes}</p>}
+    {anchor.notes && (
+      <>
+        <h4>From the listing</h4>
+        <p class="notes">{anchor.notes}</p>
+      </>
+    )}
+
+    {anchor.transit && (
+      <>
+        <h4>Transit</h4>
+        <p class="transit">{anchor.transit.replace(/,/g, ', ')}</p>
+      </>
+    )}
 
     <div class="contact">
       {anchor.phone && (
@@ -61,18 +87,17 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
       </a>
     </div>
 
-    {anchor.verification.status !== 'verified' && (
-      <p class="provenance">
-        Unconfirmed listing · source: {anchor.verification.source}
-      </p>
-    )}
+    <p class="provenance">
+      Unverified · imported from TCMAP
+      {anchor.verification.lastUpdated
+        ? ` · last updated ${anchor.verification.lastUpdated}`
+        : ''}
+    </p>
   </div>
 </details>
 
 <style>
-  .anchor {
-    border-bottom: 1px solid var(--line);
-  }
+  .anchor { border-bottom: 1px solid var(--line); }
 
   summary {
     display: flex;
@@ -96,17 +121,25 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
     margin-top: 5px;
   }
 
-  .summary-text { display: flex; flex-direction: column; gap: 2px; }
+  .summary-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .name { font-weight: 600; line-height: 1.3; }
   .addr { font-size: 0.82rem; color: var(--muted); }
 
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .tag {
+    font-size: 0.68rem;
+    line-height: 1.6;
+    padding: 1px 7px;
+    border-radius: 999px;
+    color: var(--text);
+    border: 1px solid color-mix(in srgb, var(--tag) 55%, transparent);
+    background: color-mix(in srgb, var(--tag) 16%, transparent);
+    white-space: nowrap;
+  }
+
   .body { padding: 2px 14px 16px 34px; }
 
-  .full-address {
-    margin: 0 0 14px;
-    font-size: 0.92rem;
-    line-height: 1.45;
-  }
+  .full-address { margin: 0 0 14px; font-size: 0.92rem; line-height: 1.45; }
 
   h4 {
     margin: 14px 0 6px;
@@ -116,15 +149,31 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
     color: var(--muted);
   }
 
-  .hours { margin: 0; padding: 0; list-style: none; font-size: 0.9rem; }
-  .hours li { display: flex; justify-content: space-between; gap: 12px; padding: 2px 0; }
-  .days { color: var(--muted); }
-
-  .unknown {
+  .unknown, .notes, .transit {
     margin: 0;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--muted);
-    line-height: 1.45;
+    line-height: 1.5;
+  }
+  .transit { word-break: break-word; }
+
+  .hours {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .hours li {
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid var(--line);
+    margin-bottom: 3px;
+  }
+
+  .caveat {
+    margin: 8px 0 0;
+    font-size: 0.76rem;
+    color: var(--muted);
   }
 
   .services {
@@ -143,13 +192,6 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
     padding: 3px 9px;
   }
 
-  .notes {
-    margin: 14px 0 0;
-    font-size: 0.86rem;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
   .contact { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
   .btn {
     display: inline-flex;
@@ -163,15 +205,7 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
     font-weight: 600;
     text-decoration: none;
   }
-  .btn.ghost {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--line);
-  }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
 
-  .provenance {
-    margin: 14px 0 0;
-    font-size: 0.74rem;
-    color: var(--muted);
-  }
+  .provenance { margin: 14px 0 0; font-size: 0.74rem; color: var(--muted); }
 </style>

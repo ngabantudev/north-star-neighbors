@@ -13,8 +13,12 @@ export const TILE_STYLE_URL = 'https://tiles.openfreemap.org/styles/positron';
 export const TWIN_CITIES_CENTER = [-93.1866, 44.9625];
 export const DEFAULT_ZOOM = 10.6;
 
-/** Keeps panning inside the metro so the map can't get lost. */
+/**
+ * Wide enough to cover Minnesota. The metro is the centre of gravity, but the
+ * source data includes sites as far out as Onamia, Sandstone, and the
+ * Brainerd lakes — a metro-only bound left those markers unreachable.
+ */
 export const MAX_BOUNDS = [
-  [-93.75, 44.65],
-  [-92.75, 45.25],
+  [-97.5, 43.4],
+  [-89.4, 49.5],
 ];

@@ -2,52 +2,68 @@
 import Base from '../layouts/Base.astro';
 import AnchorCard from '../components/AnchorCard.astro';
 import anchors from '../data/anchors.json';
-import { CATEGORIES } from '../data/categories.js';
+import { CATEGORIES, CATEGORY_ORDER } from '../data/categories.js';
 
-// Sort once, at build time. The browser gets a finished list.
 const sorted = [...anchors].sort((a, b) => a.name.localeCompare(b.name));
 
-const countFor = (id) => anchors.filter((a) => a.category === id).length;
+const countFor = (id) => anchors.filter((a) => a.categories.includes(id)).length;
 
-// Only the fields the map needs, so the inlined payload stays small.
+/**
+ * A site is visible when ANY of its tags is switched on — which means it
+ * should hide only when ALL of its tags are switched off.
+ *
+ * CSS can express that without JavaScript. Every checkbox is a preceding
+ * sibling of the list, so a chain of `~` combinators ANDs their states
+ * together: one rule per tag combination that actually occurs in the data,
+ * requiring every tag in that combination to be unchecked. 26 combinations
+ * here, generated at build time.
+ */
+const combos = [...new Set(sorted.map((a) => a.categories.join(' ')))];
+
+const filterCss = combos
+  .map((combo) => {
+    const ids = combo.split(' ');
+    const chain = CATEGORY_ORDER.filter((id) => ids.includes(id))
+      .map((id) => `#f-${id}:not(:checked)`)
+      .join(' ~ ');
+    return `${chain} ~ .list > li[data-cats="${combo}"] { display: none; }`;
+  })
+  .join('\n');
+
+// Only what the map needs, so the inlined payload stays small.
 const mapPoints = anchors.map((a) => ({
   id: a.id,
   name: a.name,
-  category: a.category,
+  categories: a.categories,
   lat: a.lat,
   lon: a.lon,
 }));
 ---
 
 <Base
-  title="North Star Neighbors — Twin Cities survival infrastructure"
-  description="A free, anonymous directory of water, food, and shelter across Minneapolis and Saint Paul. No accounts, no tracking, no location permissions."
+  title="North Star Neighbors — Twin Cities mutual aid directory"
+  description="A free, anonymous directory of food, shelter, health, supplies, and support services across the Twin Cities. No accounts, no tracking, no location permissions."
 >
   <div class="app">
     <aside class="sidebar">
       <header class="masthead">
         <h1>North Star Neighbors</h1>
         <p class="tagline">
-          Water, food, and shelter across Minneapolis &amp; Saint Paul.
+          {anchors.length} mutual aid sites across Minnesota.
           No account, no tracking, no location access.
         </p>
       </header>
 
       {
         CATEGORIES.map((c) => (
-          <input
-            class="filter-input visually-hidden"
-            type="checkbox"
-            id={`f-${c.id}`}
-            checked
-          />
+          <input class="filter-input visually-hidden" type="checkbox" id={`f-${c.id}`} checked />
         ))
       }
 
-      <div class="filters" role="group" aria-label="Filter by resource type">
+      <div class="filters" role="group" aria-label="Filter by type of aid">
         {
           CATEGORIES.map((c) => (
-            <label class="chip" for={`f-${c.id}`} style={`--chip:${c.color}`}>
+            <label class="chip" for={`f-${c.id}`} style={`--chip:${c.color}`} title={c.blurb}>
               <span class="emoji" aria-hidden="true">{c.emoji}</span>
               <span class="chip-label">{c.label}</span>
               <span class="chip-count">{countFor(c.id)}</span>
@@ -59,7 +75,7 @@ const mapPoints = anchors.map((a) => ({
       <ul id="anchor-list" class="list">
         {
           sorted.map((a) => (
-            <li data-category={a.category} data-anchor-item={a.id}>
+            <li data-cats={a.categories.join(' ')} data-anchor-item={a.id}>
               <AnchorCard anchor={a} />
             </li>
           ))
@@ -67,13 +83,46 @@ const mapPoints = anchors.map((a) => ({
       </ul>
 
       <footer class="colophon">
+        <section class="support">
+          <h2>Support the people doing this work</h2>
+          <p>
+            This directory is just a list. <strong>Rising Waters Mutual
+            Aid</strong> are on the ground doing the hard part. If you have
+            money to give, give it to them rather than to us.
+          </p>
+          <div class="support-actions">
+            <a
+              class="donate"
+              href="https://www.paypal.com/donate/?hosted_button_id=ZS5CHUXPVGWXG"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Donate to Rising Waters
+            </a>
+            <a
+              class="support-link"
+              href="https://risingwatersmutualaid.org/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              risingwatersmutualaid.org
+            </a>
+          </div>
+        </section>
+
         <p>
-          Listings are compiled from public information and are
-          <strong>not confirmed</strong>. Hours and availability change —
-          call ahead before travelling, especially for shelter beds.
+          Compiled from the Twin Cities Mutual Aid Project's public resource
+          list at <a
+            href="https://tcmap.org/resources/"
+            rel="noopener noreferrer nofollow"
+            target="_blank">tcmap.org/resources</a>. That project is no longer
+          active and its data stopped being updated in
+          <strong>January 2024</strong>. Nothing here is confirmed current, and
+          any hours shown are quoted from the original listing.
+          <strong>Call ahead before travelling.</strong>
         </p>
         <p>
-          In an emergency call <strong>911</strong>. For shelter, food, and
+          In an emergency call <strong>911</strong>. For food, shelter, and
           housing referrals across Minnesota, call <strong>211</strong>
           (or 651-291-0211).
         </p>
@@ -81,7 +130,7 @@ const mapPoints = anchors.map((a) => ({
     </aside>
 
     <main class="map-pane">
-      <div id="map" role="application" aria-label="Map of resource locations"></div>
+      <div id="map" role="application" aria-label="Map of aid locations"></div>
       <noscript>
         <div class="noscript-note">
           The map needs JavaScript, but the full directory in the side panel
@@ -92,6 +141,9 @@ const mapPoints = anchors.map((a) => ({
   </div>
 
   <script is:inline set:html={`window.__ANCHORS__ = ${JSON.stringify(mapPoints)};`} />
+
+  <!-- Generated above: one rule per tag combination present in the data. -->
+  <style is:inline set:html={filterCss} />
 
   <script>
     import { initMap } from '../lib/map.js';
@@ -123,74 +175,52 @@ const mapPoints = anchors.map((a) => ({
     }
 
     .masthead { padding: 18px 14px 12px; }
-    h1 {
-      margin: 0;
-      font-size: 1.12rem;
-      letter-spacing: -0.01em;
-    }
-    .tagline {
-      margin: 6px 0 0;
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
+    h1 { margin: 0; font-size: 1.12rem; letter-spacing: -0.01em; }
+    .tagline { margin: 6px 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
 
     .filters {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       padding: 4px 14px 14px;
       flex-wrap: wrap;
       border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      background: var(--panel);
+      z-index: 2;
     }
 
     .chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       min-height: 40px;
-      padding: 0 12px;
+      padding: 0 11px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       user-select: none;
       background: transparent;
       color: var(--muted);
     }
-    .chip-count {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-    }
+    .chip-count { font-size: 0.72rem; font-variant-numeric: tabular-nums; opacity: 0.8; }
 
     /* Checked is the default, so the "on" look keys off the input state. */
-    #f-water:checked ~ .filters .chip[for='f-water'],
+    #f-shelter:checked ~ .filters .chip[for='f-shelter'],
     #f-food:checked ~ .filters .chip[for='f-food'],
-    #f-shelter:checked ~ .filters .chip[for='f-shelter'] {
+    #f-health:checked ~ .filters .chip[for='f-health'],
+    #f-supplies:checked ~ .filters .chip[for='f-supplies'],
+    #f-support:checked ~ .filters .chip[for='f-support'] {
       color: var(--text);
       border-color: var(--chip);
       box-shadow: inset 0 0 0 1px var(--chip);
       background: color-mix(in srgb, var(--chip) 14%, transparent);
     }
 
-    .filter-input:focus-visible ~ .filters .chip {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
+    .filter-input:focus-visible ~ .filters .chip { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* Zero-JavaScript filtering: unchecking a box hides its rows. */
-    #f-water:not(:checked) ~ .list > li[data-category='water'],
-    #f-food:not(:checked) ~ .list > li[data-category='food'],
-    #f-shelter:not(:checked) ~ .list > li[data-category='shelter'] {
-      display: none;
-    }
-
-    .list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      flex: 1 0 auto;
-    }
+    .list { margin: 0; padding: 0; list-style: none; flex: 1 0 auto; }
 
     .colophon {
       padding: 16px 14px 28px;
@@ -201,6 +231,41 @@ const mapPoints = anchors.map((a) => ({
     }
     .colophon p { margin: 0 0 10px; }
     .colophon strong { color: var(--text); }
+
+    /* Deliberately the loudest thing in the footer. */
+    .support {
+      margin: 0 0 16px;
+      padding: 14px;
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+    .support h2 {
+      margin: 0 0 6px;
+      font-size: 0.86rem;
+      color: var(--text);
+    }
+    .support p { margin: 0 0 12px; }
+
+    .support-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .donate {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #14161b;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .support-link { font-size: 0.76rem; word-break: break-word; }
 
     .map-pane { position: relative; }
     #map { position: absolute; inset: 0; background: #11141a; }
@@ -218,13 +283,10 @@ const mapPoints = anchors.map((a) => ({
     /* Phones: the list leads, the map sits above it at a readable height. */
     @media (max-width: 820px) {
       body { overflow: auto; }
-      .app {
-        grid-template-columns: 1fr;
-        grid-template-rows: 45dvh auto;
-        height: auto;
-      }
+      .app { grid-template-columns: 1fr; grid-template-rows: 45dvh auto; height: auto; }
       .map-pane { order: -1; height: 45dvh; }
       .sidebar { overflow: visible; border-right: 0; }
+      .filters { position: static; }
     }
   </style>
 </Base>
