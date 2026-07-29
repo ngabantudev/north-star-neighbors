@@ -1,0 +1,26 @@
+{
+  "name": "north-star-neighbors",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A read-only static directory of permanent survival infrastructure across the Twin Cities.",
+  "scripts": {
+    "predev": "node scripts/vendor-css.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/vendor-css.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "data": "node scripts/convert-tcmap.mjs",
+    "hmis": "node scripts/match-hmis.mjs && node scripts/convert-tcmap.mjs",
+    "verify:links": "node scripts/verify-links.mjs",
+    "verify:osm": "node scripts/verify-osm.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.2.5",
+    "maplibre-gl": "^5.1.0"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.27.0"
+  }
+}

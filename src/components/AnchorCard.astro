@@ -1,0 +1,267 @@
+---
+import { CATEGORY_BY_ID } from '../data/categories.js';
+import { icon } from '../lib/icons.js';
+
+const { anchor } = Astro.props;
+const tags = anchor.categories.map((id) => CATEGORY_BY_ID[id]).filter(Boolean);
+const primary = tags[0];
+const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${anchor.city}`);
+
+// Rendered once per card; the SVG markup is baked in at build time.
+const phoneIcon = icon('phone', { size: 15 });
+const linkIcon = icon('external-link', { size: 15 });
+const navIcon = icon('navigation', { size: 15 });
+const clockIcon = icon('clock', { size: 13 });
+const transitIcon = icon('bus-front', { size: 13 });
+const warnIcon = icon('triangle-alert', { size: 13 });
+const intakeIcon = icon('clipboard-list', { size: 14 });
+---
+
+<details class="anchor" id={`anchor-${anchor.id}`} data-anchor-id={anchor.id}>
+  <summary>
+    <span class="dot" style={`--dot:${primary.color}`} aria-hidden="true"></span>
+    <span class="summary-text">
+      <span class="name">{anchor.name}</span>
+      <span class="addr">
+        {anchor.address}{anchor.neighborhood ? ` · ${anchor.neighborhood}` : ''}
+      </span>
+      <span class="tags">
+        {tags.map((t) => (
+          <span class="tag" style={`--tag:${t.color}`}>
+            <Fragment set:html={icon(t.icon, { size: 12 })} />{t.label}
+          </span>
+        ))}
+      </span>
+    </span>
+  </summary>
+
+  <div class="body">
+    <p class="full-address">{anchor.address}<br />{anchor.city}</p>
+
+    {anchor.hmis && (
+      <p class="hmis">
+        <Fragment set:html={intakeIcon} />
+        <span>
+          Run by <strong>{anchor.hmis.agency}</strong>, an agency in Minnesota's
+          Homeless Management Information System. They can start a housing
+          intake or referral — though not necessarily at this address. Call first.
+        </span>
+      </p>
+    )}
+
+    <h4><Fragment set:html={clockIcon} />Hours</h4>
+    {anchor.hours ? (
+      <>
+        <ul class="hours">
+          {anchor.hours.map((h) => <li>{h}</li>)}
+        </ul>
+        <p class="caveat">
+          <Fragment set:html={warnIcon} />Quoted from the listing, unverified. Call ahead.
+        </p>
+      </>
+    ) : (
+      <p class="unknown">
+        The listing never states its hours. Call or check the official page
+        before travelling.
+      </p>
+    )}
+
+    {anchor.services.length > 0 && (
+      <>
+        <h4>Services</h4>
+        <ul class="services">
+          {anchor.services.map((s) => <li>{s}</li>)}
+        </ul>
+      </>
+    )}
+
+    {anchor.notes && (
+      <>
+        <h4>From the listing</h4>
+        <p class="notes">{anchor.notes}</p>
+      </>
+    )}
+
+    {anchor.transit && (
+      <>
+        <h4><Fragment set:html={transitIcon} />Transit</h4>
+        <p class="transit">{anchor.transit.replace(/,/g, ', ')}</p>
+      </>
+    )}
+
+    <div class="contact">
+      {anchor.phone && (
+        <a class="btn" href={`tel:${anchor.phone.replace(/[^0-9+]/g, '')}`}>
+          <Fragment set:html={phoneIcon} />Call {anchor.phone}
+        </a>
+      )}
+      {anchor.url && (
+        <a class="btn" href={anchor.url} rel="noopener noreferrer nofollow" target="_blank">
+          <Fragment set:html={linkIcon} />Official page
+        </a>
+      )}
+      <a
+        class="btn ghost"
+        href={`https://www.openstreetmap.org/search?query=${mapsQuery}`}
+        rel="noopener noreferrer nofollow"
+        target="_blank"
+      >
+        <Fragment set:html={navIcon} />Directions
+      </a>
+    </div>
+
+    <p class="provenance">
+      Unverified · imported from TCMAP
+      {anchor.verification.lastUpdated
+        ? ` · last updated ${anchor.verification.lastUpdated}`
+        : ''}
+    </p>
+  </div>
+</details>
+
+<style>
+  .anchor { border-bottom: 1px solid var(--line); }
+
+  /* Inline Lucide SVGs. They inherit colour from their container. */
+  .anchor :global(.icon) {
+    flex: none;
+    vertical-align: -0.125em;
+  }
+
+  h4 :global(.icon), .caveat :global(.icon) { margin-right: 5px; }
+  .tag :global(.icon) { margin-right: 4px; }
+  .btn :global(.icon) { margin-right: 7px; }
+
+  summary {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    cursor: pointer;
+    list-style: none;
+    min-height: 44px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: var(--panel-2); }
+  .anchor[open] > summary { background: var(--panel-2); }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dot);
+    flex: none;
+    margin-top: 5px;
+  }
+
+  .summary-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .name { font-weight: 600; line-height: 1.3; }
+  .addr { font-size: 0.82rem; color: var(--muted); }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    line-height: 1.6;
+    padding: 1px 7px;
+    border-radius: 999px;
+    color: var(--text);
+    border: 1px solid color-mix(in srgb, var(--tag) 55%, transparent);
+    background: color-mix(in srgb, var(--tag) 16%, transparent);
+    white-space: nowrap;
+  }
+
+  .body { padding: 2px 14px 16px 34px; }
+
+  .full-address { margin: 0 0 14px; font-size: 0.92rem; line-height: 1.45; }
+
+  h4 {
+    display: flex;
+    align-items: center;
+    margin: 14px 0 6px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .unknown, .notes, .transit {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .transit { word-break: break-word; }
+
+  .hours {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .hours li {
+    padding: 3px 0 3px 10px;
+    border-left: 2px solid var(--line);
+    margin-bottom: 3px;
+  }
+
+  /* The scarcest thing a card can offer, so it reads before the hours. */
+  .hmis {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 4px;
+    padding: 10px 11px;
+    border: 1px solid color-mix(in srgb, #d94f70 45%, var(--line));
+    border-left-width: 3px;
+    border-radius: var(--radius);
+    background: color-mix(in srgb, #d94f70 10%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .hmis :global(.icon) { margin-top: 2px; color: #f08ca4; }
+  .hmis strong { font-weight: 600; }
+
+  .caveat {
+    display: flex;
+    align-items: center;
+    margin: 8px 0 0;
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  .services {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .services li {
+    font-size: 0.78rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  .contact { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: #14161b;
+    font-size: 0.86rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+
+  .provenance { margin: 14px 0 0; font-size: 0.74rem; color: var(--muted); }
+</style>
