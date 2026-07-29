@@ -233,9 +233,15 @@ const mapPoints = anchors.map((a) => ({
      * The markup is unchanged, so this costs nothing where it isn't
      * supported, and Ctrl+F still finds collapsed rows in Chromium.
      */
+    /*
+     * The placeholder height must be close to a real collapsed row (name +
+     * address + tag chips + padding). Underestimating it makes every scroll
+     * target drift as rows render at their true size — which is exactly the
+     * misalignment this had at 76px.
+     */
     .list > li {
       content-visibility: auto;
-      contain-intrinsic-size: auto 76px;
+      contain-intrinsic-size: auto 98px;
     }
 
     /* An open card is being read — never let it skip rendering. */
