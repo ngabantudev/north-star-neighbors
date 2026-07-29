@@ -1,0 +1,177 @@
+---
+import { CATEGORY_BY_ID } from '../data/categories.js';
+
+const { anchor } = Astro.props;
+const category = CATEGORY_BY_ID[anchor.category];
+const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${anchor.city}`);
+---
+
+<details class="anchor" id={`anchor-${anchor.id}`} data-anchor-id={anchor.id}>
+  <summary>
+    <span class="dot" style={`--dot:${category.color}`} aria-hidden="true"></span>
+    <span class="summary-text">
+      <span class="name">{anchor.name}</span>
+      <span class="addr">{anchor.address}</span>
+    </span>
+  </summary>
+
+  <div class="body">
+    <p class="full-address">
+      {anchor.address}<br />{anchor.city}
+    </p>
+
+    <h4>Hours</h4>
+    {anchor.hours ? (
+      <ul class="hours">
+        {anchor.hours.map((h) => (
+          <li><span class="days">{h.days}</span><span class="open">{h.open}</span></li>
+        ))}
+      </ul>
+    ) : (
+      <p class="unknown">
+        Not verified here. Call or check the official page before travelling.
+      </p>
+    )}
+
+    <h4>Services</h4>
+    <ul class="services">
+      {anchor.services.map((s) => <li>{s}</li>)}
+    </ul>
+
+    {anchor.notes && <p class="notes">{anchor.notes}</p>}
+
+    <div class="contact">
+      {anchor.phone && (
+        <a class="btn" href={`tel:${anchor.phone.replace(/[^0-9+]/g, '')}`}>
+          Call {anchor.phone}
+        </a>
+      )}
+      {anchor.url && (
+        <a class="btn" href={anchor.url} rel="noopener noreferrer nofollow" target="_blank">
+          Official page
+        </a>
+      )}
+      <a
+        class="btn ghost"
+        href={`https://www.openstreetmap.org/search?query=${mapsQuery}`}
+        rel="noopener noreferrer nofollow"
+        target="_blank"
+      >
+        Directions
+      </a>
+    </div>
+
+    {anchor.verification.status !== 'verified' && (
+      <p class="provenance">
+        Unconfirmed listing · source: {anchor.verification.source}
+      </p>
+    )}
+  </div>
+</details>
+
+<style>
+  .anchor {
+    border-bottom: 1px solid var(--line);
+  }
+
+  summary {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    cursor: pointer;
+    list-style: none;
+    min-height: 44px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: var(--panel-2); }
+  .anchor[open] > summary { background: var(--panel-2); }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dot);
+    flex: none;
+    margin-top: 5px;
+  }
+
+  .summary-text { display: flex; flex-direction: column; gap: 2px; }
+  .name { font-weight: 600; line-height: 1.3; }
+  .addr { font-size: 0.82rem; color: var(--muted); }
+
+  .body { padding: 2px 14px 16px 34px; }
+
+  .full-address {
+    margin: 0 0 14px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  h4 {
+    margin: 14px 0 6px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hours { margin: 0; padding: 0; list-style: none; font-size: 0.9rem; }
+  .hours li { display: flex; justify-content: space-between; gap: 12px; padding: 2px 0; }
+  .days { color: var(--muted); }
+
+  .unknown {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  .services {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .services li {
+    font-size: 0.78rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  .notes {
+    margin: 14px 0 0;
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .contact { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: #14161b;
+    font-size: 0.86rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--line);
+  }
+
+  .provenance {
+    margin: 14px 0 0;
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+</style>

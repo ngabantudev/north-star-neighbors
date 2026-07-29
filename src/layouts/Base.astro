@@ -1,0 +1,27 @@
+---
+import '../styles/global.css';
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!--
+      No analytics, no tag manager, no font CDN, no cookies. If you are
+      auditing this page, the only third-party request it makes is for map
+      tiles — see src/lib/mapConfig.js.
+    -->
+  </head>
+  <body>
+    <a class="skip-link" href="#anchor-list">Skip to the resource list</a>
+    <slot />
+  </body>
+</html>

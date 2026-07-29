@@ -1,0 +1,230 @@
+---
+import Base from '../layouts/Base.astro';
+import AnchorCard from '../components/AnchorCard.astro';
+import anchors from '../data/anchors.json';
+import { CATEGORIES } from '../data/categories.js';
+
+// Sort once, at build time. The browser gets a finished list.
+const sorted = [...anchors].sort((a, b) => a.name.localeCompare(b.name));
+
+const countFor = (id) => anchors.filter((a) => a.category === id).length;
+
+// Only the fields the map needs, so the inlined payload stays small.
+const mapPoints = anchors.map((a) => ({
+  id: a.id,
+  name: a.name,
+  category: a.category,
+  lat: a.lat,
+  lon: a.lon,
+}));
+---
+
+<Base
+  title="North Star Neighbors — Twin Cities survival infrastructure"
+  description="A free, anonymous directory of water, food, and shelter across Minneapolis and Saint Paul. No accounts, no tracking, no location permissions."
+>
+  <div class="app">
+    <aside class="sidebar">
+      <header class="masthead">
+        <h1>North Star Neighbors</h1>
+        <p class="tagline">
+          Water, food, and shelter across Minneapolis &amp; Saint Paul.
+          No account, no tracking, no location access.
+        </p>
+      </header>
+
+      {
+        CATEGORIES.map((c) => (
+          <input
+            class="filter-input visually-hidden"
+            type="checkbox"
+            id={`f-${c.id}`}
+            checked
+          />
+        ))
+      }
+
+      <div class="filters" role="group" aria-label="Filter by resource type">
+        {
+          CATEGORIES.map((c) => (
+            <label class="chip" for={`f-${c.id}`} style={`--chip:${c.color}`}>
+              <span class="emoji" aria-hidden="true">{c.emoji}</span>
+              <span class="chip-label">{c.label}</span>
+              <span class="chip-count">{countFor(c.id)}</span>
+            </label>
+          ))
+        }
+      </div>
+
+      <ul id="anchor-list" class="list">
+        {
+          sorted.map((a) => (
+            <li data-category={a.category} data-anchor-item={a.id}>
+              <AnchorCard anchor={a} />
+            </li>
+          ))
+        }
+      </ul>
+
+      <footer class="colophon">
+        <p>
+          Listings are compiled from public information and are
+          <strong>not confirmed</strong>. Hours and availability change —
+          call ahead before travelling, especially for shelter beds.
+        </p>
+        <p>
+          In an emergency call <strong>911</strong>. For shelter, food, and
+          housing referrals across Minnesota, call <strong>211</strong>
+          (or 651-291-0211).
+        </p>
+      </footer>
+    </aside>
+
+    <main class="map-pane">
+      <div id="map" role="application" aria-label="Map of resource locations"></div>
+      <noscript>
+        <div class="noscript-note">
+          The map needs JavaScript, but the full directory in the side panel
+          works without it.
+        </div>
+      </noscript>
+    </main>
+  </div>
+
+  <script is:inline set:html={`window.__ANCHORS__ = ${JSON.stringify(mapPoints)};`} />
+
+  <script>
+    import { initMap } from '../lib/map.js';
+
+    // The list is already usable. Pull the map library in afterwards so a
+    // slow connection never blocks the thing people actually need to read.
+    const start = () => initMap(window.__ANCHORS__);
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(start, { timeout: 2000 });
+    } else {
+      setTimeout(start, 200);
+    }
+  </script>
+
+  <style>
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      height: 100dvh;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    .masthead { padding: 18px 14px 12px; }
+    h1 {
+      margin: 0;
+      font-size: 1.12rem;
+      letter-spacing: -0.01em;
+    }
+    .tagline {
+      margin: 6px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      padding: 4px 14px 14px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+      background: transparent;
+      color: var(--muted);
+    }
+    .chip-count {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Checked is the default, so the "on" look keys off the input state. */
+    #f-water:checked ~ .filters .chip[for='f-water'],
+    #f-food:checked ~ .filters .chip[for='f-food'],
+    #f-shelter:checked ~ .filters .chip[for='f-shelter'] {
+      color: var(--text);
+      border-color: var(--chip);
+      box-shadow: inset 0 0 0 1px var(--chip);
+      background: color-mix(in srgb, var(--chip) 14%, transparent);
+    }
+
+    .filter-input:focus-visible ~ .filters .chip {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Zero-JavaScript filtering: unchecking a box hides its rows. */
+    #f-water:not(:checked) ~ .list > li[data-category='water'],
+    #f-food:not(:checked) ~ .list > li[data-category='food'],
+    #f-shelter:not(:checked) ~ .list > li[data-category='shelter'] {
+      display: none;
+    }
+
+    .list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      flex: 1 0 auto;
+    }
+
+    .colophon {
+      padding: 16px 14px 28px;
+      border-top: 1px solid var(--line);
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .colophon p { margin: 0 0 10px; }
+    .colophon strong { color: var(--text); }
+
+    .map-pane { position: relative; }
+    #map { position: absolute; inset: 0; background: #11141a; }
+
+    .noscript-note {
+      position: absolute;
+      inset: auto 16px 16px;
+      padding: 12px 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+    }
+
+    /* Phones: the list leads, the map sits above it at a readable height. */
+    @media (max-width: 820px) {
+      body { overflow: auto; }
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: 45dvh auto;
+        height: auto;
+      }
+      .map-pane { order: -1; height: 45dvh; }
+      .sidebar { overflow: visible; border-right: 0; }
+    }
+  </style>
+</Base>
