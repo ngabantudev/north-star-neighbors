@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useIdentity } from '@/hooks/useIdentity';
 import { useMyDrops } from '@/hooks/useMyDrops';
 import { cancelDrop } from '@/app/actions';
+import { fetchDrop } from '@/lib/dropClient';
 import { DROP_CATEGORY_LABELS, type DropSummary } from '@/lib/types';
 
 export default function ManagePage() {
@@ -17,10 +18,8 @@ export default function ManagePage() {
     async function load() {
       const entries = await Promise.all(
         records.map(async (r) => {
-          const res = await fetch(`/api/drops/${r.dropId}`);
-          if (!res.ok) return [r.dropId, 'gone' as const] as const;
-          const data: { drop: DropSummary } = await res.json();
-          return [r.dropId, data.drop] as const;
+          const drop = await fetchDrop(r.dropId, r.token);
+          return [r.dropId, drop ?? ('gone' as const)] as const;
         }),
       );
       if (!cancelled) setDetails(Object.fromEntries(entries));

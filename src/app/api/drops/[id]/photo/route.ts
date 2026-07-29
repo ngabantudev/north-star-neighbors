@@ -1,26 +1,21 @@
-import { sql } from '@/lib/db';
+import { dropTokenFrom, getDropPhotoForViewer } from '@/lib/dropAccess';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+// Same visibility rule as the drop itself: public while the pin is on the map,
+// provider/claimant-only once it's claimed or hidden. A curbside photo can show
+// the front of someone's home, so it must not outlive the pin's public phase.
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const found = await getDropPhotoForViewer(id, dropTokenFrom(req));
 
-  const rows = await sql`
-    select photo, photo_content_type
-    from drops
-    where id = ${id} and expires_at > now() and photo is not null
-  `;
+  if (!found) return new Response(null, { status: 404 });
 
-  if (rows.length === 0) {
-    return new Response(null, { status: 404 });
-  }
-
-  const row = rows[0] as { photo: Buffer; photo_content_type: string | null };
-
-  return new Response(new Uint8Array(row.photo), {
+  return new Response(new Uint8Array(found.photo), {
     headers: {
-      'Content-Type': row.photo_content_type ?? 'image/jpeg',
-      'Cache-Control': 'private, max-age=3600',
+      'Content-Type': found.contentType,
+      // Authorization is per-token, so this must never land in a shared cache.
+      'Cache-Control': 'private, no-store',
     },
   });
 }
