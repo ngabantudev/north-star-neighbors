@@ -27,6 +27,7 @@ import clock from 'lucide-static/icons/clock.svg?raw';
 import heart from 'lucide-static/icons/heart.svg?raw';
 import busFront from 'lucide-static/icons/bus-front.svg?raw';
 import triangleAlert from 'lucide-static/icons/triangle-alert.svg?raw';
+import clipboardList from 'lucide-static/icons/clipboard-list.svg?raw';
 
 const RAW = {
   'bed-double': bedDouble,
@@ -41,6 +42,7 @@ const RAW = {
   heart,
   'bus-front': busFront,
   'triangle-alert': triangleAlert,
+  'clipboard-list': clipboardList,
 };
 
 const symbolId = (name) => `i-${name}`;

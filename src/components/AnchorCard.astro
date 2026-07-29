@@ -14,6 +14,7 @@ const navIcon = icon('navigation', { size: 15 });
 const clockIcon = icon('clock', { size: 13 });
 const transitIcon = icon('bus-front', { size: 13 });
 const warnIcon = icon('triangle-alert', { size: 13 });
+const intakeIcon = icon('clipboard-list', { size: 14 });
 ---
 
 <details class="anchor" id={`anchor-${anchor.id}`} data-anchor-id={anchor.id}>
@@ -36,6 +37,17 @@ const warnIcon = icon('triangle-alert', { size: 13 });
 
   <div class="body">
     <p class="full-address">{anchor.address}<br />{anchor.city}</p>
+
+    {anchor.hmis && (
+      <p class="hmis">
+        <Fragment set:html={intakeIcon} />
+        <span>
+          Run by <strong>{anchor.hmis.agency}</strong>, an agency in Minnesota's
+          Homeless Management Information System. They can start a housing
+          intake or referral — though not necessarily at this address. Call first.
+        </span>
+      </p>
+    )}
 
     <h4><Fragment set:html={clockIcon} />Hours</h4>
     {anchor.hours ? (
@@ -194,6 +206,23 @@ const warnIcon = icon('triangle-alert', { size: 13 });
     border-left: 2px solid var(--line);
     margin-bottom: 3px;
   }
+
+  /* The scarcest thing a card can offer, so it reads before the hours. */
+  .hmis {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 4px;
+    padding: 10px 11px;
+    border: 1px solid color-mix(in srgb, #d94f70 45%, var(--line));
+    border-left-width: 3px;
+    border-radius: var(--radius);
+    background: color-mix(in srgb, #d94f70 10%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .hmis :global(.icon) { margin-top: 2px; color: #f08ca4; }
+  .hmis strong { font-weight: 600; }
 
   .caveat {
     display: flex;

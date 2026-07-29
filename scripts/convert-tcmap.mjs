@@ -27,6 +27,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(root, 'src/data/TCMAP Public Data-Grid view.csv');
 const OUT = resolve(root, 'src/data/anchors.json');
 const OVERRIDES = resolve(root, 'src/data/link-overrides.json');
+const HMIS_MATCHES = resolve(root, 'src/data/hmis-matches.json');
 
 /**
  * Corrections layered on top of the CSV. anchors.json is regenerated on every
@@ -38,6 +39,19 @@ try {
   linkOverrides = JSON.parse(readFileSync(OVERRIDES, 'utf8')).urls || {};
 } catch {
   // Optional file: converting without it just leaves the CSV's URLs alone.
+}
+
+/**
+ * Sites run by an agency in Minnesota's HMIS. Produced by
+ * scripts/match-hmis.mjs, which must run after this script (it reads
+ * anchors.json), so the first conversion on a clean checkout simply has no
+ * matches to apply.
+ */
+let hmisMatches = {};
+try {
+  hmisMatches = JSON.parse(readFileSync(HMIS_MATCHES, 'utf8')).matches || {};
+} catch {
+  // Optional file.
 }
 
 /** RFC 4180-ish parser: quoted fields may contain commas and newlines. */
@@ -232,9 +246,13 @@ function classify(row, get) {
 
   const tags = [];
   for (const id of CATEGORY_ORDER) {
-    const { flags, re } = CLASSIFIERS[id];
-    const byFlag = flags.some((c) => get(row, c) === 'checked');
-    if (byFlag || re.test(blob)) tags.push(id);
+    // Not every tag is inferred from the text. `hmis` comes from matching
+    // against a separate agency list — see scripts/match-hmis.mjs.
+    const classifier = CLASSIFIERS[id];
+    if (!classifier) continue;
+
+    const byFlag = classifier.flags.some((c) => get(row, c) === 'checked');
+    if (byFlag || classifier.re.test(blob)) tags.push(id);
   }
   return tags;
 }
@@ -350,6 +368,9 @@ for (const row of body) {
   const transitRaw = get(row, 'public_transit');
   const hours = extractHours(updates);
 
+  const hmis = hmisMatches[id] || null;
+  if (hmis) tags.push('hmis');
+
   anchors.push({
     id,
     name,
@@ -367,6 +388,9 @@ for (const row of body) {
     // the listing never states an hour. See extractHours().
     hours,
     neighborhood: get(row, 'neighborhood') || null,
+    // { agency, matchedBy } when this site is run by an HMIS agency. The card
+    // names the agency so a reader can judge the match themselves.
+    hmis: hmis ? { agency: hmis.agency, matchedBy: hmis.matchedBy } : null,
     notes: tidyNotes(updates, hours),
     verification: {
       status: 'stale-import',

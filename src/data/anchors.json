@@ -30,6 +30,7 @@
       "Groceries distributed every Saturday from 12:00pm to 3:00pm by Worldwide Outreach for Christ Ministries at 3808 Chicago Ave."
     ],
     "neighborhood": "Central",
+    "hmis": null,
     "notes": "Needs change very often. Best option to contribute: use the wishlist at https://www.amazon.com/hz/wishlist/ls/HBG9XS6Q8371 You can also stop by the square to get involved! Informational links: - Significance of the space: tinyurl.com/ydy76smj - Map of memorial site: tinyurl.com/y8autpbf",
     "verification": {
       "status": "stale-import",
@@ -44,7 +45,8 @@
       "shelter",
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "510 S 8th St",
     "city": "Minneapolis, MN 55404",
@@ -62,6 +64,10 @@
       "Monday - Friday: 9am-1pm"
     ],
     "neighborhood": "Elliot Park",
+    "hmis": {
+      "agency": "Agate Housing and Services",
+      "matchedBy": "full name"
+    },
     "notes": "Public Shower is open Showers are available at no cost to the public at our residency location – 510 South 8th Street, Minneapolis. Upon arrival, guests check in at the front desk where they will receive a towel and soap. Provides various lengths of stay and levels of service to single adults who have experienced long-term homelessness and are working to attain suitable long-term housing.",
     "verification": {
       "status": "stale-import",
@@ -89,6 +95,7 @@
       "Saturday 6:00am- 11:00am"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Open for distributing: Harm reduction supplies including naloxone, works, and syringes. Ask front desk for Access Points program. Call 763-237-9898 for more info.",
     "verification": {
       "status": "stale-import",
@@ -102,7 +109,8 @@
     "categories": [
       "shelter",
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "714 Park Ave",
     "city": "Minneapolis, MN 55404",
@@ -120,6 +128,10 @@
       "Shelf of Hope Food Shelf open Wednesdays 10am - 1pm"
     ],
     "neighborhood": "Elliot Park",
+    "hmis": {
+      "agency": "Agate Housing and Services",
+      "matchedBy": "full name"
+    },
     "notes": "Our public meal service is currently closed to the public, but will resume soon. Donations accepted by appointment: https://agatemn.org/donate/ Find additional resources at: https://agatemn.org/get-help/ Facebook: https://www.facebook.com/AgateServicesMN",
     "verification": {
       "status": "stale-import",
@@ -150,6 +162,7 @@
       "Open by appointment, Monday - Friday, 9:00AM - 4:00PM"
     ],
     "neighborhood": "Whittier",
+    "hmis": null,
     "notes": "We do drop-ins for people experiencing unsheltered homelessness, generate people's birth certificates, set up mailboxes for them so they can receive mail on-site, hand out snack packs, and have a Representative Payee program for those receiving Social Security Disability or Supplemental Security Income payments who need a receiver and/or budgeting assistance Currently in need of Snack Packs, Welcome Baskets, and Comf…",
     "verification": {
       "status": "stale-import",
@@ -190,6 +203,7 @@
       "Supply drop off Monday - Friday: 10am - 2pm by appointment only."
     ],
     "neighborhood": "Near North",
+    "hmis": null,
     "notes": "To make an appointment call 612-326-5851 if you'd like to volunteer to deliver items. Winter Coat Giveaway: https://docs.google.com/forms/d/e/1FAIpQLSeEyxGvUy-eVoMC5XJchiZmQyFZ8BrBI2fNMDFAfX5rxFMHiw/viewform Al-Maa'uun provides delivery of cooked halal meals for seniors (60+) and disabled adults to North Minneapolis households as a Meals on Wheels provider.",
     "verification": {
       "status": "stale-import",
@@ -205,7 +219,8 @@
       "food",
       "health",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "3808 Nicollet Ave",
     "city": "Minneapolis, MN 55409",
@@ -224,6 +239,10 @@
       "Monday-Friday: 9:00am-4:00pm"
     ],
     "neighborhood": "King Field",
+    "hmis": {
+      "agency": "The Aliveness Project",
+      "matchedBy": "site name inside agency name"
+    },
     "notes": "Donations are accepted year round: Anyone living with HIV is warmly welcomed to become a member of The Aliveness Project at no cost. Member benefits include meal programs, mental health support, nutrition therapy, housing support and case management, activities and more.",
     "verification": {
       "status": "stale-import",
@@ -257,6 +276,7 @@
       "Fridays: 10am - 1pm"
     ],
     "neighborhood": "Central",
+    "hmis": null,
     "notes": "HIV and Hepatitis C testing, syringes, naloxone, syphilis testing Mainline is collecting hygiene products, as well as monetary donations for our clients. Hours (accepting + distributing donations): No Wednesdays (This site has constant need and will be active for the foreseeable future) If you're unable to make it in time please call 651-359-3459.",
     "verification": {
       "status": "stale-import",
@@ -282,6 +302,7 @@
       "Please join All Nations Youth and Community Assistance Program on Fridays from 11:30 am to 2:30 pm for a free food Distribution."
     ],
     "neighborhood": "Willard-Hay",
+    "hmis": null,
     "notes": "Please come early-- food often runs out by 1:30 pm. Contact: 612-707-4030 or 763-777-1840",
     "verification": {
       "status": "stale-import",
@@ -316,6 +337,7 @@
       "10am-7pm on Thursdays"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Open: Free internal and external condoms, dental dams, and personal PPE as well as informational flyers on sexual health. No ID needed. The price of other clinic services is pay-what-you-can. If unable to pay what you can for services, long-term care would require ID, but is not needed to access services initially. Call or visit the clinic to learn more.",
     "verification": {
       "status": "stale-import",
@@ -352,6 +374,7 @@
       "Mondays through Thursdays, 9:00am - 3:00pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Hours for Distribution -APPOINTMENT ONLY- Make an appointment up to 48 hours in advance at https://acbcfoodshelf.timetap.com/ (Closed any day Anoka-Hennepin school district cancels due to weather) Accepting Donations or call 763.422.0046 to schedule a drop-off. Anoka County Brotherhood Council Food Shelf distributes food and clothing.",
     "verification": {
       "status": "stale-import",
@@ -382,6 +405,7 @@
       "Thursday 11am-7pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Hours: Friday 10am-5pm Saturday 10am-5pm Sunday closed",
     "verification": {
       "status": "stale-import",
@@ -407,6 +431,7 @@
       "Monday: 12:00-2:00pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food Shelf Hours:",
     "verification": {
       "status": "stale-import",
@@ -434,6 +459,7 @@
       "Monday-Friday: 4:30-5:30pm"
     ],
     "neighborhood": "Union Park",
+    "hmis": null,
     "notes": "Free snacks for Saint Paul youth (18 and under) at the Rice Recreation Center! Through a partnership with Youthprise, free suppers and snacks are available for youth 18 years of age and under. Schedules are subject to change based on programming needs.",
     "verification": {
       "status": "stale-import",
@@ -460,6 +486,7 @@
     "transit": "3-BUS-(2 blocks),14-BUS-(1 block),7-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Unnamed record",
+    "hmis": null,
     "notes": "*Supply drop-off by appointment only.* Asian Women United of Minnesota (AWUM) provides a safe place for all women and their children dealing with domestic violence, including physical, emotional, or sexual abuse, with a special focus on providing culturally competent services to women of Asian and Pacific Islander descent.",
     "verification": {
       "status": "stale-import",
@@ -488,6 +515,7 @@
       "Serving a free drive-up to-go dinner every Thursday, 4:30-6pm."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": null,
     "verification": {
       "status": "stale-import",
@@ -520,6 +548,7 @@
       "Thursday 5:30–7:30pm (Walk-In Only)"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "The food shelf is located at 160 Lake St. N in the City Hall building. Distribution hours and types: (Online Ordering Appt. Only) (Pop Up Pantry) (Online Ordering Appt. Only) Friday 11:30 a.m.–12:30 p.m. (Freebie Friday) Closed major holidays At Big Lake Community Food Shelf, we treat our clients with the utmost dignity and respect they deserve. We are located in city hall.",
     "verification": {
       "status": "stale-import",
@@ -547,6 +576,7 @@
       "Free food distribution, Thursdays 10am-12pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Open to everyone! Come in the front door and someone will be there to assist you. (763) 757-2170",
     "verification": {
       "status": "stale-import",
@@ -561,7 +591,8 @@
       "shelter",
       "health",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "1111 W 22nd St",
     "city": "Minneapolis, MN 55405",
@@ -576,6 +607,10 @@
     "transit": "6-BUS-(2 blocks),2-BUS-(2 blocks),17-BUS-(3 blocks),114-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Lowry Hill",
+    "hmis": {
+      "agency": "Bridge for Youth",
+      "matchedBy": "full name"
+    },
     "notes": "The Emergency Shelter is open 24/7/365 for youth (ages 10-17) For immediate help, text: (612) 400-SAFE or Call: (612) 377-8800 The Bridge for Youth centers youth voice, justice, and equity in all we do, and empowers youth experiencing homelessness through safe shelter, basic needs and healthy relationships.",
     "verification": {
       "status": "stale-import",
@@ -605,6 +640,7 @@
       "Monday-Friday 10am-4:30pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Meals are served curbside outside the single door facing the east side of the parking lot. https://www.loavesandfishesmn.org/community-meal-sites/brooklyn-united-methodist-church/ West African Family & Community Services: Fresh and pantry food items, including West African items. https://www.facebook.com/West-African-Family-Community-Services-BUMC-101490208182022/",
     "verification": {
       "status": "stale-import",
@@ -635,6 +671,7 @@
       "Nutrition Assistant Program for Seniors (NAPS) on every third Tuesday of the month from 10:00am-11:30am"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Distribution: Schedule an appointment: (952) 985-5300 Donation drop-offs:",
     "verification": {
       "status": "stale-import",
@@ -665,6 +702,7 @@
       "Thursday: 12-4pm"
     ],
     "neighborhood": "Corcoran",
+    "hmis": null,
     "notes": "Both receiving donations and distributing donations Friday: Appointment only at the CNO Office or call/text director Alicia Smith to arrange an alternate drop-off time at 612-719-4006",
     "verification": {
       "status": "stale-import",
@@ -701,6 +739,7 @@
       "Friday 9am-3pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Accepting Donations at Door C at the back of the building: When arriving, please go to the door in the back of the building and ring the bell. Call 763-441-1020 for donation times available outside of regular business hours.",
     "verification": {
       "status": "stale-import",
@@ -729,6 +768,7 @@
       "Saturday: 9am - 8pm"
     ],
     "neighborhood": "Seward",
+    "hmis": null,
     "notes": "Once a month Cafe Racer hosts a free lunch for anyone and everyone. Free meals by request anytime during open hours - please call to request one: 612-208-1695 Monday: CLOSED except for monthly Break Bread Free Lunch Sunday: 9am - 2pm More details: We recognize that food inequities are still very much a reality in our community.",
     "verification": {
       "status": "stale-import",
@@ -759,6 +799,7 @@
       "Distributing BY APPOINTMENT on Wednesdays from 11:00am-3:00pm, and Saturdays 9:00am-1:00pm."
     ],
     "neighborhood": "Bancroft",
+    "hmis": null,
     "notes": "No appointments are currently available. To join the waitlist, fill out the form here: https://docs.google.com/forms/d/e/1FAIpQLScJkhNAvwyELq8k-u6dOwkpEktTzuS49LFTUlzlFB9HjGA-Aw/viewform Questions? Call or text 612-285-3876. More information at calvaryfoodshelf.org",
     "verification": {
       "status": "stale-import",
@@ -787,6 +828,7 @@
       "Saturdays: 1pm - 3pm"
     ],
     "neighborhood": "Webber-Camden",
+    "hmis": null,
     "notes": "Hot dinners are served curbside every Weekly Food Share - Client-choice, walk-up line. - Outside when the weather allows. - Fresh fruit, vegetables, dairy, and meat choices. - Spanish language support available. Walk-ups welcome. Please wear a mask. Everyone is welcome. No ID required, but there will be a line as they can only allow a certain number of people in the donation area at a time.",
     "verification": {
       "status": "stale-import",
@@ -818,6 +860,7 @@
       "Monday - Saturday: 12:00pm-2:30pm"
     ],
     "neighborhood": "Lind-Bohanon",
+    "hmis": null,
     "notes": "Donation Receiving hours: Grocery box Distributing hours: Closed Sundays. Stop by the corner of 47th & Colfax to get a meal and box of groceries to take home for you and your family. Everyone in our community is welcome! All food distributions last until supplies are gone. Website: http://www.thecamdenpromise.org/",
     "verification": {
       "status": "stale-import",
@@ -849,6 +892,7 @@
       "Wednesday 2-6 pm"
     ],
     "neighborhood": "Cedar Riverside",
+    "hmis": null,
     "notes": "Campus Cupboard In-Person Shopping in Anderson 26. The most accessible entrance is the 2016 S. 8th St entrance. Summer 2023 Hours: Appointments on request Campus Kitchen hosts cooking workshops in the Food Lab (Hagfors 108) almost every week. Email campuskitchen@augsburg.edu to get added to the Food Lab email list and learn about upcoming events.",
     "verification": {
       "status": "stale-import",
@@ -879,6 +923,7 @@
       "Friday, 8am-4:30pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Location: A 1560 (first floor Activities building) Fall semester hours: Open to Normandale students only! Student ID number required. We offer fresh and frozen groceries available all times, with no limits to how often you can visit or what you can take. Grab-and-Go Meals: fresh or frozen meals supplied by Minnesota Central Kitchen. Students can get up to 2 meals per day, while supplies last.",
     "verification": {
       "status": "stale-import",
@@ -910,6 +955,7 @@
       "Mon - Thurs, 9am - 4pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food shelf open to Hennepin County residents: Fresh produce distribution 2nd. *Numbers handed out at 12:30pm Accepting hours: Please park in front of the food shelf and a staff member or volunteer will greet you at the door to collect items; no appointment needed CAPI is no longer providing curbside pickup. Those visiting the food shelf may come inside and choose their own items.",
     "verification": {
       "status": "stale-import",
@@ -935,6 +981,7 @@
       "Distributing food every Thursday, 12-3 pm, with Sanneh Foundation."
     ],
     "neighborhood": "Rondo",
+    "hmis": null,
     "notes": null,
     "verification": {
       "status": "stale-import",
@@ -968,6 +1015,7 @@
       "To donate food or household essentials: you can make your donation during CEAP's open hours, which are Monday-Friday 8am to 4:30pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Curbside pickup: Sign up at app.pantrysoft.com/login/ceap or call 763-566-9600 to make an appointment for food assistance. Arrive at your appointment time and follow the signs through the circle drive at the back of the building. Stay in your car. 60% of the food consists of fresh produce, including vegetables, fruit, meat and dairy, when possible. Non-perishable items comprise the rest of any order.",
     "verification": {
       "status": "stale-import",
@@ -998,6 +1046,7 @@
       "Monday and Thursday 4pm-6pm."
     ],
     "neighborhood": "North Suburbs",
+    "hmis": null,
     "notes": "Food distribution hours are: No appointment needed; clients can visit twice a month (but be aware that this will soon return to once a month). No ID required, but some household information will be collected for reporting to Second Harvest. Donations can be given at food shelf by appointment. Due to COVID constraints, you must call (763-784-2013) to make an appointment to donate food items.",
     "verification": {
       "status": "stale-import",
@@ -1025,6 +1074,7 @@
       "Mon-Sat, 10am-6pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Accepting Donations: Once you arrive, ask the friendly cashiers about putting in a food order. They will connect you with the right person. We ask that you stop in between 10:30 am - 4:30 pm to ensure that a team member is available to help! Donations: All furniture is checked in through the front door. Ask a cashier for a staff member to check it in.",
     "verification": {
       "status": "stale-import",
@@ -1055,6 +1105,7 @@
       "Thursday: 8:30am-1:00pm & 2:00pm-5:30pm"
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "Hours for accepting cloth diapers and supplies for the MN Cloth Diaper Bank ( https://www.mnclothdiaperbank.org ): Friday: 8:30am-1:00pm",
     "verification": {
       "status": "stale-import",
@@ -1084,6 +1135,7 @@
       "Friday: 9:00am - 2:00pm"
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "Hours for accepting donations: Donations are accepted during Child and Family Chiropractic's business hours.",
     "verification": {
       "status": "stale-import",
@@ -1115,6 +1167,7 @@
       "Thursday: 1 pm - 6:30pm"
     ],
     "neighborhood": "Lowertown",
+    "hmis": null,
     "notes": "Anonymous syringe exchange / needle exchange and disposal, Naloxone / Narcan, HIV testing, Hepatitis C testing, Hepatitis A vaccination, syphilis testing, covid vaccination, and connection to community resources. Friday: 10 am- 1 pm Walk-ins are okay. Located in Saint Paul - Ramsey County Public Health Center, enter through door 3.",
     "verification": {
       "status": "stale-import",
@@ -1127,7 +1180,8 @@
     "name": "CLUES Minneapolis-Canasta Familiar",
     "categories": [
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "777 East Lake Street",
     "city": "Minneapolis, MN 55407",
@@ -1145,6 +1199,10 @@
       "Canasta Familiar will distribute free food every Wednesday at CLUES Minneapolis from 2 pm to 5 pm; no registration is necessary."
     ],
     "neighborhood": "Phillips West",
+    "hmis": {
+      "agency": "Comunidades Latinas Unidas En Servicio",
+      "matchedBy": "acronym CLUES"
+    },
     "notes": "Food will be distributed on a first-come, first-served basis and while supplies last. Traffic guidelines: https://clues.org/wp-content/uploads/2020/10/CANASTA-FAMILIAR-Winter-Food-Distribution-Update_ENG-SPAN.pdf The Canasta Familiar is a free food distribution program that includes fruits, vegetables, and other fresh groceries. Foods may vary according to availability.",
     "verification": {
       "status": "stale-import",
@@ -1157,7 +1215,8 @@
     "name": "CLUES St. Paul-Canasta Familiar",
     "categories": [
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "771 Margaret Street",
     "city": "St. Paul, MN 55106",
@@ -1174,6 +1233,10 @@
       "Lunes / Mondays 3pm - 5pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": {
+      "agency": "Comunidades Latinas Unidas En Servicio",
+      "matchedBy": "acronym CLUES"
+    },
     "notes": "Canasta Familiar will now distribute free food every Monday at CLUES St. Paul from 3pm to 5pm; no registration is necessary. Food will be distributed on a first-come, first-served basis and while supplies last. Traffic guidelines: https://clues.org/wp-content/uploads/2020/10/CANASTA-FAMILIAR-Winter-Food-Distribution-Update_ENG-SPAN.pdf The Canasta Familiar is a free food distribution program that includes fruits, veg…",
     "verification": {
       "status": "stale-import",
@@ -1187,7 +1250,8 @@
     "categories": [
       "shelter",
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1651 Jefferson Parkway",
     "city": "Northfield, MN 55057",
@@ -1209,6 +1273,10 @@
       "Mondays and Tuesdays, and Thursdays: 11am-5pmFridays: 9:30am-2pm"
     ],
     "neighborhood": null,
+    "hmis": {
+      "agency": "Community Action Center of Northfield",
+      "matchedBy": "full name"
+    },
     "notes": "Resource Center Hours: Food Shelf Hours (to receive or to donate food): (Closed Wednesdays) Walk-ins welcome- no appointment needed! -Food is available for anyone who needs it up to once per week. -No ID or proof of income is required. Minimal information is requested (name, address, number of people in your household, ages). -Any information shared with us is kept confidential.",
     "verification": {
       "status": "stale-import",
@@ -1221,7 +1289,8 @@
     "name": "Community Action Center of Northfield- NCEC location",
     "categories": [
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "700 Lincoln Parkway Northfield",
     "city": "MN 55057",
@@ -1240,6 +1309,10 @@
       "Open Thursdays, 3pm–7pm"
     ],
     "neighborhood": null,
+    "hmis": {
+      "agency": "Community Action Center of Northfield",
+      "matchedBy": "full name"
+    },
     "notes": "Walk-ins welcome- no appointment needed! -Food is available for anyone who needs it up to once per week. -No ID or proof of income is required. Minimal information is requested (name, address, number of people in your household, ages). -Any information shared with us is kept confidential. -Our staff speak English, Spanish, and Somali.",
     "verification": {
       "status": "stale-import",
@@ -1271,6 +1344,7 @@
       "Thursdays 5pm - 7pm"
     ],
     "neighborhood": "Bancroft",
+    "hmis": null,
     "notes": "Accepting donations: Distribution: Delivery available on Saturdays (with appointments requested the Sunday before). Fill out the request form here: https://canmn.vercel.app/ If you are donating a large number of perishable items or need to drop off at a time outside of our normal drop-off hours, please contact us at communityaidnetworkmn@gmail.com.",
     "verification": {
       "status": "stale-import",
@@ -1296,6 +1370,7 @@
       "Food Pantry is open the 2nd Friday of each month, 8am-11am."
     ],
     "neighborhood": "Phillips West",
+    "hmis": null,
     "notes": "Phone: (612) 746-4108 Email: info@communitybridgempls.org",
     "verification": {
       "status": "stale-import",
@@ -1322,6 +1397,7 @@
       "3rd Wednesday of every month: 12pm - 1:30pm."
     ],
     "neighborhood": "Near North",
+    "hmis": null,
     "notes": "Food shelf every Supplies go to community on need-by-need basis.",
     "verification": {
       "status": "stale-import",
@@ -1356,6 +1432,7 @@
       "Friday, 1pm-3pm [First-come, first served]"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "You may visit the food shelf 1 time per month. Learn more: https://cesmn.org/visit-the-food-shelf/ Home delivery is designed for our neighbors in the Phillips area who are low income and unable to physically visit the food pantry. Food is delivered free of charge, once a month. For more info, call 612-870-1125 or email us: CES@cesmn.org Donations accepted M-F 9am – 12pm.",
     "verification": {
       "status": "stale-import",
@@ -1388,6 +1465,7 @@
       "Accepting donations Sundays 12:30-3:30 and Mondays/Tuesdays 1:30-6:00."
     ],
     "neighborhood": "Marcy Holmes",
+    "hmis": null,
     "notes": "Look for the door with the bag lunch on it, and come up the stairs! Volunteers turn rescued produce and donated goods into hot meals delivered to unhoused groups all over Minneapolis and offered to anyone who walks up. linktr.ee/communitykitchenmpls",
     "verification": {
       "status": "stale-import",
@@ -1423,6 +1501,7 @@
       "Friday and Saturday: 9am - 1pm"
     ],
     "neighborhood": "Longfellow",
+    "hmis": null,
     "notes": "https://copalmn.org/ Communities Organizing Latinx Power and Action (COPAL) Do you need assistance with access to food, access to health insurance, how to do your taxes, apply for unemployment, filling out the census, or other resources? Call to talk a COPAL Navigator who can answer your questions at 612-598-6632.",
     "verification": {
       "status": "stale-import",
@@ -1451,6 +1530,7 @@
       "Walk-ins welcome Monday-Friday 8 am-4 pm"
     ],
     "neighborhood": "Central",
+    "hmis": null,
     "notes": "Southside Clinic is on the front lines delivering vaccines and boosters to our community We are currently administering Moderna and Pfizer to patients 6 months and older. Wear a mask, and don't forget to bring your vaccine card when you come in for a booster appointment! Same-day COVID testing can be done for health care workers, first responders and essential workers. Call 612-827-7181 to schedule an appointment.",
     "verification": {
       "status": "stale-import",
@@ -1478,6 +1558,7 @@
       "Monday - Thursday: 9:00am-6:30pm"
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "Donations are accepted at this site during Delightful Chiropractic's business hours. Accepting donations: Friday - Sunday: Closed",
     "verification": {
       "status": "stale-import",
@@ -1518,6 +1599,7 @@
       "Thursday: 9:30 am – 2:30 pm"
     ],
     "neighborhood": "Northeast Suburbs",
+    "hmis": null,
     "notes": "Open boundaries food shelf with healthy choices and referrals to other community-based resources and services with a focus on American Indian families, but all are welcome! Offering Fresh Fruits and vegetables, meat, pasta, cereal, culturally appropriate foods, diapers, and more.",
     "verification": {
       "status": "stale-import",
@@ -1547,6 +1629,7 @@
       "Mon/Tues/Weds/Fri: 12pm - 3pm."
     ],
     "neighborhood": "Powderhorn Park",
+    "hmis": null,
     "notes": "Food shelf is open for accepting and distributing donations Please bring donations to the Horizons Unlimited Food Shelf on the first floor of the building. This supply distribution is intended for American Indians in need. For more programs, visit: https://www.diw-mn.org/all-programs",
     "verification": {
       "status": "stale-import",
@@ -1574,6 +1657,7 @@
       "Wednesdays and Saturdays from 5:30pm - 6:30pm."
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "The ETCIC food shelf is open for Donation and Distribution: https://www.etcic.org/community-outreach/",
     "verification": {
       "status": "stale-import",
@@ -1603,6 +1687,7 @@
       "Monday-Friday 9:00am-4:00pm"
     ],
     "neighborhood": "Phillips West",
+    "hmis": null,
     "notes": "Accepting Donations: Call ahead at 612-872-3644 *Limited storage for fresh produce; call ahead.",
     "verification": {
       "status": "stale-import",
@@ -1626,6 +1711,7 @@
     "transit": "9-BUS-(1 block),21-BUS-(1 block)",
     "hours": null,
     "neighborhood": "Longfellow",
+    "hmis": null,
     "notes": "Summer (June-September) food distribution in partnership with Second Harvest, the first and third Wednesday of each month. Scheduled to start at 3pm, but start time may change based on delivery (look for updates at https://www.facebook.com/profile.php?id=100067758576110), and runs until food is gone (usually about two hours).",
     "verification": {
       "status": "stale-import",
@@ -1656,6 +1742,7 @@
       "Fourth Friday of each month, 3-5pm"
     ],
     "neighborhood": "Willard-Hay",
+    "hmis": null,
     "notes": "Free food distribution Enter at gym door 29. Through partnerships with NCFA and other organizations, we provide 500 to 1500 pounds of food from fruits and vegetables, meats, eggs, bread, dairy, and packaged products. https://www.brothersempowered.org/",
     "verification": {
       "status": "stale-import",
@@ -1686,6 +1773,7 @@
       "First Friday of each month, 3-5pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Free food distribution Enter at gym door. Through partnerships with NCFA and other organizations, we provide 500 to 1500 pounds of food from fruits and vegetables, meats, eggs, bread, dairy, and packaged products. https://www.brothersempowered.org/",
     "verification": {
       "status": "stale-import",
@@ -1716,6 +1804,7 @@
       "Second Friday of each month, 3-5pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "Free food distribution Enter on Franklin Ave S. Through partnerships with NCFA and other organizations, we provide 500 to 1500 pounds of food from fruits and vegetables, meats, eggs, bread, dairy, and packaged products. https://www.brothersempowered.org/",
     "verification": {
       "status": "stale-import",
@@ -1746,6 +1835,7 @@
       "Third Friday of each month, 3-5pm"
     ],
     "neighborhood": "Midway",
+    "hmis": null,
     "notes": "Free food distribution Use gym door. Through partnerships with NCFA and other organizations, we provide 500 to 1500 pounds of food from fruits and vegetables, meats, eggs, bread, dairy, and packaged products. https://www.brothersempowered.org/",
     "verification": {
       "status": "stale-import",
@@ -1777,6 +1867,7 @@
       "Accepting non-perishable food donations:Tuesday, Wednesday, and Thursday from 10am – 2pm."
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Distributing food in vestibule: Go to the door marked \"Food Donations.\" FAQ and more information is available on their website: https://www.everymeal.org/get-involved/donate-food/ Financial donations can be made through the Every Meal website https://www.everymeal.org/get-involved/donate/ or through mail to 2723 Patton Road, Roseville, MN 55113 Email fooddrive@everymeal.org with questions",
     "verification": {
       "status": "stale-import",
@@ -1810,6 +1901,7 @@
       "On Thursdays, pay-as-you-can hot lunches are available through Shobi's Table 12:00pm-1:00pm (or until we run out), served from the BIG BLUE TRUCK."
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Distributing frozen meals, clothes (in a free store!), and household necessities on During COVID-19, we're keeping new protocols to help keep you safe: all employees and volunteers will wear masks and practice physical distancing. All meals are in To-Go containers. The walk-up line is marked with spots 6 ft apart to guide physical distancing.",
     "verification": {
       "status": "stale-import",
@@ -1838,6 +1930,7 @@
       "Monday-Friday, 9am-5pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Phone: (763) 552-3663 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -1867,6 +1960,7 @@
       "Tuesday: 10am-5pm"
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Phone: (651) 257-1308 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -1898,6 +1992,7 @@
       "Thursday: 9am-5pm"
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Friday: 9am-5pm Phone: (651) 464-2098 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -1928,6 +2023,7 @@
       "Thursday: 9am-5pm"
     ],
     "neighborhood": "Wisconsin",
+    "hmis": null,
     "notes": "Phone: (715) 327-4425 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -1957,6 +2053,7 @@
       "Thursday and Friday: 9am-5pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Phone: (651) 674-8313 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -1987,6 +2084,7 @@
       "Friday: 10am-2pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Phone: (320) 532-7665. Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -2017,6 +2115,7 @@
       "Thursday: 9am-5pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Phone: (320) 629-0128 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -2046,6 +2145,7 @@
       "Friday: 9am-12pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Phone: (320) 245-2485 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -2077,6 +2177,7 @@
       "Thursday: 9am-5pm"
     ],
     "neighborhood": "Wisconsin",
+    "hmis": null,
     "notes": "Phone: (715) 483-2920 Website: https://www.familypathways.org/our-work/food-access-and-equity/food-shelves/ Call to make a first monthly appointment. Bring a photo ID and mail with your current address on it. You will be able to shop monthly—free of charge—for items your family will use and eat; perishable and non-perishable food items, household products, and personal hygiene products.",
     "verification": {
       "status": "stale-import",
@@ -2108,6 +2209,7 @@
       "The Farmington Food Shelf distributes NAPS food on every 3rd Thursday of the month, between noon and 6:00."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Food shelf open for distribution (appointments for shopping available 12pm-5:30pm; pre-packed emergency bags available 12pm-6pm). DISTRIBUTION: Emergency bags are a single bag of groceries, meant to get people through a couple days. Nutrition Assistance Program for Seniors (NAPS) This is a government-funded program. You will need an appointment to participate in this program.",
     "verification": {
       "status": "stale-import",
@@ -2133,6 +2235,7 @@
       "Every Tuesday 4pm - 4:30pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Meal Program Located in parking lot in front of address; refrigerated vehicle. Free single and family-sized (4 servings) meals from local restaurants. Learn more: https://www.facebook.com/FeedingFrogtown",
     "verification": {
       "status": "stale-import",
@@ -2158,6 +2261,7 @@
       "Every Tuesday: 2pm - 3pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Park at Community Office & knock on front door. Mention Feeding Frogtown. Free single and family-sized (4 person) meals from local restaurants; pick-up only. Meals could be heated to east or placed in refrigerator for later that week. Learn more: https://www.facebook.com/FeedingFrogtown",
     "verification": {
       "status": "stale-import",
@@ -2183,6 +2287,7 @@
       "Every Tuesday 2:30-3:30 pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Parking lot of Community Center at tables set up under porch. Free single and family-sized (4 person) meals from local restaurants; pick-up only. Meals could be heated to east or placed in refrigerator for later that week. Learn more: https://www.facebook.com/FeedingFrogtown",
     "verification": {
       "status": "stale-import",
@@ -2208,6 +2313,7 @@
       "Every Tuesday 3:30-4:30 pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Locate at main entrance for apartment building. Free single and family-sized (4 person) meals from local restaurants at apartment entrance. Learn more: https://www.facebook.com/FeedingFrogtown",
     "verification": {
       "status": "stale-import",
@@ -2233,6 +2339,7 @@
       "Every Tuesday 4:30-5:30 pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Located in parking lot next to apartments; refrigerated vehicle. Free single and family-sized (4 servings) meals from local restaurants. Learn more: https://www.facebook.com/FeedingFrogtown",
     "verification": {
       "status": "stale-import",
@@ -2258,6 +2365,7 @@
       "Grocery distribution usually 2 Fridays per month: 3pm-6pm."
     ],
     "neighborhood": "West Frogtown",
+    "hmis": null,
     "notes": "2024 dates: February 9 March 8 & 22 April 5 & 19 May 3, 17, & 31 June 14 & 28 July 12 & 26 August 9 & 23 September 6 & 20 October 4 & 18 November 1, 15, & 29 December 13 & 27 Facebook Event: https://www.facebook.com/events/370100005608801/",
     "verification": {
       "status": "stale-import",
@@ -2283,6 +2391,7 @@
       "Every Tuesday 2pm - 3pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Free single and family-sized (4 person) meals from local restaurants at apartment entrance. Learn more: https://www.facebook.com/FeedingFrogtown",
     "verification": {
       "status": "stale-import",
@@ -2312,6 +2421,7 @@
       "Weekly, free, to-go meals and mostly-organic produce distribution every Sunday: 4:00pm-5:00pm."
     ],
     "neighborhood": "Longfellow",
+    "hmis": null,
     "notes": "The line starts on 31st Street and moves east and north onto Longfellow Ave. The host will call you forward to pick up a bag. The bags will be identical and not exchangeable. If you cannot use something, give it to someone who can! Find updates at https://firstnationskitchen.org/ or on Facebook and Instagram @FirstNationsKitchen, or contact Fr. Robert Two Bulls @ 612-791-1253",
     "verification": {
       "status": "stale-import",
@@ -2341,6 +2451,7 @@
       "Flourish is a plant-based food shelf open to in-person shopping every Wednesday from 1-3pm."
     ],
     "neighborhood": "South Uptown",
+    "hmis": null,
     "notes": "Flourish offers food that is or is made from fruits, vegetables, whole grains, and legumes. We offer both shelf-stable and fresh food. Flourish is located in the Center of Belonging at 3501 Aldrich Ave S, Minneapolis. We exist to provide access to fresh and healthy food options to households in communities where access to fresh and healthy food options can be difficult to come by.",
     "verification": {
       "status": "stale-import",
@@ -2369,6 +2480,7 @@
       "M, W, Thu: 10am-2pm"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Lunch Bag Distribution Sunday Dinner (Takeaway Only): 5-6:30pm Food Shelf Upcoming 2024 dates: May 18, June 15, July 20 10am-11:30am Clothes Closet: Offer a range of clothing items and shoes for men, women, and children. During the winter months, we offer coats, boots and outerwear.",
     "verification": {
       "status": "stale-import",
@@ -2398,6 +2510,7 @@
       "2nd and 4th Thursday: 5pm-7pm."
     ],
     "neighborhood": "Jordan",
+    "hmis": null,
     "notes": "The food pantry is open for distribution, (note: during November and December holiday season we only host the food program on the 2nd Thursday of the month) Everyone is welcome, no appointment necessary. Participants are provided with a week's worth of groceries.",
     "verification": {
       "status": "stale-import",
@@ -2425,6 +2538,7 @@
       "1st and 3rd Tuesday of each month: 5pm-7pm."
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "The food pantry is open for distribution the Everyone is welcome, no appointment necessary. Participants are provided with a week's worth of groceries.",
     "verification": {
       "status": "stale-import",
@@ -2450,6 +2564,7 @@
       "4th Thursday of each month from 12pm–2pm."
     ],
     "neighborhood": "Near - North",
+    "hmis": null,
     "notes": "Food Shelf in a Box at the Work Force Center! Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2478,6 +2593,7 @@
       "Tuesdays, 11am - 1pm"
     ],
     "neighborhood": "Logan Park",
+    "hmis": null,
     "notes": "Free grocery pickup Corner of Jackson St NE and Broadway St NE at back garage door.",
     "verification": {
       "status": "stale-import",
@@ -2503,6 +2619,7 @@
       "3rd Wednesday of each month from 2pm-4pm"
     ],
     "neighborhood": "SE Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! https://www.goodinthehood.org/our-programs/food-programs/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2528,6 +2645,7 @@
       "1st Wednesday of each month: 4:30 pm – 6:30 pm"
     ],
     "neighborhood": "Northeast Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2553,6 +2671,7 @@
       "3rd Wednesday of each month: 4:00 pm – 6:00 pm"
     ],
     "neighborhood": "Northeast Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2578,6 +2697,7 @@
       "4th Thursday of each month: 12:00pm–2:00pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2603,6 +2723,7 @@
       "4th Tuesday of each month: 5pm-7pm"
     ],
     "neighborhood": "Northeast",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2628,6 +2749,7 @@
       "Distribution: 3rd Tuesday of each month from 3:00 pm – 5:00 pm"
     ],
     "neighborhood": "Standish",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2653,6 +2775,7 @@
       "Distribution: 3rd Tuesday of the month: 1pm-3pm"
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "https://www.goodinthehood.org/our-programs/food-programs/foodshelf-in-a-box/ Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -2678,6 +2801,7 @@
       "2nd Thursday of each month: 2pm-5pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2703,6 +2827,7 @@
       "1st Tuesday of each month: 2pm-4pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2728,6 +2853,7 @@
       "3rd Thursday of each month: 4pm-5:30pm"
     ],
     "neighborhood": "Jordan",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2753,6 +2879,7 @@
       "3rd Thursday of each month: 3:20pm-4:45pm"
     ],
     "neighborhood": "East Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2778,6 +2905,7 @@
       "4th Wednesday of each month: 1:00pm–3:30pm"
     ],
     "neighborhood": "King Field",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2804,6 +2932,7 @@
       "1st Wednesday of month at 1854 Bebe Road from 3-5pm"
     ],
     "neighborhood": "East Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2829,6 +2958,7 @@
       "2nd Wednesday of the month: 2pm - 4pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2854,6 +2984,7 @@
       "3rd Wednesday of each month: 2pm-4pm"
     ],
     "neighborhood": "Jordan",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2879,6 +3010,7 @@
       "3rd Monday of each month: 3pm-5pm"
     ],
     "neighborhood": "East Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2908,6 +3040,7 @@
       "2nd & 4th Wednesdays of the month: 2pm - 4pm"
     ],
     "neighborhood": "Wenonah",
+    "hmis": null,
     "notes": "Food Shelf in a Box! FREE fresh produce, dairy, meat, canned & boxed foods, cleaning supplies & personal supplies at Crosstown Covenant Church Wear a mask & bring grocery bags! Organized by Crosstown Covenant Church and Trinity Lutheran Church of Minnehaha Falls, in Partnership with Good in the ‘Hood and the Nokomis East Neighborhood Association Questions: nokomiseastfood@gmail.com 612-217-2769 English/Español https:…",
     "verification": {
       "status": "stale-import",
@@ -2933,6 +3066,7 @@
       "2nd Tuesday of the month: 2pm - 4pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2958,6 +3092,7 @@
       "4th Thursday of each month: 4-6 pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -2983,6 +3118,7 @@
       "2nd Wednesday of the month: 2pm - 4pm"
     ],
     "neighborhood": "Hiawatha",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -3008,6 +3144,7 @@
       "3rd Wednesday of each month: 3:00pm-5:00pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Contact info@goodinthehood.org 612-217-4003 https://www.goodinthehood.org/our-programs/feeding-the-future/foodshelf-in-a-box/",
     "verification": {
       "status": "stale-import",
@@ -3033,6 +3170,7 @@
       "2nd Wednesday of month from 2:00 pm – 4:00 pm"
     ],
     "neighborhood": "St. Anthony Park",
+    "hmis": null,
     "notes": "Food Shelf in a Box! https://www.goodinthehood.org/our-programs/food-programs/foodshelf-in-a-box/ Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -3056,6 +3194,7 @@
     "transit": "225 Deluxe-BUS-(1 block)",
     "hours": null,
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Food Shelf in a Box! Pantry open M-F: 8:00am-5:00pm Located in the Billy Graham Community Life Commons – Room G222.",
     "verification": {
       "status": "stale-import",
@@ -3081,6 +3220,7 @@
       "Distribution: 2nd Wednesday of each month: 3-5pm"
     ],
     "neighborhood": "Northeast Suburbs",
+    "hmis": null,
     "notes": "https://www.goodinthehood.org/our-programs/food-programs/foodshelf-in-a-box/ Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -3106,6 +3246,7 @@
       "Distribution: 2nd Tuesday of the month: 12pm - 2pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "https://www.goodinthehood.org/our-programs/food-programs/foodshelf-in-a-box/ Contact info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -3133,6 +3274,7 @@
       "Monday, Tuesday and Wednesday: 2:30-6:00pm"
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Youth Drop-In Center works alongside people in crisis, focusing on overall health and household stability. New Teen Center hours are Youth Support -School-based violence prevention curriculum on bullying, sexual assault, anger management, dating and family violence -Youth leadership -Teen Centers provide a safe, welcoming after school environment Teen Center Areas of Focus Career Development (CD) Healthy Relationship…",
     "verification": {
       "status": "stale-import",
@@ -3169,6 +3311,7 @@
       "Friday 9:00am-11:30am and 1:00pm-4pm"
     ],
     "neighborhood": "Highland Park",
+    "hmis": null,
     "notes": "Weekly Foodshelf Hours: Staff & interns speak 10 languages: English, Spanish, Hmong, Lao, Thai, Karen, Burmese, Amharic, Tigrigna, Somali, and Swahili. Delivery is available for those without transportation - call 651-789-2534. The Francis Basket Food Market has a walk up procedure so you need to walk to the door and ring the doorbell and someone will ask you a few questions and then bring out your food.",
     "verification": {
       "status": "stale-import",
@@ -3196,6 +3339,7 @@
       "Sunday: 10:30 and 4:00pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "Hot meal served every Sunday: after each service. Also giving away donated food each week. Worship service and short message each: The food we offer is completely free and the service is completely optional. We serve a hot meal, but we also have pallets of food to give away. https://freegrace.tv/locations/minneapolis/ https://freegrace.tv/locations/minneapolis-downtown-sun/ `",
     "verification": {
       "status": "stale-import",
@@ -3223,6 +3367,7 @@
       "Hot meal served on Saturday after service at 5:00pm."
     ],
     "neighborhood": "Jordan",
+    "hmis": null,
     "notes": "https://freegrace.tv/locations/minneapolis-north/",
     "verification": {
       "status": "stale-import",
@@ -3249,6 +3394,7 @@
       "We are open to the public most Tuesdays from 4:00–6:00pm, year round (weather permitting)."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Guests drive through as volunteers load free groceries into their vehicles. As a courtesy to our neighbors, we ask that guests do not arrive before 3:30pm. Manna Market is a food distribution ministry at Fridley Covenant Church, in partnership with Second Harvest Heartland. We serve residents of Fridley, Columbia Heights, Hilltop, and Spring Lake Park.",
     "verification": {
       "status": "stale-import",
@@ -3282,6 +3428,7 @@
       "If you would like curbside pickup instead of coming inside to shop, please call between 12pm and 3pm on Monday to make a special appointment."
     ],
     "neighborhood": "SE Suburbs",
+    "hmis": null,
     "notes": "Our main service area is Cottage Grove, Newport, St. Paul Park, and Grey Cloud Island, but we will help anyone in need of food, regardless of where they live. (Deliveries and our non-food programs are only for those in our service area.) We are pleased to offer fresh produce, deli, dairy, meat, milk, eggs, non-perishables, toiletries, and pet food in a grocery store-style setting.",
     "verification": {
       "status": "stale-import",
@@ -3308,6 +3455,7 @@
       "2nd Thursday of each month, 5:30pm - 7:30pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Free food distribution - intended for low income families or those going through a time of crisis. Food & Household Products Bring your own boxes to carry items One registration per household 952-447-8282 https://friendshipmn.org/events/search.asp?EventName=second",
     "verification": {
       "status": "stale-import",
@@ -3339,6 +3487,7 @@
       "Saturdays, 9am-12pm (or when food runs out, often around 11:30am)"
     ],
     "neighborhood": "Payne-Phalen",
+    "hmis": null,
     "notes": "Fresh dairy products, meats, produce, and breads, plus personal care and pantry goods. We can provide each household with food twice per month and there needs to be an adult to receive food on behalf of each household. More information here about what to expect: https://vcsmn.org/services Guidelines for pickup: 1. Wear a mask 2. Observe 6 feet social distancing 3. Use hand sanitizer, available upon entering 4.",
     "verification": {
       "status": "stale-import",
@@ -3373,6 +3522,7 @@
       "Thursday: 11am-4pm"
     ],
     "neighborhood": "Prospect Park - East River Road",
+    "hmis": null,
     "notes": "Hours of operation: Must be a resident of Glendale Townhomes. Income must be at or below 300% of federal poverty guidelines (self-declared). Each family completes an enrollment form providing names and ages of each person in the household. We offer a wide variety of food items, including fresh fruits and vegetables and culturally-specific foods that are staples to the diets of community members.",
     "verification": {
       "status": "stale-import",
@@ -3402,6 +3552,7 @@
       "Monday- Saturday, 10 am-5 pm, during store hours."
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "Collecting non-perishables and toiletries every day during shop hours for redistribution to resource sites where they're needed.",
     "verification": {
       "status": "stale-import",
@@ -3432,6 +3583,7 @@
       "Delivery Services will be on Fridays between 4 – 7pm CST."
     ],
     "neighborhood": "Logan Park",
+    "hmis": null,
     "notes": "Food shelf is open to all who qualify Guests are allowed to use the pantry twice a month. All guests are welcome to use the table items during operating hours on Fridays. Donations accepted during open hours. https://linktr.ee/goodworksfoodshelf On those days, we will only offer West African food, and will not have our regular food shelf offerings.",
     "verification": {
       "status": "stale-import",
@@ -3467,6 +3619,7 @@
       "Please call 612-788-2444 between 9 am and 11 am Monday through Friday to register."
     ],
     "neighborhood": "Logan Park",
+    "hmis": null,
     "notes": "Food shelf hours: People are welcome to come to the food shelf once every 30 days. Pre-registration is required. No zip code or ID requirements. No-contact pick-up service of groceries, fresh produce, and personal hygiene items. Pet food is available on request. Enter at the corner of 5th & 15th streets (in the former Holland school building).",
     "verification": {
       "status": "stale-import",
@@ -3492,6 +3645,7 @@
       "Free food distribution: 2nd Friday of the month: 5pm-7pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Next date: May 10 REGISTRATION IS REQUIRED on the same day from 10am-3pm OR 4:30pm-6:45pm Learn more: https://gracefree.org/food-distribution Guests will receive a time slip at registration, and should return at the designated time with the time slip. (763) 784-7199",
     "verification": {
       "status": "stale-import",
@@ -3524,6 +3678,7 @@
       "Sunday: open 3:00pm-6:00pm"
     ],
     "neighborhood": "Phillips",
+    "hmis": null,
     "notes": "Free DIY bicycle repair! Monday: closed Tuesday: closed Friday: closed Used bicycle parts available sliding scale. Cheap used bicycles for sale. We also accept work trade as a form of payment for parts. Contact via Instagram @greasepitbikeshop",
     "verification": {
       "status": "stale-import",
@@ -3552,6 +3707,7 @@
       "Distributing food Saturdays: 11:15am-1:00pm."
     ],
     "neighborhood": "Near North",
+    "hmis": null,
     "notes": "No identification necessary, but some household questions may be asked strictly for statistical purposes. http://gmvchurch.com/",
     "verification": {
       "status": "stale-import",
@@ -3578,6 +3734,7 @@
     "transit": "219-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "Willard-Hay",
+    "hmis": null,
     "notes": "**Please take COVID-19 precautions by wearing masks and practicing social distancing. To schedule a time to drop off donations, please contact (612) 978-3750.",
     "verification": {
       "status": "stale-import",
@@ -3604,6 +3761,7 @@
     "transit": "2-BUS-(1 block),17-BUS-(1 block),18-BUS-(1 block)",
     "hours": null,
     "neighborhood": "Stevens Square",
+    "hmis": null,
     "notes": "Accepting and distributing donations M-F from 9:30am to 12:00pm. The shelf is accepting donations of all kinds that can be used by a family - all non-perishable food, toiletries, household products. Call 612-871-0277 to schedule large donations. The food shelf is on Groveland Avenue between Nicollet and Lasalle (Temporary entrance on Nicollet Ave). Hosted in the basement of Plymouth Congregational Church.",
     "verification": {
       "status": "stale-import",
@@ -3633,6 +3791,7 @@
       "Monday - Friday: 9am - 5pm"
     ],
     "neighborhood": "Summit-University",
+    "hmis": null,
     "notes": "Open for donation and distribution every week. Saturday & Sunday: CLOSED Anyone dropping off donations should CALL AHEAD. The public is not permitted inside the building. Employees will meet donors and clients OUTSIDE the front doors. Free masks are available at the Center. (651)-224-4601 https://www.hallieqbrown.org They are working with a client choice model.",
     "verification": {
       "status": "stale-import",
@@ -3664,6 +3823,7 @@
       "Great River School: Monday - Friday, 9am-3pm"
     ],
     "neighborhood": "Midway",
+    "hmis": null,
     "notes": "Distribution: Free snacks for Saint Paul youth (18 and under), 6/19-8/17 (closed July 3 and 4): Snacks: 2:30pm-3:30pm Donations accepted here: Donations also accepted at: Ginkgo Coffeehouse: during business hours Monetary donations: https://bit.ly/3kJwiht Checks can be made out to Hamline Midway Coalition, with \"Midway Project\" on the memo line and sent to: Hamline Midway Coalition 1558 West Minnehaha Avenue Saint Pa…",
     "verification": {
       "status": "stale-import",
@@ -3692,6 +3852,7 @@
       "Tuesday-Saturday 11am - 7pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "***Delivery only*** Delivery available Service available in Duluth, Superior, Cloquet, Fond Du Lac, Iron Range, Itasca, Koochiching and Lake County Call or text (218) 206-6482 for delivery https://harmreductionsisters.org/services",
     "verification": {
       "status": "stale-import",
@@ -3718,6 +3879,7 @@
       "Saturday: 10am - 1pm"
     ],
     "neighborhood": "King Field",
+    "hmis": null,
     "notes": "Come in and shop for FREE in our Food Center! Closed Sundays, Mondays, and national holidays. Distribución de alimientos: Martes a Viernes 11-4 y Sabado 10-1 No appointment or documentation is necessary. / No requerimos una cita o identificación. Call 612-822-2101 with questions. / Puede llamar a 612-822-2101 con preguntas.",
     "verification": {
       "status": "stale-import",
@@ -3745,6 +3907,7 @@
     "transit": null,
     "hours": null,
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Every 4th Sunday of the Month 11:00 am - 2:00 pm Free and confidential consultations and referrals with a physician are available. Other services such as vaccinations, blood pressure management, and glucose and cholesterol tests also available.",
     "verification": {
       "status": "stale-import",
@@ -3771,6 +3934,7 @@
     "transit": null,
     "hours": null,
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "Accepting and distributing food and household items by appointment only. For more information, call Martha Brannon at 612-325-4693. Donations can be left at Mount Calvary Lutheran Church, 301 Oak Street, Excelsior",
     "verification": {
       "status": "stale-import",
@@ -3796,6 +3960,7 @@
     "transit": "4-BUS-(1 block)",
     "hours": null,
     "neighborhood": "Uptown",
+    "hmis": null,
     "notes": "Intermittent supply drives announced on social media, typically Sunday afternoons. Home Base will continue to pick up donations and distribute them; email WeAreHomeBaseMN@gmail.com to arrange. Financial donations will continue to be used to purchase necessities for our unhoused communities: Donate: Venmo: @Emilie-Valenti Cashapp: $EmilieValenti Home Base is raising funds to open a physical community and storage space…",
     "verification": {
       "status": "stale-import",
@@ -3822,6 +3987,7 @@
       "Mondays and Fridays: 9 am-3 pm."
     ],
     "neighborhood": "Bryn Mawr",
+    "hmis": null,
     "notes": "Open for distribution Open for receiving donations: An ID is required to receive services.",
     "verification": {
       "status": "stale-import",
@@ -3836,7 +4002,8 @@
       "shelter",
       "food",
       "health",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "2665 4th Avenue North",
     "city": "Suite 40, Anoka, MN 55303",
@@ -3853,6 +4020,10 @@
       "Thu: 11am - 7pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": {
+      "agency": "HOPE 4 Youth, Inc.",
+      "matchedBy": "full name"
+    },
     "notes": "Drop-in center hours for youth: Fri: 11am - 5pm Donation receiving hours: Wednesday and Saturday, 9am - 12pm We support young people, ages 16 to 24, who are experiencing homelessness in the northern metro area. (If you are under 16 and need help, we can connect you to other service providers.) In addition to many basic-needs services, case management is also provided, linking youth to stable housing, health and welln…",
     "verification": {
       "status": "stale-import",
@@ -3881,6 +4052,7 @@
       "Drive-thru food pantry distribution every Thursday 9:30am-5:00pm."
     ],
     "neighborhood": "North Suburbs",
+    "hmis": null,
     "notes": "Food donations can be brought in during volunteer hours or left under the awning at any time. **Note that this group has partnered with the police department for delivery.**",
     "verification": {
       "status": "stale-import",
@@ -3909,6 +4081,7 @@
       "Drive-thru food pantry distribution every 1st and 3rd Wednesday of the month: 3:00pm-5:00pm."
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "Distributing: **Note that this group has partnered with the police department for delivery.**",
     "verification": {
       "status": "stale-import",
@@ -3938,6 +4111,7 @@
     "transit": "46-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Northrop",
+    "hmis": null,
     "notes": "Catholic Charities' Hope Street Shelter provides shelter for youth and young adults age 18-22. It is open 24 hours a day. They can be reached at (612) 204-8211. More information about their services, including school outreach and long-term support, is available here: https://www.cctwincities.org/locations/hope-street-shelter/ Shelter for youth ages 18 up to 22nd birthday, 30-day average stay, longer stays available i…",
     "verification": {
       "status": "stale-import",
@@ -3967,6 +4141,7 @@
       "Accepting donations at HopeBridge during the same hours, or at New Hope Church (4225 Gettysburg Ave N) Monday–Friday, 8:30am–4:30pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Appointments available Make an appointment here: https://newhopechurchmn.org/serve/food-shelf/ DELIVERY: If you're unable to get to the food shelf, email us. We encourage in-person visits, however, we may be able to deliver food to those unable to leave their homes. We offer a limited delivery service in our immediate area on the 2nd and 4th Monday of each month. Contact us for more details.",
     "verification": {
       "status": "stale-import",
@@ -3998,6 +4173,7 @@
       "Friday: 10am - 12pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "ICA has historically served residents of Hopkins, Minnetonka, Excelsior, Shorewood, Deephaven, Greenwood, and Woodland. However, residency/documentation is not required: https://www.icafoodshelf.org/make-an-appointment Open to receive donations: 1st and 3rd Saturday of each month: 10am - 12pm Open for distribution (by appointment): Monday: 10am - 6:30pm Tuesday: 10:00am - 3:30pm Wednesday: 9:00am - 3:30pm Thursday: 1…",
     "verification": {
       "status": "stale-import",
@@ -4025,6 +4201,7 @@
       "Tuesday and Thursday from 2:00pm-4:00pm."
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": "Free produce distribution every This site requires all visitors to present an ID Schedule an appointment outside normal hours at 651-488-4463Website: https://ihelpmarketsquare.com",
     "verification": {
       "status": "stale-import",
@@ -4055,6 +4232,7 @@
       "Free walk-in counseling available on-sight (no paperwork or intake, just walk in and talk) on Tuesday at 2-5pm and Fridays at 11am-5pm"
     ],
     "neighborhood": "Hawthorne",
+    "hmis": null,
     "notes": "Distributing syringes, works, naloxone, hygiene kits available on the following days: HIV/HCV testing on Fridays by appointment only, call 612-267-0305 for an appointment. Located in the Sanctuary Resource Center on the NW corner of Lyndale and West Broadway. Ring the bell for In 'n' Out, contact 612-543-4580 to confirm hours.",
     "verification": {
       "status": "stale-import",
@@ -4067,7 +4245,8 @@
     "name": "Indigenous People's Task Force",
     "categories": [
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1335 E 23rd St",
     "city": "Minneapolis, MN 55404",
@@ -4085,6 +4264,10 @@
       "Tues and Thurs 8:30am-12pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": {
+      "agency": "Indigenous Peoples Task Force",
+      "matchedBy": "full name"
+    },
     "notes": "Harm reduction supplies including syringe exchange/needle exchange, works, Naloxone/Narcan available: What to expect: The client will be met at the front door to our office. A staff member will ask for desired syringe size, prepare a package of sterile supplies including a week’s supply of syringes (50 needles), then bring the bag outside for the client to pick up.Walk-ins are ok.",
     "verification": {
       "status": "stale-import",
@@ -4113,6 +4296,7 @@
       "3rd Thursday of the month: 2pm-3pm or until it is gone."
     ],
     "neighborhood": "Dayton's Bluff",
+    "hmis": null,
     "notes": "Monthly food share with Sisters' Camelot: sharing food Upcoming Dates 2024: May 16 If you have clean paper grocery bags to donate, please bring those with you. Please bring a reusable shopping bag/box/cart/something sturdy to help you carry both the paper bag of groceries we pass out and the extra produce that is usually available in addition.",
     "verification": {
       "status": "stale-import",
@@ -4127,7 +4311,8 @@
       "shelter",
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1605 County Road 101 N",
     "city": "Plymouth, MN, 55447-2708",
@@ -4146,6 +4331,10 @@
       "Wednesday: 9am-noon, 2pm-5pm"
     ],
     "neighborhood": null,
+    "hmis": {
+      "agency": "Interfaith Outreach and Community Partners",
+      "matchedBy": "acronym IOCP"
+    },
     "notes": "Donation hours: Food shelf open by appointment only: Friday: 9am-noon Our food shelf is now open for you to shop inside the building and choose what items work best for you. To shop you must make an appointment at iocp.org/foodvisit. You can schedule an appointment once every 2 weeks. We will not be able to take in-person drop-ins; appointments are required.",
     "verification": {
       "status": "stale-import",
@@ -4174,6 +4363,7 @@
       "Pre-registration is required for new clients; please call (763) 571-5604 between 9:00am and 1:00pm, Saturday through Thursday."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "No-boundaries, no-restrictions food shelf serving all the residents of Minnesota. Please call us at: (763) 571-5604 or email us at: icm@islamiccentermn.org ID is required; no restrictions by zip code.",
     "verification": {
       "status": "stale-import",
@@ -4201,6 +4391,7 @@
       "A free Community Bowl is available to anyone who needs it - every day, 11am - 8pm."
     ],
     "neighborhood": "Summit-University",
+    "hmis": null,
     "notes": "Call 651-222-3263 to request an order, and it will be ready in about 15 minutes. If you need to feed a large group, email info@jselbys.com. https://www.jselbys.com/faq",
     "verification": {
       "status": "stale-import",
@@ -4228,6 +4419,7 @@
       "Monday - Thursday: 1:30pm-4:30pm"
     ],
     "neighborhood": "Powderhorn",
+    "hmis": null,
     "notes": "Open for distribution Site receives food from Second Harvest Heartland and The Food Group. Also offers gas cards, bus cards, and vouchers for State IDs, Drivers Licenses, and Birth Certificates.",
     "verification": {
       "status": "stale-import",
@@ -4253,6 +4445,7 @@
       "Friday: 10am-11:30am"
     ],
     "neighborhood": "Powderhorn",
+    "hmis": null,
     "notes": "Food and fresh produce distributed every They will be open all year and all seasons with the exception of these holidays: 1/1. They receive food from Second Harvest Heartland and The Food Group. They also offer gas and bus cards and vouchers for State ID's, Driver Licenses, and Birth Certificates.",
     "verification": {
       "status": "stale-import",
@@ -4281,6 +4474,7 @@
       "One Saturday each month (usually the last Saturday - check Facebook events link below to confirm), 10am - 12pm."
     ],
     "neighborhood": "Uptown",
+    "hmis": null,
     "notes": "Free food! Drive-Through Food Distributions. Next 2024 date: April 27 Everyone is welcome. No need to register or show an ID; just show up. We accept food donations by appointment, please email: joycommunityservice@gmail.com or call (612-367-7542) if you are planning to drop off any items.",
     "verification": {
       "status": "stale-import",
@@ -4313,6 +4507,7 @@
       "Thursday: 11am-6:45pm"
     ],
     "neighborhood": "South Uptown",
+    "hmis": null,
     "notes": "-We are currently booking appointments 4 weeks out. To schedule an appointment, call 612-825-4431 Client Choice Shopping Appointments available: Saturday: 9am-1:45pm You can pick up a food bag during our shopping hours even without an appointment! Pre-packed emergency bags available during all open hours. This model offers each person food choices in a small grocery store-style food shelf.",
     "verification": {
       "status": "stale-import",
@@ -4339,6 +4534,7 @@
     "transit": "14-BUS-(1 block),3-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": null,
+    "hmis": null,
     "notes": "Summer needs: Bottled water and Gatorade Raising monetary donations for equipping and maintaining a sound truck. Also looking for a car detailer; cleaning and painting. Accepting donations by appointment! DM Justice Frontline Aid to coordinate drop-off times: Facebook: https://www.facebook.com/justicefrontlineaid/ Email: justicefrontlineaidcrew@gmail.com Website: https://www.justicefrontlineaid.org/ As the needs of t…",
     "verification": {
       "status": "stale-import",
@@ -4372,6 +4568,7 @@
       "Wednesday: 8:30am - 6pm"
     ],
     "neighborhood": "Union Park",
+    "hmis": null,
     "notes": "Food Shelf – 12:00 p.m. & 2:00 – 4:00 p.m. Donations accepted: The center is between the Wendy’s and Arby’s on the corner of Fairview and University. No appointment or advanced registration is required. Food shelf participants are served on a first come, first served basis https://keystoneservices.org/food-shelf/ Please call 651-917-3792 if you have any questions.",
     "verification": {
       "status": "stale-import",
@@ -4398,6 +4595,7 @@
     "transit": "87-BUS-(1 block)",
     "hours": null,
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Free Food Distribution One day each month: 10:30am - 12pm 2024 upcoming dates: Wednesday, May 22 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4424,6 +4622,7 @@
     "transit": "3-BUS-(2 blocks),67-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Capitol",
+    "hmis": null,
     "notes": "Free Food Distribution Usually two consecutive days each month: 9:30am-11:30am. Upcoming 2024 dates: May 28 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4452,6 +4651,7 @@
     "transit": null,
     "hours": null,
     "neighborhood": "Como",
+    "hmis": null,
     "notes": "Free Food Distribution One day each month, 10am-12pm. 2024 upcoming dates: Wednesday, May 29 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4463,7 +4663,8 @@
     "id": "keystone-foodmobile-grocery-distribution-jeremiah-program-st",
     "name": "Keystone Foodmobile Grocery Distribution - Jeremiah Program (St. Paul)",
     "categories": [
-      "food"
+      "food",
+      "hmis"
     ],
     "address": "932 Concordia Ave",
     "city": "St Paul, MN 55104",
@@ -4479,6 +4680,10 @@
     "transit": "83-BUS-(4 blocks),21-BUS-(5 blocks)",
     "hours": null,
     "neighborhood": "Summit-University",
+    "hmis": {
+      "agency": "Jeremiah Program",
+      "matchedBy": "full name"
+    },
     "notes": "Free Food Distribution One day per month: 2pm - 4pm 2024 upcoming dates: Monday, May 20 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4509,6 +4714,7 @@
       "One Friday each month, 10am-12pm."
     ],
     "neighborhood": "Payne-Phalen",
+    "hmis": null,
     "notes": "Free Food Distribution 2024 upcoming dates: May 17 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4535,6 +4741,7 @@
     "transit": "61-BUS-(1 block)",
     "hours": null,
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Free Food Distribution One day each month: 2pm - 4pm Upcoming 2024 dates: Thursday, May 16 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4564,6 +4771,7 @@
       "One Tuesday of each month, 2pm-4pm"
     ],
     "neighborhood": "North End",
+    "hmis": null,
     "notes": "Free Food Distribution 2024 upcoming dates: May 21 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4592,6 +4800,7 @@
       "Specific Mondays or Tuesdays: 2pm - 4pm"
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Free Food Distribution Upcoming 2024 dates: Monday, March 11 New location! Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4622,6 +4831,7 @@
       "Second Monday of each month, 10am-12pm."
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Free Food Distribution 2024 upcoming dates: May 13 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4650,6 +4860,7 @@
       "Second Tuesday of each month: 2pm-4pm."
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Free Food Distribution 2024 upcoming dates: May 14 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4676,6 +4887,7 @@
     "transit": "68-BUS-(1 block),61-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "North End",
+    "hmis": null,
     "notes": "Free Food Distribution One day each month: 2pm - 4pm 2024 upcoming dates: Monday, May 6 Open to anyone needing food support. We will be distributing shelf stable groceries, produce, dairy, meat and other items in a safe, socially distanced manner. This does count as a food shelf service, so participants will be asked a few questions prior to accessing food.",
     "verification": {
       "status": "stale-import",
@@ -4704,6 +4916,7 @@
       "Donations of dry goods accepted Sundays 1-3pm and Mondays 11am-1pm."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "The distribution is a drive-thru. You will remain in your car the entire time and we will load the food into your vehicle. The distribution is first come, first serve until we run out of food. No hay ningun requisito. Solo ven y con tu auto, fórmate en la línea. No tienes que bajar de tu auto, nosotros pondremos todo en el baul.",
     "verification": {
       "status": "stale-import",
@@ -4732,6 +4945,7 @@
       "Hot meal served every Wednesday night, 5pm-6:30pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Menu is posted each week on Facebook: https://www.facebook.com/lcmonline55430/",
     "verification": {
       "status": "stale-import",
@@ -4762,6 +4976,7 @@
       "Community lunch served 1:15-2pm on Sunday afternoons after"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "If you would like to volunteer to plan, prepare, and serve that Sunday meal, you'll find information here: https://www.changingourcity.org/sunday-shelter-meal Life Center website: https://www.changingourcity.org/index.html",
     "verification": {
       "status": "stale-import",
@@ -4787,6 +5002,7 @@
       "LoveShare grocery distribution one Monday per month (usually the 4th Monday, but may move due to holidays), 6pm until gone."
     ],
     "neighborhood": "SE Suburbs",
+    "hmis": null,
     "notes": "Next date: May 20th. Check for upcoming dates: https://lighthousemn.church/events/",
     "verification": {
       "status": "stale-import",
@@ -4801,7 +5017,8 @@
       "shelter",
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "421 E 7th St",
     "city": "St Paul, MN 55101",
@@ -4815,6 +5032,10 @@
       "Wednesday - Sunday: 12pm - 8pm"
     ],
     "neighborhood": "Dayton's Bluff",
+    "hmis": {
+      "agency": "Listening House of St Paul",
+      "matchedBy": "site name inside agency name"
+    },
     "notes": "NEW location and hours! Lunch is served from 1:30 - 2:15pm Dinner is served from 5:30 - 6:15pm We will start accepting clothing donations again next Thursday (Nov.16). To schedule a drop-off time, go to: https://www.listeninghouse.org/items Listening House is a sanctuary from the streets where practical assistance, counsel, and a friendly ear are offered to all people.",
     "verification": {
       "status": "stale-import",
@@ -4841,6 +5062,7 @@
     "transit": "67-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "Midway",
+    "hmis": null,
     "notes": "Daily: 24/7, weather permitting. Clothing available to take anything you need. Visit Instagram to DM to arrange donations. https://www.instagram.com/littleswapcloset/",
     "verification": {
       "status": "stale-import",
@@ -4870,6 +5092,7 @@
       "Distributing food every 3rd Wednesday of the month: 1pm-3pm"
     ],
     "neighborhood": "Willard-Hay",
+    "hmis": null,
     "notes": "Loaves and Fishes: To-go meals served Food Shelf in a Box: ----- Loaves and Fishes website: https://www.loavesandfishesmn.org/community-meal-sites/true-vine-new-bethel/ Food Shelf In-A-Box website and contact: https://www.goodinthehood.org/our-programs/food-programs/foodshelf-in-a-box/ info@goodinthehood.org 612-217-4003",
     "verification": {
       "status": "stale-import",
@@ -4898,6 +5121,7 @@
       "Monday, Wednesday, and Friday from 5:00 – 6:00 PM"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Hybrid meal service with to-go and in-person dining options. To-go meals served by the rear doors facing East River Road. In-Person Dining guests may enter the double doors facing East River Road. https://www.loavesandfishesmn.org/community-meal-sites/advent-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -4926,6 +5150,7 @@
       "To-go meals served Mondays and Thursdays, 11:30am-12pm"
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Email: jtodd@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/bethel-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -4954,6 +5179,7 @@
       "Wednesday, 5:30-6:30pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "To-go meals served: Where to go: outside the main door on the back side of the building off the parking lot https://www.loavesandfishesmn.org/community-meal-sites/brunswick-united-methodist-church/",
     "verification": {
       "status": "stale-import",
@@ -4982,6 +5208,7 @@
       "Meals served Monday – Friday from 5:00 – 6:00 PM"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "To-go meals served at the main doors under the overhang. *Closed 5/29 and 6/19* https://www.loavesandfishesmn.org/community-meal-sites/christ-the-king-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5010,6 +5237,7 @@
       "Meals served daily: 4:30-5:30pm."
     ],
     "neighborhood": "Downtown St. Paul",
+    "hmis": null,
     "notes": "Site coordinator: John Gambino Contact: 612-204-8485 https://www.loavesandfishesmn.org/community-meal-sites/dorothy-day-center/",
     "verification": {
       "status": "stale-import",
@@ -5038,6 +5266,7 @@
       "Meals served: Monday – Thursday, 5:30 – 6:30 PM"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Please do NOT to go to the building located at 4200 Pilot Knob Rd. Loaves and Fishes’ meals are served at the corner of Pilot Knob and Cliff. Hybrid meal service with to-go and in-person dining options. To-go meals are served at the front doors of the church (2 white double doors).",
     "verification": {
       "status": "stale-import",
@@ -5066,6 +5295,7 @@
       "To-go meals served Monday-Thursday, 5:30-6:30pm."
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Email: esthers@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/esthers-kitchen-christ-united-presbyterian-church/",
     "verification": {
       "status": "stale-import",
@@ -5094,6 +5324,7 @@
       "Wednesdays 5:30pm - 6:30pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Meals served Enter the parking lot at E 130th St. and To-Go meals are served at the coffee shop entry doors. https://www.loavesandfishesmn.org/community-meal-sites/faith-covenant-church/",
     "verification": {
       "status": "stale-import",
@@ -5123,6 +5354,7 @@
       "3rd Wednesday of each month, 5:30-6:30pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Meals Served: Email: pastor.marianne.ozanne@gmail.com or dscopatz@gmail.com https://www.loavesandfishesmn.org/community-meal-sites/faith-united-methodist-church-wsp/",
     "verification": {
       "status": "stale-import",
@@ -5151,6 +5383,7 @@
       "To-go meals served: Monday and Thursday 5pm - 5:30pm and Tuesday 12pm-12:30pm"
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Email: jtodd@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/first-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5179,6 +5412,7 @@
       "Every 4th Saturday from 11:30am-12:30pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Meals served: https://www.loavesandfishesmn.org/community-meal-sites/fridley-united-methodist-church/",
     "verification": {
       "status": "stale-import",
@@ -5207,6 +5441,7 @@
       "Meals served: Monday-Friday 5:30pm-6:30pm."
     ],
     "neighborhood": "Hawthorne",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Enter through the big red doors at the front of the church along N Emerson Ave. https://www.loavesandfishesmn.org/community-meal-sites/great-is-thy-faithfulness/",
     "verification": {
       "status": "stale-import",
@@ -5235,6 +5470,7 @@
       "Monday-Thursday 5:15pm-6:15 pm."
     ],
     "neighborhood": "East Phillips",
+    "hmis": null,
     "notes": "Meals served *Closed 5/29 and 6/19* Look for the doorway on 18th Ave. S on the east side of the building. Website: https://www.loavesandfishesmn.org/community-meal-sites/holy-rosary-catholic-church/",
     "verification": {
       "status": "stale-import",
@@ -5263,6 +5499,7 @@
       "To-go meals served Monday - Friday 5pm-6pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Phone: 612-869-7700 Email: hopechurch@loavesandfishesmn.org Website: https://www.loavesandfishesmn.org/community-meal-sites/hope-presbyterian-church/",
     "verification": {
       "status": "stale-import",
@@ -5291,6 +5528,7 @@
       "Thursdays, 4:00-5:30pm"
     ],
     "neighborhood": "Lynnhurst",
+    "hmis": null,
     "notes": "To- go meals served: Contact: smcnamee@mtolivet.org Website: https://www.loavesandfishesmn.org/community-meal-sites/mount-olivet-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5319,6 +5557,7 @@
       "Mondays, 5:30-6:30pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "To-go meals served: Curbside to-go meal served at Door 2. For additional Community Meal information, please visit: https://www.moply.org/community-meal https://www.loavesandfishesmn.org/community-meal-sites/brunswick-united-methodist-church/",
     "verification": {
       "status": "stale-import",
@@ -5347,6 +5586,7 @@
       "To-go meals served Wednesdays, 5-6pm."
     ],
     "neighborhood": "Hale",
+    "hmis": null,
     "notes": "https://www.loavesandfishesmn.org/community-meal-sites/nokomis-heights-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5375,6 +5615,7 @@
       "Wednesdays 5:30pm - 6:30pm"
     ],
     "neighborhood": "East Side",
+    "hmis": null,
     "notes": "Meals served https://www.loavesandfishesmn.org/community-meal-sites/our-redeemer-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5403,6 +5644,7 @@
       "Monday-Friday 5:00-6:00pm"
     ],
     "neighborhood": "Whittier",
+    "hmis": null,
     "notes": "To-go meals served *Closed 5/29 and 6/19* Email: peacehouse@loavesandfishesmn.org Email: office@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/peace-house-community/",
     "verification": {
       "status": "stale-import",
@@ -5431,6 +5673,7 @@
       "Thursdays, 4:00-5:30pm"
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "Meals Served: Phone: 218-947-3844 (or Brian Chaffee at 218-820-1961) https://www.loavesandfishesmn.org/community-meal-sites/pine-mountaineer-senior-center/",
     "verification": {
       "status": "stale-import",
@@ -5459,6 +5702,7 @@
       "Saturdays: 5:30pm – 6:30pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "Meals served: *CLOSED 5/6* https://www.loavesandfishesmn.org/community-meal-sites/plymouth-covenant-church/",
     "verification": {
       "status": "stale-import",
@@ -5487,6 +5731,7 @@
       "Meals served: Monday – Thursday, 5:30 – 6:30 PM."
     ],
     "neighborhood": "SE Suburbs",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Hybrid meal service with to-go and in-person dining options. To-go meals are served in front of the double set of double doors facing the parking lot. Email: riverheights@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/river-heights-vineyard-church/",
     "verification": {
       "status": "stale-import",
@@ -5515,6 +5760,7 @@
       "Mondays, 4:00-6:00pm"
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "Meals Served: *Closed 5/29 and 6/19* Contacts: Riverview Church: 218-587-2021 Brian Chaffee: 218-820-1961 https://www.loavesandfishesmn.org/community-meal-sites/riverview-church/",
     "verification": {
       "status": "stale-import",
@@ -5543,6 +5789,7 @@
       "Saturday, Sunday, Monday, Tuesday: 5:30 – 6:30 PM"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "Meals served: Meals are served out of the East Door off 13th Avenue S. Email: stgabriel@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/st-gabriels-catholic-church-st-joseph-campus/",
     "verification": {
       "status": "stale-import",
@@ -5571,6 +5818,7 @@
       "To-go meals served Monday, Tuesday, Thursday, Friday 5:30 – 6:30 PM."
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "Walk up or drive up on 8th Ave. *Closed 5/29 and 6/19* https://www.loavesandfishesmn.org/community-meal-sites/st-johns-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5599,6 +5847,7 @@
       "Meals served Monday-Friday 5:00pm-6:00pm"
     ],
     "neighborhood": "West Side",
+    "hmis": null,
     "notes": "*Closed 5/29 and 6/19* Hybrid meal service with to-go and in-person dining options. To-go meals served in the SE parking lot off W Robie St., near door #5. https://www.loavesandfishesmn.org/community-meal-sites/st-matthews-catholic-church/",
     "verification": {
       "status": "stale-import",
@@ -5627,6 +5876,7 @@
       "Free produce for distribution every Saturday at 11:00am!"
     ],
     "neighborhood": "Jordan",
+    "hmis": null,
     "notes": "https://www.loavesandfishesmn.org/programs-2/produce-market/",
     "verification": {
       "status": "stale-import",
@@ -5659,6 +5909,7 @@
       "Friday: 10:00am - 11:30am"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Free Community Meal: To-go meals served at Door 1. For additional Community Supper information, please visit: https://splcmn.org/outreach/ St. Philip's Food & Clothing shelf hours of operation: St. Philip’s Food & Clothing Shelf has reopened its doors to inside service! We are now in our newly expanded space in Rooms 16 and 17, with entrance through Door 3.",
     "verification": {
       "status": "stale-import",
@@ -5687,6 +5938,7 @@
       "Saturday and Sunday 5:30-6:30 pm."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "To-go meals served: Use the main entrance doors. Email: woodlake@loavesandfishesmn.org https://www.loavesandfishesmn.org/community-meal-sites/woodlake-lutheran-church/",
     "verification": {
       "status": "stale-import",
@@ -5713,6 +5965,7 @@
       "Community meals provided (eat in or take to go) on the 1st and 3rd Monday of each month from 5:30-6:15pm."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "This is a drive-through distribution. Recipients generally receive fresh produce, deli items, bread, and sweets depending on that day's donations. More information: http://www.ascensionburnsville.org/home",
     "verification": {
       "status": "stale-import",
@@ -5742,6 +5995,7 @@
       "Daily: 9:00am-3:00pm."
     ],
     "neighborhood": "Near North",
+    "hmis": null,
     "notes": "Accepting donations Distribution is to residents only. Contact: Jamie Peasley Property Manager- Lyndale Manor Phone: 612-344-2292",
     "verification": {
       "status": "stale-import",
@@ -5767,6 +6021,7 @@
       "3rd Saturday of every month 12pm-1pm."
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Masjid At-Taqwa's monthly Food Shelf is open to all! Check Facebook page for any updates: https://www.facebook.com/masjid.attaqwa.mn",
     "verification": {
       "status": "stale-import",
@@ -5796,6 +6051,7 @@
       "Every Friday, 4-6pm (or while supplies last): bread & bakery giveaway."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Located in the Coon Rapids United Methodist Church parking lot on the corner of Hanson and CR Blvd. No requirements or data collection. Everyone welcome, including walkers (no car needed). Facebook page: https://www.facebook.com/SpiritofMatthew25/",
     "verification": {
       "status": "stale-import",
@@ -5809,7 +6065,8 @@
     "categories": [
       "food",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "1669 Arcade St Suite 4",
     "city": "St Paul, MN 55106",
@@ -5833,6 +6090,10 @@
       "Thursday: 10:00 am- 12:00 pm"
     ],
     "neighborhood": "Payne-Phalen",
+    "hmis": {
+      "agency": "Merrick Community Services",
+      "matchedBy": "full name"
+    },
     "notes": "Drive Thru Hours: Door 2A In Person Shopping Hours: Door 3 Merrick’s Food Shelves are open to all Maplewood residents and Saint Paul residents who live in Merrick’s service area. Call 651-287-2088 for more information and to schedule an appointment for your food shelf visit. They also offer free career, family, and youth services - call 651-771-9339 to arrange an appointment. https://merrickcs.org/",
     "verification": {
       "status": "stale-import",
@@ -5863,6 +6124,7 @@
       "Saturdays, 9am-12pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "The food shelf is open by appointment only - call 952-985-5300 to schedule an appointment. Appointments are available Donations accepted: Tuesdays and Thursdays: 9am - 12pm When you arrive, go to the back parking lot and enter Door #3. (It will also be marked with a food shelf sign.) Special arrangements can be made for other drop off days and times. Donations can be dropped off at Messiah's office or the Food Shelf.",
     "verification": {
       "status": "stale-import",
@@ -5894,6 +6156,7 @@
     "transit": "5-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "Central",
+    "hmis": null,
     "notes": null,
     "verification": {
       "status": "stale-import",
@@ -5925,6 +6188,7 @@
       "Saturdays: 11:00am-2:00pm"
     ],
     "neighborhood": "Harrison",
+    "hmis": null,
     "notes": "Emergency grocery distribution: Tuesdays: By appointment only Walk up or pull up and pop your car trunk. Everyone welcome, masks required. Tuesdays by appointment only, Call Bettie at (953)737-8592.",
     "verification": {
       "status": "stale-import",
@@ -5956,6 +6220,7 @@
       "Monday - Thursday: 4pm - 6pm"
     ],
     "neighborhood": "Downtown West",
+    "hmis": null,
     "notes": "Library is available as a warming/cooling site during open hours: Youthprise snack distribution: Need help with housing, meals, benefits, etc.? Ask for more information at the first floor iDesk. Library is not taking donations at this time. Snack Pick-Up Instructions 1. To protect those around you, wear a mask or face covering while picking up meal packs, if possible. 2.",
     "verification": {
       "status": "stale-import",
@@ -5987,6 +6252,7 @@
       "Thursdays, 5pm-6:30pm"
     ],
     "neighborhood": "Whittier",
+    "hmis": null,
     "notes": "Sharing groceries, produce, personal hygiene products, clothing, household items and encouragement with families in Minneapolis. https://www.minneapolisfirst.org/ministries/community-service",
     "verification": {
       "status": "stale-import",
@@ -6012,6 +6278,7 @@
       "Free food distribution Tuesdays 10:00am-3:00pm, and one Saturday per month (usually the fourth Saturday) from 9am-10am."
     ],
     "neighborhood": "Minnehaha",
+    "hmis": null,
     "notes": "All are welcome - primarily serves clients living between Cedar Ave W & the Mississippi River and between Highway 62 and Lake St, but no one will be turned away. https://minnehaha.org/foodshelf.html",
     "verification": {
       "status": "stale-import",
@@ -6044,6 +6311,7 @@
       "Monday-Thursday: 9am-5pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "MoveFwd (formerly Teens Alone) is here to serve young people and their families. Drop-in Center (Fridays by appointment only - call ahead, 952-988-8336) After hours resources: https://movefwdmn.org/get-help/after-hours-resources/ We provide: - Barrier-free therapy to youth and families - Housing assistance to young people who are experiencing or at risk for homelessness - Housing program for young adults who are lear…",
     "verification": {
       "status": "stale-import",
@@ -6056,7 +6324,8 @@
     "name": "Native American Community Clinic (NACC)",
     "categories": [
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1213 E Franklin Ave",
     "city": "Minneapolis, MN 55404",
@@ -6077,6 +6346,10 @@
       "Thurs - 8:30 am–5:00 pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": {
+      "agency": "Native American Community Clinic",
+      "matchedBy": "full name"
+    },
     "notes": "Hours: Fri - 8:30 am–5:00 pm Sat - Closed Sun - Closed Lobby closed every day 12:45pm-1:45pm. NACC is now has exchange hours on Mondays in the Old Dollar Tree Part of their building! The clinic provides medical and dental health, as well as social services, community health, and COVID-19 testing. COVID-19 evaluation and testing are free, other services are billed on sliding scale.",
     "verification": {
       "status": "stale-import",
@@ -6102,6 +6375,7 @@
       "Distributing pre-packed boxes and bags of food on the first four Saturdays of the month from 10:00am-2:00pm, or until they run out."
     ],
     "neighborhood": "Northrop",
+    "hmis": null,
     "notes": "The food shelf is closed on the fifth Saturday of any month with five weekends. Open to all Twin Cities residents, walk-ins welcome.",
     "verification": {
       "status": "stale-import",
@@ -6133,6 +6407,7 @@
       "Food pickup appointments are scheduled between 1:00pm to 4:20pm Monday- Friday."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food pickups are scheduled Individuals or families in our service area may call (763) 533-2836 between 9:00am. to 3:00pm. weekdays to schedule a same day appointment. Clients are allowed to visit NEAR twice a month. Through a cooperative effort of twelve area churches, volunteers provide food relief to residents of Crystal, New Hope, Robbinsdale and attendees of all member churches.",
     "verification": {
       "status": "stale-import",
@@ -6161,6 +6436,7 @@
       "One Wednesday per month: 2:30pm - 4pm, Student Center Room 101"
     ],
     "neighborhood": "Dayton's Bluff",
+    "hmis": null,
     "notes": "Free Produce Distribution Upcoming Spring 2024 dates: March 13 April 10 May 8 Open to all, cost-free. Our Winter Fresh Produce Distribution events take place at Metro State University in St. Paul. During each event, we distribute approximately 3,000 pounds of food to approximately 75-100 families on average.",
     "verification": {
       "status": "stale-import",
@@ -6198,6 +6474,7 @@
       "3rd Saturday of each month: 10am-2pm"
     ],
     "neighborhood": "West Side",
+    "hmis": null,
     "notes": "In-person Food Market shopping hours (as of January 2024): Pre-registration is required! See details below about making an appointment. ----- Fresh Produce Distribution Every 2nd and 4th Wednesday (July - October): 1:30pm - 3pm From July to October, you can come pick up a variety of free fruits and vegetables for your family and friends. The distributions are held outdoors and are farmer’s market style.",
     "verification": {
       "status": "stale-import",
@@ -6230,6 +6507,7 @@
       "Third Saturday of each month: 9 a.m."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Food Shelf: until noon. By Appointment Clothes Closet: until noon, offers a special 50% off sale on all clothing. Donation Hours: Same as weekly food shelf (9:00am-4:00pm); ring the doorbell next to the garage door on the lower level.",
     "verification": {
       "status": "stale-import",
@@ -6260,6 +6538,7 @@
       "Saturday: 10am-12pm"
     ],
     "neighborhood": "Hale",
+    "hmis": null,
     "notes": "New Creations Ministries Mother Jeanette Frazier Food Shelf provides a 3 day supply of food to households in the Minneapolis, St. Paul and surrounding communities. FOOD GIVEAWAY TONS OF MEAT EVERY MONDAY HOME COVID TEST KITS AVAILABLE Receiving donations at back door (closest to 13th Ave S).",
     "verification": {
       "status": "stale-import",
@@ -6286,6 +6565,7 @@
       "Fourth Thursday of every month, 5:00pm - 6:30pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Food shelf open Contact (763) 421-0166 with any questions. https://www.newlifemn.org/outreach-ministries/local-outreach/foodshelf-homeless/",
     "verification": {
       "status": "stale-import",
@@ -6318,6 +6598,7 @@
       "Thursday 9am-12pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "North Anoka County Emergency Food Shelf & Clothes Closet serves residents of Bethel, Cedar, East Bethel, Ham Lake, Linwood Township, Oak Grove, St. Francis, Stacy, and Wyoming in Anoka County. Visitors may come once per calendar month.",
     "verification": {
       "status": "stale-import",
@@ -6348,6 +6629,7 @@
       "Saturdays (by appointment only): 11am-2pm"
     ],
     "neighborhood": "Webber-Camden",
+    "hmis": null,
     "notes": "Our program supports community members experiencing financial stress without income or residency requirements and our team of community based volunteers are able to supply our neighbors with pet food, supplies and resources. Here are a few reminders at the time of your appointment: - Masks are required to enter. - 2 households at a time.",
     "verification": {
       "status": "stale-import",
@@ -6376,6 +6658,7 @@
       "Monday-Saturday Receiving donations: 9:00am-6:00pm."
     ],
     "neighborhood": "Jordan",
+    "hmis": null,
     "notes": "Distributing: 1:00pm-5:00pm. Drop off donations in the back. @NSBlessings-77 PayPal: nsblessings77@gmail.com Cash app: $syllyme",
     "verification": {
       "status": "stale-import",
@@ -6389,7 +6672,8 @@
     "categories": [
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1835 Penn Ave N",
     "city": "Minneapolis, MN 55411",
@@ -6409,6 +6693,10 @@
       "Donate food Monday through Friday, 9:00am-5:00pm."
     ],
     "neighborhood": "Willard-Hay",
+    "hmis": {
+      "agency": "NorthPoint Health and Wellness Center",
+      "matchedBy": "full name"
+    },
     "notes": "If you expect to bring in a large amount, please call ahead at 612-767-9175. If you are sick, you must stay home. Masks available on request! An ID is helpful but not required. You may visit the food shelf once per calendar month (anytime during a month). Items include meat, dairy, bread, and other food, hygiene, cleaning supplies, and pet food.",
     "verification": {
       "status": "stale-import",
@@ -6435,6 +6723,7 @@
       "Monday - Friday: 9:00am - 4:30pm"
     ],
     "neighborhood": "Willard-Hay",
+    "hmis": null,
     "notes": "The Northside Achievement Zone (NAZ) exists to permanently close the achievement gap and end generational poverty in North Minneapolis. With partner organizations, NAZ works with low-income families as they put their children on a path to college. To enroll in NAZ, you must live within North Minneapolis, have at least one child pre-birth to age 18, and be actively enrolled/engaged with one of our referral partners.",
     "verification": {
       "status": "stale-import",
@@ -6464,6 +6753,7 @@
       "Saturday, 1-4pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "24-hour resource and crisis line at 612-825-0000. Drop-in center open Youth and young adults between the ages 10-24 of all genders and their children can access the following services: - Advocacy, safety planning and connections to a range of additional community resources - Counseling - Housing, computer lab, career and educational assistance- Food and snacks - Shower and laundry - Supplies and clothing- Creative ar…",
     "verification": {
       "status": "stale-import",
@@ -6479,7 +6769,8 @@
       "food",
       "health",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "2200 W Old Shakopee Rd",
     "city": "Bloomington, MN 55431",
@@ -6506,6 +6797,10 @@
       "Youth drop-in hours: Monday and Wednesday-Friday 2-5 pm"
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": {
+      "agency": "Oasis for Youth",
+      "matchedBy": "full name"
+    },
     "notes": "Resource Center Hours: •••By Appointment Only••• M-F: 9am-5pm Oasis for Youth operates a Drop-In resource center for youth ages 16-24 who live, work, or attend school in Bloomington, Richfield and Edina (though no youth in need are turned away.) Oasis for Youth meets the needs of Youth through individualized case management, connections to resources , improved access to services and supports and assistance with basic…",
     "verification": {
       "status": "stale-import",
@@ -6532,6 +6827,7 @@
       "The Pantry runs the first and third Tuesdays of each month, from 2-4pm or until food runs out."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Food is available to the public. (From June to October, there is also produce distribution on the second and fourth Tuesday of each month.) The 191 Community Pantry is available year-round. Recipients receive a grocery bag of non-perishable items and a small box of assorted fruits and vegetables. Pantry pick-up is located at Diamondhead Education Center, 200 W.",
     "verification": {
       "status": "stale-import",
@@ -6557,6 +6853,7 @@
       "Drive-through pick up food distribution on the 3rd Wednesday of each month (from September to May) from 3:30 - 5:30 p.m."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "(No summer distribution!) Focused on Neill families and neighborhood, but food distribution is open to the public. Food is free and usually includes both dry goods and fresh produce, as well as dairy and meat when available.",
     "verification": {
       "status": "stale-import",
@@ -6595,6 +6892,7 @@
       "Tuesdays/Wednesdays: 9am-6pm"
     ],
     "neighborhood": "East Suburbs",
+    "hmis": null,
     "notes": "CLOSED Monday, September 4th for Labor Day. ----- Today's Harvest free market Today's Harvest is a free market that provides fresh produce, meat, dairy, and bakery items we rescue each day from local grocery stores, farms, and other partners. You are welcome to visit Today’s Harvest once a day. You will not need to provide any documentation to receive food. We will ask for your household size and zip code.",
     "verification": {
       "status": "stale-import",
@@ -6627,6 +6925,7 @@
       "2nd and 4th Tuesday of each month: 12pm-2pm"
     ],
     "neighborhood": "Midway",
+    "hmis": null,
     "notes": "Meal service times: Food shelf Please join us for our FREE weekly community meals. A hot meal is served on Monday and a bagged lunch is served on Wednesday. Those using our food shelf must fill out an eligibility form once per calendar year. Face coverings/masks are required to be worn by all when in attendance. You may call 651-646-6549 ext.",
     "verification": {
       "status": "stale-import",
@@ -6650,6 +6949,7 @@
     "transit": "9-BUS-(3 blocks),663 Express-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "Ongoing need for winter clothing items (hats, gloves, coats) Schedule a donation time by email or phone; call John Martin at 763-485-0469/email JohnMartinC1970@gmail.com to arrange for a pickup in metro area.",
     "verification": {
       "status": "stale-import",
@@ -6675,6 +6975,7 @@
       "Distributing food through Sanneh Foundation's Latino Outreach program from 3pm-5pm every other Saturday (spring dates: March 2, 16, and 30; April 13 and 27; May 11 and 25)"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": null,
     "verification": {
       "status": "stale-import",
@@ -6700,6 +7001,7 @@
       "Monday-Friday: 9am-4pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Hours: PCs for People provides free pick up and recycling of electronic waste from businesses, educational and governmental organizations. PCs for People has both NAID AAA and R2 certifications, meaning your data is protected through strict adherence to the highest standards of information destruction, hard drive sanitization, and all recycling is environmentally responsible.",
     "verification": {
       "status": "stale-import",
@@ -6725,6 +7027,7 @@
       "Monday-Friday: 10:00am-5:00pm"
     ],
     "neighborhood": "Mankato",
+    "hmis": null,
     "notes": "PCs for People provides refurbished tech to low-income households Services include low-cost desktop & laptop computers, computer accessories, internet devices and subscriptions, computer repairs, digital learning, and individual electronics drop-off.",
     "verification": {
       "status": "stale-import",
@@ -6751,6 +7054,7 @@
       "Saturday: 9:00am-4:00pm"
     ],
     "neighborhood": "Midway",
+    "hmis": null,
     "notes": "PCs for People provides refurbished tech to low-income households Services include low-cost desktop & laptop computers, computer accessories, internet devices and subscriptions, computer repairs, digital learning, individual electronics drop-off, volunteer opportunities.",
     "verification": {
       "status": "stale-import",
@@ -6775,6 +7079,7 @@
     "transit": "4-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Waite Park",
+    "hmis": null,
     "notes": "Donation site for People and Pets Together. Open M-F: 8am-4:30pm",
     "verification": {
       "status": "stale-import",
@@ -6801,6 +7106,7 @@
       "Saturday: 8:30am-1pm"
     ],
     "neighborhood": "North Suburbs",
+    "hmis": null,
     "notes": "Donation site for People and Pets together M-F: 8:30am-6pm",
     "verification": {
       "status": "stale-import",
@@ -6828,6 +7134,7 @@
       "Saturday: 8am-2pm"
     ],
     "neighborhood": "East Suburbs",
+    "hmis": null,
     "notes": "Donation site for People and Pets together. Donations can be left during business hours: Sunday: Closed",
     "verification": {
       "status": "stale-import",
@@ -6855,6 +7162,7 @@
       "Sat: 8am - 12:00pm"
     ],
     "neighborhood": "East Harriet",
+    "hmis": null,
     "notes": "Donation site for People and Pets together. Open",
     "verification": {
       "status": "stale-import",
@@ -6882,6 +7190,7 @@
       "Saturdays: 9am-1pm"
     ],
     "neighborhood": "Northrop",
+    "hmis": null,
     "notes": "Donation site for People and Pets together",
     "verification": {
       "status": "stale-import",
@@ -6910,6 +7219,7 @@
       "Sat: 9am-1pm"
     ],
     "neighborhood": "Whittier",
+    "hmis": null,
     "notes": "Donation site for People and Pets together. Open Sat: 9am-1pm",
     "verification": {
       "status": "stale-import",
@@ -6936,6 +7246,7 @@
       "Monday - Friday: 8am-6pm."
     ],
     "neighborhood": "SE Suburbs",
+    "hmis": null,
     "notes": "Donation site for People and Pets together. Open",
     "verification": {
       "status": "stale-import",
@@ -6968,6 +7279,7 @@
       "Thursday 9:30am-1:00pm"
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": null,
     "notes": "Open for distribution and donations: Friday: 9:30am-1:00pm Food shelf is available to families and individuals generally once a month. New households are encouraged to call and make an appointment to speak with a case manager to review needs and determine additional resources PROP can provide (short-term emergency financial assistance, employment support, additional services) PROP offers an extensive menu of food inc…",
     "verification": {
       "status": "stale-import",
@@ -6983,7 +7295,8 @@
       "food",
       "health",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "614 South 3rd Street",
     "city": "Minneapolis, MN 55415",
@@ -7007,6 +7320,10 @@
       "Saturday 1:00pm-3:30pm"
     ],
     "neighborhood": "Downtown East",
+    "hmis": {
+      "agency": "People Serving People",
+      "matchedBy": "full name"
+    },
     "notes": "Donation Drop Off Hours: IF YOU ARE IN NEED OF SHELTER CALL: 651-291-0211 Shelter Resources Listed Here: https://www.peopleservingpeople.org/shelter-guests/directory-and-info/ Drop off location is at the loading dock. People Serving People has a huge amount of resources including but not limited to family programming, emergency shelter, technology resources, and family advocacy available.",
     "verification": {
       "status": "stale-import",
@@ -7021,7 +7338,8 @@
       "food",
       "health",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "420 15th Avenue South",
     "city": "Minneapolis, MN, 55454",
@@ -7045,6 +7363,10 @@
       "Every 1st and 3rd Thursday of the month from 12pm-2pm"
     ],
     "neighborhood": "Cedar Riverside",
+    "hmis": {
+      "agency": "Pillsbury United Communities",
+      "matchedBy": "full name"
+    },
     "notes": "Food Shelf Distribution: Produce distribution: Regarding Food Shelf Distribution: Free nutritious groceries for individuals and families. Pre-filled pantry bags are available for pick-up at Brian Coyle Center during the usual food shelf operating hours. No appointment needed, but first-time visitors will be asked to complete a brief registration process.",
     "verification": {
       "status": "stale-import",
@@ -7058,7 +7380,8 @@
     "categories": [
       "food",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "1701 Oak Park Avenue North",
     "city": "Minneapolis, MN, 55411",
@@ -7079,6 +7402,10 @@
       "Take-out meals available Tuesdays-Thursdays, 4pm-6pm"
     ],
     "neighborhood": "Near - North",
+    "hmis": {
+      "agency": "Pillsbury United Communities",
+      "matchedBy": "full name"
+    },
     "notes": "https://pillsburyunited.org/programs/cafe-meals/",
     "verification": {
       "status": "stale-import",
@@ -7092,7 +7419,8 @@
     "categories": [
       "food",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "2323 11th Avenue South",
     "city": "Minneapolis, MN, 55404",
@@ -7116,6 +7444,10 @@
       "Thursdays: 10:00am-12:00pm, 1:00pm-4:00pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": {
+      "agency": "Pillsbury United Communities",
+      "matchedBy": "full name"
+    },
     "notes": "To-Go Meals (Lunch): Food Shelf Distribution: Produce Distribution: 2nd & 4th Wednesday of the month: 10:00am-12:00pm NAPS Program (Senior Boxes): Free nutritional support box for adults 60+. Days and times vary. Call your neighborhood center for details. Registration required for first-time participants.",
     "verification": {
       "status": "stale-import",
@@ -7156,6 +7488,7 @@
       "Sat 9am -3pm"
     ],
     "neighborhood": "West Suburbs",
+    "hmis": null,
     "notes": "PRISM food shelf: 2023 Fresh Produce Distributions: July 18 August 1 August 15 September 5 September 19 October 3 Donations accepted during Shop for Change business hours: M-W, F 9am - 5pm Th 9am - 7pm Sat 9am -3pm PRISM is now a Naloxone Access Point (NAP), which provides free naloxone and fentanyl test strip kits to prevent opioid-related overdose.",
     "verification": {
       "status": "stale-import",
@@ -7183,6 +7516,7 @@
       "Saturdays: 10:30am-12:00pm in the church parking lot."
     ],
     "neighborhood": "Battle Creek",
+    "hmis": null,
     "notes": "PBC Fishes and Loaves Food Shelf is available Vaccine connector and housing info here: https://www.progressivebaptistchurchmn.com/coronavirus",
     "verification": {
       "status": "stale-import",
@@ -7209,6 +7543,7 @@
       "Monday-Friday: 10:00am - 4:00pm"
     ],
     "neighborhood": "Duluth",
+    "hmis": null,
     "notes": "Services include: syringes, naloxone, works, hygiene kits, 218-481-7225",
     "verification": {
       "status": "stale-import",
@@ -7235,6 +7570,7 @@
       "Tuesdays 12pm-4pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Syringes, Works, Naloxone, hygiene kits available Greater MN Syringe Exchange site located inside Lakeview Behavioral Health 218-341-2698",
     "verification": {
       "status": "stale-import",
@@ -7261,6 +7597,7 @@
       "Services available Monday-Friday: 12:00pm-4:00pm."
     ],
     "neighborhood": "Mankato",
+    "hmis": null,
     "notes": "Services include: syringes, works, naloxone, hygiene kits, and free Hep C and HIV testing Located in the First Presbyterian Church of Mankato.",
     "verification": {
       "status": "stale-import",
@@ -7286,6 +7623,7 @@
       "Thursdays 12:00pm-4:00pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Services include: syringes, works, Naloxone 218-341-2698 Back entrance of the Arrowhead Center",
     "verification": {
       "status": "stale-import",
@@ -7299,7 +7637,8 @@
     "categories": [
       "shelter",
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1710 Plymouth Ave N",
     "city": "Minneapolis, MN 55411",
@@ -7316,6 +7655,10 @@
     "transit": "7-BUS-(1 block),32-BUS-(1 block)",
     "hours": null,
     "neighborhood": "Near North",
+    "hmis": {
+      "agency": "Minneapolis Public Housing Authority",
+      "matchedBy": "full name"
+    },
     "notes": "Donations go to residents of Rainbow Terrace (low-income, elderly housing). There are 82 apartments and all items should be sized for a single household. When making donations please call ahead Mattie Henderson, the president of Rainbow Terrace, at (612) 407-5415 (call between 6pm-12am midnight). Always accepting pre-made meals for Mattie and her staff (6 meals - no dietary restrictions).",
     "verification": {
       "status": "stale-import",
@@ -7345,6 +7688,7 @@
       "Monday through Friday: 9:00am-12:00pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Accepting donations at donation barrels near back entrance ••• Distribution by appointment only ••• We are open Monday through Friday by appointment (day and evening shopping hours are available). Please call the food shelf appointment line at 651-621-6280 (Español: 651-621-6284) to schedule an appointment to receive food or fill out an appointment request form (available in English or Spanish from here: https://www.…",
     "verification": {
       "status": "stale-import",
@@ -7372,6 +7716,7 @@
       "1st Saturday of each month (March - November): 1pm - 4pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "The Really Really Free Market will be at Whittier Park on the Upcoming Dates 2024: March 2 Bring what you can, take what you need. Conversation, art, music, food, good vibes are just as welcome as material items. No money, no trade, no barter. The Really Really Free Market is an experiment in community and giving, a window into an actual gift economy.",
     "verification": {
       "status": "stale-import",
@@ -7404,6 +7749,7 @@
       "Thursday: 10 am - 4 pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "Distributing syringes, works, naloxone, needle exchange, HIV testing, Free testing for HIV, sexually transmitted diseases, refugee health and immigration services. More info: https://www.reddoorclinic.org/more-services • Will ask for an I.D. but it is not required. • reddoorclinic.org Please call 612-543-5555 before you arrive due to COVID-19 concerns.",
     "verification": {
       "status": "stale-import",
@@ -7431,6 +7777,7 @@
     "transit": "54-BUS-(1 block),64-BUS-(1 block),80-BUS-(1 block)",
     "hours": null,
     "neighborhood": null,
+    "hmis": null,
     "notes": "One Monday per month (December 27, 2022; 2023 dates: Jan 23, Feb 27, Mar 27, Apr 24, May 22, Jun 26, Jul 24, Aug 28, Sep 25, Oct 23, Nov 27, Dec 18). 4-5pm. Enter through Door 4. Manna Market is the food shelf of Redeeming Love Church. It’s an open-house style market that includes free groceries to ANYONE struggling to put food on the table (open to all, no appointment needed). Please bring your own bags.",
     "verification": {
       "status": "stale-import",
@@ -7460,6 +7807,7 @@
       "Tuesday evening additional hours: 5pm-7pm."
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Distribution and donation hours: AND If you plan to drop off more than a carload of donations, or have other questions about donating, please call (651) 322-5113 Also has distribution for Nutrition Assistance Program for Seniors (NAPS) every Wednesday following the 1st Monday of the month.",
     "verification": {
       "status": "stale-import",
@@ -7473,7 +7821,8 @@
     "categories": [
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "310 E 38th St #200",
     "city": "Minneapolis, MN 55409",
@@ -7495,6 +7844,10 @@
       "Monday–Wednesday: 12:30pm – 3pm"
     ],
     "neighborhood": "Central",
+    "hmis": {
+      "agency": "Sabathani Community Center",
+      "matchedBy": "full name"
+    },
     "notes": "Food shelf open for distributing food every Arrive 15 minutes before the food shelf closes; ID required Clients can pick up food once per month. Available supplies include meats, legumes, rice, pasta, cereal, canned goods and packaged foods, milk, fresh fruits and vegetables (in season), baby items and toiletries (occasionally available) and even juice and dessert items.",
     "verification": {
       "status": "stale-import",
@@ -7527,6 +7880,7 @@
       "10 AM – 4 PM Fridays"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "SafeZone Location Hours: Young people ages 14 – 24 are encouraged to come in and see what we have to offer. We can connect you to basic needs like a place to shower and supplies, all the way up to health check-ups, sexual health info, and help with school, work and housing.",
     "verification": {
       "status": "stale-import",
@@ -7559,6 +7913,7 @@
       "The Haven Community Pantry will be open at the Sanctuary Resource Center every Wednesday and Thursday (except federal holidays) from 11 am to 3 pm."
     ],
     "neighborhood": "Hawthorne",
+    "hmis": null,
     "notes": "Haven Community Pantry Northsiders may shop every week, and those who live outside the Northside may shop once per month. The pantry will offer non-perishable food items (including frozen meats), diapers, women's supplies, and laundry soap.",
     "verification": {
       "status": "stale-import",
@@ -7585,6 +7940,7 @@
     "transit": "5-BUS-(1 block)",
     "hours": null,
     "neighborhood": "Seward",
+    "hmis": null,
     "notes": "The Sanctuary Supply Depot is a central hub aimed at facilitating the collection and distribution of basic survival supplies for our unhoused neighbors. Born of the Minneapolis Sanctuary Movement, we unite in the ideals of housing justice, mutual aid, abolition, harm reduction, and decolonization.",
     "verification": {
       "status": "stale-import",
@@ -7612,6 +7968,7 @@
       "Family grocery distribution Tuesdays, 3-5pm"
     ],
     "neighborhood": "Conway",
+    "hmis": null,
     "notes": "Free breakfast and lunch for Saint Paul youth (18 and under), 6/19-8/17 (closed July 4): Breakfast: 8:30am-10:30am Lunch: 12:30pm-3:00pm Learn more: https://www.facebook.com/ConwayTSF/",
     "verification": {
       "status": "stale-import",
@@ -7639,6 +7996,7 @@
       "Fresh produce and other culturally specific staples for Latinx communities every Friday, 12pm-2pm."
     ],
     "neighborhood": "Corcoran",
+    "hmis": null,
     "notes": "Drive-thru and walk up. We are in need of volunteers, especially Spanish speaking ones (but everyone is welcome.)",
     "verification": {
       "status": "stale-import",
@@ -7667,6 +8025,7 @@
       "Monday-Friday 8:00am-3:30pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Donation Hours: Second Harvest Heartland relies on donations of excess food from commercial growers, retailers and industry partners. Unfortunately, because of our food bank’s size and scale, we cannot accept food donations from individuals or small groups at this time. (Our operations are set up to handle pallets and volume quantities of items.) Please go to the front desk at the main entrance for assistance.",
     "verification": {
       "status": "stale-import",
@@ -7695,6 +8054,7 @@
       "Monday - Friday: 8:00am-3:30pm — stop by front desk for instructions."
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Donation Hours: ***For food safety reasons, personal care items and cleaning supplies must be kept separate from food items*** Food donated needs to be labeled, undamaged and still within the “best if used by” date. We cannot accept donations exceeding 200 pounds or frozen goods at our Maplewood location. Please donate these items at our Brooklyn Park location or to one of our partner agencies in Maplewood.",
     "verification": {
       "status": "stale-import",
@@ -7726,6 +8086,7 @@
       "Saturdays 9:30 a.m."
     ],
     "neighborhood": "Powderhorn",
+    "hmis": null,
     "notes": "Chuck and Don's Pet Wellness Center, In the Seward neighborhood. Hours open for distribution: - 8:30 p.m. - 2:30 p.m. Donations can be dropped off during office hours, or 24/7 in the dropbox behind building outside of office. We provide dog and cat food, and pet care items, to individuals and families in crisis.",
     "verification": {
       "status": "stale-import",
@@ -7757,6 +8118,7 @@
       "Monday-Friday: 9:30 am - 1pm"
     ],
     "neighborhood": "Logan Park",
+    "hmis": null,
     "notes": "Hours of operation: Participants in the Senior Food Shelf must be 55 years or older, live in Hennepin County, and fall within 300% of federal poverty guidelines. Written verification of income is not required. Participants receive: fresh produce, meat, bread, and shelf-stable foods. Pet food and hygiene items are also provided when available. Participants may receive 20 pounds of food every month.",
     "verification": {
       "status": "stale-import",
@@ -7787,6 +8149,7 @@
       "To-go meals will be available through Loaves and Fishes every Friday from 5pm-6pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Please visit www.svcc.as.me to schedule an appointment for Curbside Grocery Pickup. NOTE: Please come only at your scheduled time and be prepared to wait a little bit in line. If you have any questions setting up a Curbside Grocery pickup appointment or registering for an event please call our main line at 763.533.3929.",
     "verification": {
       "status": "stale-import",
@@ -7815,6 +8178,7 @@
       "Monday-Thursday; 9am-3pm"
     ],
     "neighborhood": "North Suburbs",
+    "hmis": null,
     "notes": "Make an appointment at https://www.sewa-aifw.org/events Call (763) 234-8301 for more information. Free and confidential consultations and referrals with a physician are available. Other services such as vaccinations, blood pressure management, and glucose and cholesterol tests also available. Groceries & donations accepted: Our current drop off location is in Brooklyn Center, MN. Please text to confirm: 612-422-3276.",
     "verification": {
       "status": "stale-import",
@@ -7852,6 +8216,7 @@
       "Monday-Thursday: 8:00am-3:00pm"
     ],
     "neighborhood": "Unnamed record",
+    "hmis": null,
     "notes": "Hot meals served: Bags of food are distributed Accepting donations: Saturday-Sunday: 8:00am-11am Contact with donation questions: 612.338.4640 or email info@sharingandcaringhands.org. All are welcome. For details and other services (dental, eye care, bus vouchers, beds, vouchers to get State Identification, etc). see https://sharingandcaringhands.org/day-services",
     "verification": {
       "status": "stale-import",
@@ -7880,6 +8245,7 @@
       "Please bring any donations in a paper bag to the metal shelf by door 3 on Tuesdays and Thursdays from 10:00 am – 4:00 pm."
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Distribution and donation hours: DISTRIBUTION: Food Shelf is open by appointment only. Both pre-packed bags and shopping appointments are available. Please contact 360 Communities at 952.985.5300 for an appointment. Contact the Food Shelf at 952.985.7388 (answered during food shelf hours only). DONATIONS: Please check expiration dates; we cannot accept food that is expired.",
     "verification": {
       "status": "stale-import",
@@ -7912,6 +8278,7 @@
       "Wednesday - Friday, 10 am - 3 pm."
     ],
     "neighborhood": "Near North",
+    "hmis": null,
     "notes": "Shiloh Cares Food Shelf (Please arrive by 2:30 pm to receive food). Free cooked meals on-site each Wednesday & Thursday on a \"first come, first served basis\". Shiloh Cares and staff are also certified to administer Narcan as a Narcan access point. Senior Meal Program Free Grocery Giveaway every 2nd and 4th Friday. Seniors (55+) who are not homebound can pick meals up from 1pm - 3 pm.",
     "verification": {
       "status": "stale-import",
@@ -7938,6 +8305,7 @@
       "Also distributing Thursdays, 12-1:00pm at Faith Lutheran (499 Charles Ave), and Fridays 12-1:00pm at Allianz Field (400 Snelling Ave N)"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": null,
     "verification": {
       "status": "stale-import",
@@ -7966,6 +8334,7 @@
       "Also distributing Tuesdays, 12-1:00pm at Christ on Capitol hill (105 University Ave W) and Thursdays, 12-1:00pm at Faith Lutheran (499 Charles Ave)"
     ],
     "neighborhood": "Frogtown",
+    "hmis": null,
     "notes": null,
     "verification": {
       "status": "stale-import",
@@ -7993,6 +8362,7 @@
     "transit": "534-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Every 2nd Sunday of the Month 11:00 am - 2:00 pm Free and confidential consultations and referrals with a physician are available. Other services such as vaccinations, blood pressure management, and glucose and cholesterol tests also available.",
     "verification": {
       "status": "stale-import",
@@ -8022,6 +8392,7 @@
     "transit": "11-BUS-(1 block)",
     "hours": null,
     "neighborhood": "Powderhorn",
+    "hmis": null,
     "notes": "Sisters' Camelot shares food on Tuesdays & Thursdays. Hours and location vary - see Facebook page for most current information: https://www.facebook.com/SistersFoodshare/ The beloved kitchen bus needs new tires and other mechanical repairs in order to continue traveling safely.",
     "verification": {
       "status": "stale-import",
@@ -8047,6 +8418,7 @@
     "transit": "32-BUS-(1 block),25-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Audubon Park",
+    "hmis": null,
     "notes": "Sisters' Camelot shares food on Tuesdays & Thursdays. Hours and location vary - see Facebook page for most current information: https://www.facebook.com/SistersFoodshare/ The beloved kitchen bus needs new tires and other mechanical repairs in order to continue traveling safely.",
     "verification": {
       "status": "stale-import",
@@ -8075,6 +8447,7 @@
     "transit": "5-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Powderhorn",
+    "hmis": null,
     "notes": "Sisters' Camelot shares food at Park Ave UMC on some Tuesdays & Thursdays. Hours and location vary - see Facebook page for most current information: https://www.facebook.com/SistersFoodshare/ The beloved kitchen bus needs new tires and other mechanical repairs in order to continue traveling safely.",
     "verification": {
       "status": "stale-import",
@@ -8101,6 +8474,7 @@
     "transit": "5-BUS-(3 blocks),DLINE-BUS-(3 blocks),11-BUS-(4 blocks)",
     "hours": null,
     "neighborhood": "Phillips West",
+    "hmis": null,
     "notes": "Sisters' Camelot shares food on Tuesdays & Thursdays. Hours and location vary - see Facebook page for most current information: https://www.facebook.com/SistersFoodshare/ The beloved kitchen bus needs new tires and other mechanical repairs in order to continue traveling safely.",
     "verification": {
       "status": "stale-import",
@@ -8128,6 +8502,7 @@
       "First Thursday of each month: 2pm - 3pm"
     ],
     "neighborhood": "Near North",
+    "hmis": null,
     "notes": "Upcoming 2024 dates: May 2 Please stand outside the side door and someone will set the bag out for you. If you have clean paper grocery bags to donate, please bring those with you. Please bring a reusable shopping bag/box/cart/something sturdy to help you carry both the paper bag of groceries we pass out and the extra produce that is usually available in addition.",
     "verification": {
       "status": "stale-import",
@@ -8162,6 +8537,7 @@
       "Free produce some Tuesdays and Thursdays through Sisters Camelot, 2-3pm or until it is gone."
     ],
     "neighborhood": "Seward",
+    "hmis": null,
     "notes": "Accepting donations: Distributing hours: https://www.facebook.com/SistersFoodshare/ Lunch is available M-F and groceries on Wednesdays. Items are distributed from the front doors on 25th Ave. Sisters' Camelot shares food at Soup For You Cafe (formerly Bethany Church) on some Tuesdays & Thursdays.",
     "verification": {
       "status": "stale-import",
@@ -8196,6 +8572,7 @@
       "One Saturday per month (usually the 4th Saturday), 9:30am-11am (see calendar here: https://sourcemn.org/events/)"
     ],
     "neighborhood": "Whittier",
+    "hmis": null,
     "notes": "Simpson Food Pantry and Source MN have partnered up! Drive up or walk up to receive food Women's Drop-In Center: https://sourcemn.org/rest/ More info/resources available at https://sourcemn.org/food/ and https://www.facebook.com/SimpsonChurchMN Facebook Events: https://www.facebook.com/sourcemn/events/",
     "verification": {
       "status": "stale-import",
@@ -8223,6 +8600,7 @@
       "2nd Sunday of each month: 10am-12pm"
     ],
     "neighborhood": "SE Suburbs",
+    "hmis": null,
     "notes": "Free food for all (no income restrictions) Upcoming 2023 dates: December 10 and 2024: January 14 February 11 March 10 April 14 May 12 June 9 https://www.southmetroic.org/foodshelf Questions? Call 651-252-1186.",
     "verification": {
       "status": "stale-import",
@@ -8256,6 +8634,7 @@
       "Thursday: 8am-3pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Open hours (for thrift store, donations, or food shelf appointments): Friday/Saturday/Sunday: closed Food shelf appointments can be made online 2 calendar days in advance, at https://sacafoodsappointments.timetap.com. Food Shelf visits can be made every 30 days. More information is available at https://www.sacafoodshelf.org/.",
     "verification": {
       "status": "stale-import",
@@ -8282,6 +8661,7 @@
     "transit": "17-BUS-(1 block),6-BUS-(2 blocks)",
     "hours": null,
     "neighborhood": "Lowry Hill East",
+    "hmis": null,
     "notes": "Speakeasy MPLS is a mutual aid side base in Uptown Minneapolis. We are a highly curated, eco-friendly thrift/general \"store\" that runs on donations. We provide beautiful, high-quality items that are accessible to everyone. How it works: 1.",
     "verification": {
       "status": "stale-import",
@@ -8314,6 +8694,7 @@
       "Monday – Friday 9:00 am – 4:00 pm or call for arrangements."
     ],
     "neighborhood": "Downtown West",
+    "hmis": null,
     "notes": "urces, and reception for Samaritan Ministry. Additional Ministry Hours Monday through Wednesday 9am-11am, no appointment required Donations accepted at the parish office During weekend Masses you can give your items to an usher or place them in the blue bins in the back of church.",
     "verification": {
       "status": "stale-import",
@@ -8345,6 +8726,7 @@
       "Paul Opportunity Center is open from 9:00am-5:30pm daily."
     ],
     "neighborhood": "Downtown St. Paul",
+    "hmis": null,
     "notes": "The St. Services such as healthcare, meals, and laundry are provided. Meal Service: Breakfast: 9:00am – 9:45am Lunch: 11:45am – 12:45pm Dinner: 4:30pm – 5:15pm More information is available here: https://www.cctwincities.org/locations/saint-paul-opportunity-center/ To call for more information: 651-404-6407",
     "verification": {
       "status": "stale-import",
@@ -8376,6 +8758,7 @@
       "Saturdays 10:30 am to 3:30 pm"
     ],
     "neighborhood": "Phillips",
+    "hmis": null,
     "notes": "Weekly grocery giveaway Accepting donations",
     "verification": {
       "status": "stale-import",
@@ -8410,6 +8793,7 @@
       "Thursdays: 8am-3:30pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "STEP provides confidential food shelf services to those in need residing in St. Louis Park. Make an appointment to use the food shelf by calling 952-925-4899. Distribution: Fridays: 8am-11:30am Donations accepted: Mondays: 8:00-3:30pm Tuesdays: 12:00-7:00pm Wednesdays: 8:00-3:30pm Thursdays: 8:00-3:30pm Fridays: 8-11:30am Requirements: -Picture ID and verification of St.",
     "verification": {
       "status": "stale-import",
@@ -8436,6 +8820,7 @@
       "Saturdays 10am-12pm"
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Free food: (763) 238-6126",
     "verification": {
       "status": "stale-import",
@@ -8463,6 +8848,7 @@
       "Food distribution on Saturdays, 11am-2pm."
     ],
     "neighborhood": "NW Suburbs",
+    "hmis": null,
     "notes": "Questions? Please contact Denise at 952-607-1681. https://www.facebook.com/Task-Force-Inc-106309488983046/",
     "verification": {
       "status": "stale-import",
@@ -8499,6 +8885,7 @@
       "Wednesday-Thursday: 10:00am-11:30am"
     ],
     "neighborhood": "East St. Paul",
+    "hmis": null,
     "notes": "Food shelf hours are every week The Corner Shelf, Woodland’s food shelf, provides weekly distribution of fresh fruits, vegetables, meat and kitchen staples to the Greater Twin Cities area. Everyone is welcome, everyone will be served. All you need to provide is your name, address and date of birth upon arrival.",
     "verification": {
       "status": "stale-import",
@@ -8513,7 +8900,8 @@
       "shelter",
       "food",
       "supplies",
-      "support"
+      "support",
+      "hmis"
     ],
     "address": "7800 W County Road 42",
     "city": "Apple Valley, MN 55124",
@@ -8532,6 +8920,10 @@
       "Monday - Friday: 2:00pm-5:00pm"
     ],
     "neighborhood": "SW Suburbs",
+    "hmis": {
+      "agency": "The Link",
+      "matchedBy": "full name"
+    },
     "notes": "C.O.R.E Drop-in Center provides a place where youth (ages 16-24) who are at-risk of or are currently experiencing homelessness can get help with basic needs (food, clothes, shower, laundry, etc.). *Must have a connection to Dakota County! Drop in without an appointment: Some of the services and programming available at C.O.R.E.",
     "verification": {
       "status": "stale-import",
@@ -8566,6 +8958,7 @@
       "Saturday 7:00 am- 1:00 pm"
     ],
     "neighborhood": "Elliot Park",
+    "hmis": null,
     "notes": "We offer daytime resources connecting people with medical and mental health care, breakfast (7:00am-8:00 am) and lunch (11:20am-12:20pm), showers, internet access, laundry and employment counseling. Additional services include counseling services, employment assistance: job search, resumes, one-on-one support and access to job skills training, screening for county benefits, shelter, mental health services, medical an…",
     "verification": {
       "status": "stale-import",
@@ -8592,6 +8985,7 @@
     "transit": "2-BUS-(1 block),121-BUS-(1 block),122-BUS-(1 block),123-BUS-(1 block),465 Express-BUS-(1 block),475 Express-BUS-(1 block),698 Express-BUS-(1 block),774 Express-BUS-(1 block),789-BUS-(1 block),795-BUS-(1 block),Green-GREENLINE-(2 blocks)",
     "hours": null,
     "neighborhood": "University of Minnesota",
+    "hmis": null,
     "notes": "Free meal Thursdays To-go, chef prepared meals available to any University of Minnesota student. Partnership between Kitchen Coalition (Second Harvest Heartland), the Campus Club, and Swipe Out Hunger. Located at Coffman Memorial Union, outside Nutritious U Food Pantry (Room 103A) 4:00 pm - 5:00 pm while meals last St.",
     "verification": {
       "status": "stale-import",
@@ -8623,6 +9017,7 @@
       "Fridays, 10am–12pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Monthly appointments are available for Dakota County residents: Call to make an appointment: 651-686-0787 Clients are required to self-report income, but there are no income or citizenship requirements. Bringing a photo ID or mail showing your current address is recommended but not required. The Open Door's Mobile Food Pantry also makes stops all over Dakota County.",
     "verification": {
       "status": "stale-import",
@@ -8651,6 +9046,7 @@
     "transit": "14-BUS-(3 blocks),23-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "Bancroft",
+    "hmis": null,
     "notes": "If you or someone you know are in need of laundry assistance: - Send an email to thepeopleslaundrympls@gmail.com, - DM on Instagram @thepeopleslaundrympls, or - Fill out the services request form here: https://thepeopleslaundrympls.com/request-service/ to get in touch.",
     "verification": {
       "status": "stale-import",
@@ -8679,6 +9075,7 @@
     "transit": "14-BUS-(3 blocks)",
     "hours": null,
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "If you or someone you know are in need of laundry assistance: - Send an email to thepeopleslaundrympls@gmail.com, - DM on Instagram @thepeopleslaundrympls, or - Fill out the services request form here: https://thepeopleslaundrympls.com/request-service/ to get in touch.",
     "verification": {
       "status": "stale-import",
@@ -8704,6 +9101,7 @@
       "Fridays 6:00pm-7:00pm."
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Manna Market distributes fresh fruits and vegetables, meat, milk, dairy products, bread and baked goods. Registration and fellowship 5 PM - 7 PM, distribution at 6 PM. All participants will receive distribution in random order. Call the church office for more information at (763) 753-1234",
     "verification": {
       "status": "stale-import",
@@ -8734,6 +9132,7 @@
       "Friday: 8am-3pm"
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Donations Accepted: Due to the COVID-19 pandemic and to protect the health and wellness of our clients and staff all donated items must be new, unopened, and unused. If you have questions please call our business line at 612.825.3333. Special arrangements and questions may be made by calling 612.825.3333 or emailing give@tubman.org.",
     "verification": {
       "status": "stale-import",
@@ -8746,7 +9145,8 @@
     "name": "Valley Outreach",
     "categories": [
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "1911 Curve Crest Blvd",
     "city": "Stillwater MN 55082",
@@ -8763,6 +9163,10 @@
       "Friday: 9:30am-12:30pm"
     ],
     "neighborhood": "East Suburbs",
+    "hmis": {
+      "agency": "Valley Outreach",
+      "matchedBy": "full name"
+    },
     "notes": "In-person, drive-up, or delivery (to Ramsey and Washington Counties) for food and clothing: By appointment: Appointment booking and delivery information available here: https://valleyoutreachmn.org/food-shelf/ Donations accepted during open hours on Mondays, Tuesdays, and Thursdays (not Fridays!). *Please do not leave items outside of our building at any time.",
     "verification": {
       "status": "stale-import",
@@ -8776,7 +9180,8 @@
     "categories": [
       "shelter",
       "food",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "9600 Aldrich Avenue S",
     "city": "Bloomington, MN 55420",
@@ -8799,6 +9204,10 @@
       "Our call intake center is open Monday – Friday from 9:00 a.m."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": {
+      "agency": "VEAP, Inc.",
+      "matchedBy": "acronym VEAP"
+    },
     "notes": "Your first step, whether you need food, resources for your children, or simply to speak with our Social Services team is to call us at 952-888-9616. Volunteers will gather information and explain VEAP’s programs. – 4:30 p.m. Drop-offs M-F 9:00am-4:30pm, no appointment needed; pull around to door 4. Serves residents of Edina, Richfield, Bloomington, and Minneapolis south of 50th St./west of Cedar.",
     "verification": {
       "status": "stale-import",
@@ -8812,7 +9221,8 @@
     "categories": [
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "8201 Park Ave S",
     "city": "Minneapolis, MN 55420",
@@ -8826,6 +9236,10 @@
       "Fridays: 12:00-2:00pm at the Dar Al-Farooq Islamic Center."
     ],
     "neighborhood": "South Suburbs",
+    "hmis": {
+      "agency": "VEAP, Inc.",
+      "matchedBy": "acronym VEAP"
+    },
     "notes": "VEAP's Mobile Food Pantry brings fresh produce and other healthy foods directly to people in our service area. All are welcome! Check our events calendar for detailed information on our distribution locations and schedule: https://veap.org/events/",
     "verification": {
       "status": "stale-import",
@@ -8839,7 +9253,8 @@
     "categories": [
       "food",
       "health",
-      "supplies"
+      "supplies",
+      "hmis"
     ],
     "address": "7227 Penn Ave South",
     "city": "Richfield MN 55423",
@@ -8853,6 +9268,10 @@
       "Every Saturday from 2 – 4 p.m."
     ],
     "neighborhood": null,
+    "hmis": {
+      "agency": "VEAP, Inc.",
+      "matchedBy": "acronym VEAP"
+    },
     "notes": "or until food runs out VEAP's Mobile Food Pantry brings fresh produce and other healthy foods directly to people in our service area. All are welcome at the VEAP Mobile Food Pantry! Check our events calendar for detailed information on our distribution locations and schedule: https://veap.org/events/",
     "verification": {
       "status": "stale-import",
@@ -8886,6 +9305,7 @@
       "One Sunday per month (usually the first Sunday): 9am-1pm."
     ],
     "neighborhood": "Seward",
+    "hmis": null,
     "notes": "We are an appointment-only clinic. Due to extremely high demand, VeTouch books appointments 2 months out. Our appointment request form (available over email: vetouch@umn.edu) opens the morning after our monthly clinic. When we are at capacity we do not accept any new appointment requests.",
     "verification": {
       "status": "stale-import",
@@ -8917,6 +9337,7 @@
       "Monday-Thursday 5:30-7:30 PM (Virtual only)"
     ],
     "neighborhood": "Phillips",
+    "hmis": null,
     "notes": "Clinic hours: Free counseling by mobile phone or computer, no appointment, insurance, or identification needed. Services are available in Hmong and Spanish at this number: 612-870-0565. You may have to leave your number to be called back later. To get counseling by computer use this link: https://zoom.us/j/458270804. To get counseling by phone, go to https://walkin.org/ and use the phone numbers provided.",
     "verification": {
       "status": "stale-import",
@@ -8946,6 +9367,7 @@
       "On some Tuesdays and Thursdays, Sisters Camelot distributes additional organic produce and bread from 2:30-3:30pm (or until food is gone)."
     ],
     "neighborhood": "Midtown Phillips",
+    "hmis": null,
     "notes": "Groceries and to-go meals distributed every All are welcome. Dates get posted on facebook: https://www.facebook.com/SistersFoodshare",
     "verification": {
       "status": "stale-import",
@@ -8974,6 +9396,7 @@
       "2nd and 4th Tuesdays of each month: 2:30-5:30pm."
     ],
     "neighborhood": "North Suburbs",
+    "hmis": null,
     "notes": "Food and miscellaneous items are available at no cost to those in need from Andover, Blaine, Coon Rapids and Ham Lake. Please bring a valid photo ID along with a current utility bill (showing your current address) to each visit to the Food Shelf. The Way of the Lord Food Shelf is located on the campus of Way of the Lord Church on the north end of the property.",
     "verification": {
       "status": "stale-import",
@@ -9003,6 +9426,7 @@
       "Wednesday, Thursday, Friday: 9am - 2 pm"
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "Curbside pickup distribution hours: Donation hours: Donation details: Self-serve donation bins for non-perishable items only. Avoid glass items, and don't overfill the bin. If you wish to donate perishable items, 300+ lbs, or need a receipt, call 651-407-5331. All are welcome. No appointment needed.",
     "verification": {
       "status": "stale-import",
@@ -9031,6 +9455,7 @@
       "Distribution of food and personal care products is available to clients with the WeCAN service area Monday – Thursday, 9 a.m."
     ],
     "neighborhood": null,
+    "hmis": null,
     "notes": "Donations accepted: to 4:30 p.m. Western Communities Action Network (WeCAN) in Mound helps fight local hunger via its unique Mobile Market, which delivers food directly to low-income residents within their coverage area who have barriers to accessing a traditional food shelf.",
     "verification": {
       "status": "stale-import",
@@ -9056,6 +9481,7 @@
       "In-person shopping Monday, Tuesday, Wednesday, and Friday, 1-4pm."
     ],
     "neighborhood": "NE Suburbs",
+    "hmis": null,
     "notes": "All are welcome - no appointment needed! https://whitebearfoodshelf.org/",
     "verification": {
       "status": "stale-import",
@@ -9091,6 +9517,7 @@
       "Drop off Monday-Friday from 8:30am to 5:00pm"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "Drop-in open for youth ages 16-24: (Please note the drop-in center is closed on the following holidays: New Year’s Day, Martin Luther King, Jr. Day, Memorial Day, Juneteenth, Independence Day/Fourth of July, Labor Day, Thanksgiving Thursday and Friday, Christmas Eve/Christmas Day) YouthLink is a nonprofit in downtown Minneapolis that helps young people between the ages of 16 and 24 on their journeys from homeless to…",
     "verification": {
       "status": "stale-import",
@@ -9120,6 +9547,7 @@
       "Monday-Thursday: 5:00-5:30 pm"
     ],
     "neighborhood": "Payne-Phalen",
+    "hmis": null,
     "notes": "Free suppers and snacks for Saint Paul youth (18 and under) at the Arlington Hills Community Center! (https://youthprise.org/nutritionprogram/) Snack: Hot Supper: Through a partnership with Youthprise, free suppers and snacks are available at the Arlington Hills Community Center for youth 18 years of age and under. Schedules are subject to change based on programming needs.",
     "verification": {
       "status": "stale-import",
@@ -9148,6 +9576,7 @@
       "Monday-Thursday: 5:30-6:00pm"
     ],
     "neighborhood": "North End",
+    "hmis": null,
     "notes": "Free suppers and snacks for Saint Paul youth (18 and under) at the McDonough Recreation Center! (https://youthprise.org/nutritionprogram/) Snacks: Hot Supper: Through a partnership with Youthprise, free suppers and snacks are available at McDonough Recreation Center for youth 18 years of age and under. Schedules are subject to change based on programming needs.",
     "verification": {
       "status": "stale-import",
@@ -9176,6 +9605,7 @@
       "Monday-Thursday 5-6pm"
     ],
     "neighborhood": "West Seventh",
+    "hmis": null,
     "notes": "Free suppers and snacks for Saint Paul youth (18 and under) at the Palace Recreation Center! (https://youthprise.org/nutritionprogram/) Snacks: Supper: Through a partnership with Youthprise, free suppers and snacks are available at Palace Recreation Center for youth 18 years of age and under. Schedules are subject to change based on programming needs.",
     "verification": {
       "status": "stale-import",
@@ -9205,6 +9635,7 @@
       "Monday-Thursday: 4:45pm-5:15pm"
     ],
     "neighborhood": "North End",
+    "hmis": null,
     "notes": "Free suppers and snacks for Saint Paul youth (18 and under) at the Rice Recreation Center! (https://youthprise.org/nutritionprogram/) Snack: Hot Supper: Through a partnership with Youthprise, free suppers and snacks are available at Rice Recreation Center for youth 18 years of age and under. Schedules are subject to change based on programming needs.",
     "verification": {
       "status": "stale-import",
@@ -9233,6 +9664,7 @@
       "Youthprise serves snacks 3:30-7:30 pm Tuesday, Thursday, Saturday (https://youthprise.org/nutritionprogram/)"
     ],
     "neighborhood": "Ventura Village",
+    "hmis": null,
     "notes": "Sisters Camelot shares organic produce at this location on some Tuesday and Thursday afternoons. Watch Facebook for announcements about upcoming dates: https://www.facebook.com/SistersFoodshare/",
     "verification": {
       "status": "stale-import",
@@ -9257,6 +9689,7 @@
     "transit": "50-BUS-(2 blocks),60-BUS-(2 blocks),Blue-BLUELINE-(2 blocks)",
     "hours": null,
     "neighborhood": null,
+    "hmis": null,
     "notes": "ZACAH (Zakat, Aid and Charity Assisting Humanity) is a local 501c(3) that strives to provide support for residents of Minnesota facing poverty and the threat of displacement and unsheltered homelessness, especially from marginalized religious, socioeconomic and ethnic communities. As a grassroots organization with no large donors or grant funding, we are reliant on your trust and support.",
     "verification": {
       "status": "stale-import",
@@ -9283,6 +9716,7 @@
       "Every Thursday 1:00-3:00 pm."
     ],
     "neighborhood": "Midway",
+    "hmis": null,
     "notes": "Distributing a free home cooked meal to each individual and bag of groceries to take home for each household. Please do not arrive before 12:45pm unless you are a volunteer. https://www.zlcmidway.org/services",
     "verification": {
       "status": "stale-import",
@@ -9308,6 +9742,7 @@
       "Fourth Tuesday of each month: 1pm-3:30pm"
     ],
     "neighborhood": "South Suburbs",
+    "hmis": null,
     "notes": "Market Day takes place on the We have everything from fresh produce, meat, dairy, bread, canned goods, etc. Generally there is no limit to what you can take. You can come as early as 10am to get your number (which is your place in line), but food distribution begins at 1pm and ends a 3:30pm. You do not need to stay if you pick up your number early. Boxes will be provided for food.",
     "verification": {
       "status": "stale-import",

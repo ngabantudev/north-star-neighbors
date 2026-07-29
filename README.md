@@ -27,15 +27,16 @@ Current output: **323 sites** from 326 source rows.
 
 | Tag | Sites |
 | --- | ---: |
-| 🍲 Food | 285 |
-| 🧺 Supplies | 152 |
-| 🩺 Health | 66 |
-| 🛏️ Shelter & Warmth | 52 |
-| 🤝 Support Services | 33 |
+| Food | 285 |
+| Supplies | 152 |
+| Health | 66 |
+| Shelter & Warmth | 52 |
+| Support Services | 33 |
+| Housing Intake (HMIS) | 28 |
 
 Sites carry every tag that applies — about half provide more than one kind of
 aid, so a single category per site would have thrown information away. There
-are 26 distinct tag combinations.
+are 36 distinct tag combinations.
 
 ### ⚠️ It is stale, and nothing is confirmed
 
@@ -47,6 +48,40 @@ the authoritative fallbacks.
 This matters more here than in a normal app: someone without shelter walking
 across a city to a closed door pays a real cost for a wrong listing. Nothing in
 this repo has been checked against the organizations themselves.
+
+### The HMIS cross-reference
+
+`src/data/Agencies Participating In MN's HMIS-Grid view.csv` lists the 297
+agencies participating in Minnesota's Homeless Management Information System —
+the organizations that do intakes with people experiencing homelessness. An
+agency on that list is plugged into coordinated entry and can start a housing
+referral, which is a scarcer thing than a hot meal.
+
+```bash
+node scripts/match-hmis.mjs   # -> src/data/hmis-matches.json
+```
+
+**28 of the 323 sites** match, across 21 agencies. The output is committed so
+the matches can be read and corrected by hand; delete an entry to reject one.
+
+**HMIS participation is recorded per agency; this directory lists sites.** VEAP
+participates in HMIS, but that does not mean VEAP's mobile food pantry in a
+mosque parking lot can process housing paperwork. So the `hmis` tag claims only
+what the data supports — that the site is *run by* an HMIS agency — every card
+names the matched agency so a reader can judge it, and the card text says
+plainly "though not necessarily at this address."
+
+For the same reason `hmis` sits **last** in `categories.js`: it is a property of
+the operator, not a kind of aid, and a site's map colour should come from what
+it hands out rather than from its paperwork.
+
+The matcher is tuned for precision over recall — a missed match costs a filter
+hit, a false one tells someone sleeping outside that a food shelf can start
+their housing case. It matches on full-name containment and genuine acronyms
+only. An earlier, looser pass produced 71 matches including *Hennepin Technical
+College* ← *Hennepin County* and *Mother Jeanette Frazier Food Shelf* ←
+*Frazier Recovery Homes*; many entries in the abbreviation column are short
+names rather than acronyms, which is what caused it.
 
 ### Verifying the data
 
@@ -257,8 +292,10 @@ per the order in `categories.js`.
 src/
   data/TCMAP Public Data-Grid view.csv   the base reference
   data/anchors.json                      generated — do not edit
+  data/Agencies ... HMIS-Grid view.csv   HMIS agency list
   data/link-overrides.json               repaired URLs, layered over the CSV
-  data/categories.js                     the five tags; order is significant
+  data/hmis-matches.json                 site -> HMIS agency, reviewable
+  data/categories.js                     the six tags; order is significant
   lib/mapConfig.js                       all outbound network config, isolated
   lib/map.js                             lazy-loaded map behavior
   lib/icons.js                           Lucide sprite, inlined at build time
@@ -267,6 +304,7 @@ src/
   pages/index.astro                      sidebar, generated filter CSS, layout
 scripts/
   convert-tcmap.mjs                      CSV -> anchors.json
+  match-hmis.mjs                         cross-reference the HMIS agency list
   verify-links.mjs                       official-link liveness check
   verify-osm.mjs                         address cross-check via Nominatim
   vendor-css.mjs                         copies MapLibre CSS to public/
@@ -276,5 +314,6 @@ scripts/
 | --- | --- |
 | `npm run dev` / `build` | the site |
 | `npm run data` | regenerate `anchors.json` from the CSV |
+| `npm run hmis` | rebuild the HMIS matches, then re-run `data` |
 | `npm run verify:links` | check the 219 official links (~1 min) |
 | `npm run verify:osm` | cross-check addresses against OSM (~6 min) |

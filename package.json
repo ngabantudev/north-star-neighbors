@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "data": "node scripts/convert-tcmap.mjs",
+    "hmis": "node scripts/match-hmis.mjs && node scripts/convert-tcmap.mjs",
     "verify:links": "node scripts/verify-links.mjs",
     "verify:osm": "node scripts/verify-osm.mjs"
   },

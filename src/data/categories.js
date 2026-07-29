@@ -50,6 +50,22 @@ export const CATEGORIES = [
     blurb: 'Legal, immigration, education, case work',
     color: '#c9a227',
   },
+  /*
+   * Not a kind of aid but a property of the operator, which is why it sits
+   * last: primary tag is whichever comes first, and a site's marker should be
+   * coloured by what it hands out, never by its paperwork.
+   *
+   * HMIS participation is recorded per agency, not per site — see
+   * scripts/match-hmis.mjs. The label says "run by", not "does intakes here",
+   * because that is all the data supports.
+   */
+  {
+    id: 'hmis',
+    label: 'Housing Intake',
+    icon: 'clipboard-list',
+    blurb: "Run by an agency in Minnesota's HMIS — can start a housing referral",
+    color: '#d94f70',
+  },
 ];
 
 export const CATEGORY_BY_ID = Object.fromEntries(
