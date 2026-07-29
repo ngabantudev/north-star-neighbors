@@ -21,7 +21,7 @@ const countFor = (id) => anchors.filter((a) => a.categories.includes(id)).length
  */
 const combos = [...new Set(sorted.map((a) => a.categories.join(' ')))];
 
-const filterCss = combos
+const hideRules = combos
   .map((combo) => {
     const ids = combo.split(' ');
     const chain = CATEGORY_ORDER.filter((id) => ids.includes(id))
@@ -30,6 +30,22 @@ const filterCss = combos
     return `${chain} ~ .list > li[data-cats="${combo}"] { display: none; }`;
   })
   .join('\n');
+
+/*
+ * The "switched on" look for each chip, generated from the same list rather
+ * than hand-written. This was a hard-coded block of five selectors, and adding
+ * a sixth category left its chip permanently styled as if it were off.
+ */
+const chipRules = `${CATEGORIES.map(
+  (c) => `#f-${c.id}:checked ~ .filters .chip[for="f-${c.id}"]`
+).join(',\n')} {
+  color: var(--text);
+  border-color: var(--chip);
+  box-shadow: inset 0 0 0 1px var(--chip);
+  background: color-mix(in srgb, var(--chip) 14%, transparent);
+}`;
+
+const filterCss = `${hideRules}\n\n${chipRules}`;
 
 // Only what the map needs, so the inlined payload stays small.
 const mapPoints = anchors.map((a) => ({
@@ -207,17 +223,7 @@ const mapPoints = anchors.map((a) => ({
     }
     .chip-count { font-size: 0.72rem; font-variant-numeric: tabular-nums; opacity: 0.8; }
 
-    /* Checked is the default, so the "on" look keys off the input state. */
-    #f-shelter:checked ~ .filters .chip[for='f-shelter'],
-    #f-food:checked ~ .filters .chip[for='f-food'],
-    #f-health:checked ~ .filters .chip[for='f-health'],
-    #f-supplies:checked ~ .filters .chip[for='f-supplies'],
-    #f-support:checked ~ .filters .chip[for='f-support'] {
-      color: var(--text);
-      border-color: var(--chip);
-      box-shadow: inset 0 0 0 1px var(--chip);
-      background: color-mix(in srgb, var(--chip) 14%, transparent);
-    }
+    /* The checked/"on" chip styling is generated — see chipRules above. */
 
     .filter-input:focus-visible ~ .filters .chip { outline: 2px solid var(--accent); outline-offset: 2px; }
 
