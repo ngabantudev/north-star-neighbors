@@ -26,6 +26,19 @@ import { CATEGORY_ORDER, sortCategories } from '../src/data/categories.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(root, 'src/data/TCMAP Public Data-Grid view.csv');
 const OUT = resolve(root, 'src/data/anchors.json');
+const OVERRIDES = resolve(root, 'src/data/link-overrides.json');
+
+/**
+ * Corrections layered on top of the CSV. anchors.json is regenerated on every
+ * run, so a fix applied there would be wiped — repairs have to live here to
+ * survive. Produced by scripts/verify-links.mjs.
+ */
+let linkOverrides = {};
+try {
+  linkOverrides = JSON.parse(readFileSync(OVERRIDES, 'utf8')).urls || {};
+} catch {
+  // Optional file: converting without it just leaves the CSV's URLs alone.
+}
 
 /** RFC 4180-ish parser: quoted fields may contain commas and newlines. */
 function parseCsv(text) {
@@ -260,10 +273,24 @@ function extractHours(text) {
   return hits.length ? hits : null;
 }
 
-/** Collapses whitespace and trims the free-text blob to card length. */
-function tidyNotes(text, limit = 420) {
-  const flat = (text || '').replace(/\s+/g, ' ').trim();
+/**
+ * Collapses whitespace and trims the free-text blob to card length.
+ *
+ * Sentences already surfaced under Hours are dropped: the card renders both
+ * blocks, so keeping them would print the same opening times twice and charge
+ * the reader — and the page weight — for it 323 times over.
+ */
+function tidyNotes(text, hours, limit = 420) {
+  let flat = (text || '').replace(/\s+/g, ' ').trim();
   if (!flat) return null;
+
+  for (const line of hours || []) {
+    const quoted = line.replace(/…$/, '');
+    if (quoted.length > 12) flat = flat.split(quoted).join(' ');
+  }
+  flat = flat.replace(/\s+/g, ' ').replace(/^[\s.;,]+/, '').trim();
+  if (!flat) return null;
+
   if (flat.length <= limit) return flat;
   const cut = flat.slice(0, limit);
   const stop = cut.lastIndexOf('. ');
@@ -321,6 +348,7 @@ for (const row of body) {
   ])].filter((s) => !(s === 'By appointment' && banners.length));
 
   const transitRaw = get(row, 'public_transit');
+  const hours = extractHours(updates);
 
   anchors.push({
     id,
@@ -331,15 +359,15 @@ for (const row of body) {
     lat: coords.lat,
     lon: coords.lon,
     phone: extractPhone(updates),
-    url: extractUrl(updates),
+    url: linkOverrides[id] || extractUrl(updates),
     services,
     // Its own field, not a service chip: these strings list up to nine routes.
     transit: transitRaw && transitRaw !== '----' ? transitRaw : null,
     // Verbatim sentences from the listing, not structured times. Null when
     // the listing never states an hour. See extractHours().
-    hours: extractHours(updates),
+    hours,
     neighborhood: get(row, 'neighborhood') || null,
-    notes: tidyNotes(updates),
+    notes: tidyNotes(updates, hours),
     verification: {
       status: 'stale-import',
       source: 'Twin Cities Mutual Aid Project (TCMAP) public data export',
@@ -358,6 +386,7 @@ console.log(`read       ${body.length} rows`);
 console.log(`wrote      ${anchors.length} anchors -> src/data/anchors.json`);
 console.log(`tags       ${JSON.stringify(tally)}`);
 console.log(`           ${anchors.filter((a) => a.phone).length} with phone, ${anchors.filter((a) => a.url).length} with link`);
+console.log(`overrides  ${anchors.filter((a) => linkOverrides[a.id]).length} repaired links applied`);
 console.log(`           ${new Set(anchors.map((a) => a.categories.join(' '))).size} distinct tag combinations`);
 if (repaired.length) console.log(`repaired   ${repaired.length} flipped longitude: ${repaired.join(', ')}`);
 if (badCoords.length) console.log(`dropped    ${badCoords.length} with unusable coordinates: ${badCoords.join(', ')}`);

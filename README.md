@@ -48,6 +48,58 @@ This matters more here than in a normal app: someone without shelter walking
 across a city to a closed door pays a real cost for a wrong listing. Nothing in
 this repo has been checked against the organizations themselves.
 
+### Verifying the data
+
+Two checkers, both free and keyless. Neither proves an organization is still
+operating — that needs a human, or a Google Places key the repo doesn't have.
+
+```bash
+node scripts/verify-links.mjs --json report.json   # ~1 min
+node scripts/verify-osm.mjs   --json report.json   # ~6 min (rate-limited)
+```
+
+**`verify-links.mjs`** probes the 219 official links. It distinguishes cases a
+bare status check would conflate:
+
+| Verdict | Meaning |
+| --- | --- |
+| `ok` / `redirected` | answers, alive |
+| `stale-path` | page 404s but the domain answers — link rot, not closure |
+| `blocked` | 403, almost always a bot filter |
+| `parked` | redirects to a domain-sale lander — strong closure signal |
+| `dead-domain` | nothing answers at the origin either |
+
+Last run: 140 ok, 11 redirected, 64 stale-path, 1 parked, 3 dead-domain. The
+64 stale paths are repaired via `src/data/link-overrides.json`, which
+`convert-tcmap.mjs` layers over the CSV — `anchors.json` is regenerated every
+run, so a fix applied there would be wiped.
+
+The one unambiguous casualty is Lighthouse Church - Rosemount, whose domain
+has lapsed to an expired-domain lander.
+
+**`verify-osm.mjs`** geocodes every address with Nominatim and measures the
+distance to the stored coordinates. Last run: **243 match** (within 250m),
+**31 nearby**, **21 mismatch**, **28 not-found**.
+
+Read the mismatches carefully. Only 4 are real: those where Nominatim resolved
+an exact house number and still landed kilometres away. The other 17 are the
+geocoder falling back to a street centroid because it couldn't pin the number
+— an artifact of the check, not a bad coordinate. The four worth a human look:
+
+| Site | Off by |
+| --- | ---: |
+| Family Pathways - Cambridge Food Shelf | 5.1 km |
+| Keystone Foodmobile - Rice Street Library | 4.8 km |
+| Family Pathways - Chisago Area Food Shelf | 3.3 km |
+| Sisters' Camelot Food Share: St. Mary's | 2.4 km |
+
+Nominatim is a donated public service: the script holds itself to one request
+per second with an identifying User-Agent. **Don't raise the rate.**
+
+A clean pass from either script means the address is real and the website
+answers. It does not mean the door is open. Everything here is still
+`"status": "stale-import"`.
+
 ### What the converter has to work around
 
 The CSV was built for a live mutual aid dashboard, not a directory, so several
@@ -104,16 +156,54 @@ markers are reachable.
 ## What ships to the browser
 
 The entire directory is rendered at build time into a single HTML file. First
-paint needs `index.html` and one small stylesheet, plus ~4 kB of JavaScript.
+paint needs `index.html` and one small stylesheet, plus ~4.5 kB of JavaScript.
 
 MapLibre (~283 kB gzipped) and its stylesheet load **after** first paint, on
 idle. On a weak connection the directory is readable before the map arrives,
 and if the map never arrives the page still works.
 
-At 323 records the page is ~104 kB gzipped (~930 kB raw). That's one request
-with nothing following it, but it is the main thing to watch if the dataset
-grows — the free text in `notes` is the bulk of it, and trimming the 420-char
-cap in `tidyNotes()` is the cheapest lever.
+At 323 records the page is **~114 kB gzipped** (~1.1 MB raw) — one request with
+nothing following it.
+
+### Rendering
+
+Two things do the heavy lifting, and neither is about bytes:
+
+- **`content-visibility: auto`** on list rows. 323 cards is a lot of layout and
+  paint, nearly all of it offscreen; this lets the browser skip a row until it
+  is nearly in view, with `contain-intrinsic-size` supplying a placeholder
+  height so the scrollbar behaves. An open card is exempted via `:has()` so it
+  never skips while being read.
+- **The map is one GeoJSON source and one GL circle layer**, not 323 DOM
+  markers. Markers are absolutely-positioned elements the browser repositions
+  on every frame of every pan; this draws on the GPU and holds the DOM at a
+  constant size however far the dataset grows. Rotate and pitch are off and
+  `fadeDuration` is 0.
+
+Points are deliberately **not clustered** — every site is one dot at a fixed
+radius at every zoom, coloured by its primary tag. A cluster hides how many
+places are packed into a block, and people read this list counting on seeing
+all of them.
+
+### Icons
+
+Lucide, emitted as a single inline SVG sprite in `src/lib/icons.js`, with each
+use site a ~40-byte `<use>` reference. No icon font, no sprite request, no
+runtime JavaScript.
+
+Inlining the full markup at each site instead cost **21 kB gzipped**: with 323
+cards, an inline icon is an icon paid for 323 times. If page weight ever needs
+to come down, dropping icons from the repeated section headers is the cheapest
+~8 kB. `lucide-static` is a devDependency — nothing from it ships as a package,
+only the path data it contributes.
+
+### A byte lesson worth keeping
+
+Stripping the hours sentences out of `notes` (so the card doesn't print the
+same opening times twice) cut 8 kB of raw HTML but *raised* the gzipped size by
+2.5 kB. Duplicated text compresses to almost nothing, and removing it hurt the
+compression ratio more than it saved. It stayed for the reading experience, not
+for the bytes — measure gzipped, not raw.
 
 ## Privacy
 
@@ -167,12 +257,24 @@ per the order in `categories.js`.
 src/
   data/TCMAP Public Data-Grid view.csv   the base reference
   data/anchors.json                      generated — do not edit
+  data/link-overrides.json               repaired URLs, layered over the CSV
   data/categories.js                     the five tags; order is significant
   lib/mapConfig.js                       all outbound network config, isolated
   lib/map.js                             lazy-loaded map behavior
+  lib/icons.js                           Lucide sprite, inlined at build time
   components/AnchorCard.astro
+  layouts/Base.astro                     document shell + icon sprite
   pages/index.astro                      sidebar, generated filter CSS, layout
 scripts/
   convert-tcmap.mjs                      CSV -> anchors.json
+  verify-links.mjs                       official-link liveness check
+  verify-osm.mjs                         address cross-check via Nominatim
   vendor-css.mjs                         copies MapLibre CSS to public/
 ```
+
+| Script | What it does |
+| --- | --- |
+| `npm run dev` / `build` | the site |
+| `npm run data` | regenerate `anchors.json` from the CSV |
+| `npm run verify:links` | check the 219 official links (~1 min) |
+| `npm run verify:osm` | cross-check addresses against OSM (~6 min) |

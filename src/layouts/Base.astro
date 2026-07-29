@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { iconSprite } from '../lib/icons.js';
 
 const { title, description } = Astro.props;
 ---
@@ -21,6 +22,8 @@ const { title, description } = Astro.props;
     -->
   </head>
   <body>
+    <!-- Icon geometry, emitted once. Every icon on the page <use>s this. -->
+    <Fragment set:html={iconSprite()} />
     <a class="skip-link" href="#anchor-list">Skip to the resource list</a>
     <slot />
   </body>

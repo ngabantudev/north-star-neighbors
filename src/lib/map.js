@@ -4,21 +4,21 @@ import {
   DEFAULT_ZOOM,
   MAX_BOUNDS,
 } from './mapConfig.js';
-import { CATEGORY_BY_ID } from '../data/categories.js';
+import { CATEGORIES } from '../data/categories.js';
+
+const SOURCE = 'anchors';
 
 /**
- * Opens the sidebar card for an anchor and brings it into view. The card
- * itself is server-rendered, so this only ever toggles existing markup.
+ * Opens the sidebar card for a site and brings it into view. The card is
+ * server-rendered, so this only toggles markup that already exists.
  */
 function revealAnchor(id) {
   const details = document.getElementById(`anchor-${id}`);
   if (!details) return;
 
-  document
-    .querySelectorAll('details.anchor[open]')
-    .forEach((d) => {
-      if (d !== details) d.open = false;
-    });
+  for (const open of document.querySelectorAll('details.anchor[open]')) {
+    if (open !== details) open.open = false;
+  }
 
   details.open = true;
   details.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -40,21 +40,16 @@ function loadMapStyles() {
   });
 }
 
-/**
- * A site can offer several kinds of aid. The marker takes the colour and icon
- * of its primary tag — the scarcest one, per the order in categories.js — and
- * names the rest in its accessible label.
- */
-function makeMarkerEl(anchor, tags) {
-  const [primary] = tags;
-  const el = document.createElement('button');
-  el.type = 'button';
-  el.className = 'ns-marker';
-  el.style.setProperty('--marker', primary.color);
-  el.setAttribute('aria-label', `${anchor.name} — ${tags.map((t) => t.label).join(', ')}`);
-  el.textContent = primary.emoji;
-  if (tags.length > 1) el.dataset.multi = String(tags.length);
-  return el;
+const toFeature = (a) => ({
+  type: 'Feature',
+  geometry: { type: 'Point', coordinates: [a.lon, a.lat] },
+  properties: { id: a.id, name: a.name, primary: a.categories[0] },
+});
+
+/** Colour a point by its primary tag, via a data-driven `match`. */
+function primaryColorExpression() {
+  const cases = CATEGORIES.flatMap((c) => [c.id, c.color]);
+  return ['match', ['get', 'primary'], ...cases, '#8a94a6'];
 }
 
 export async function initMap(points) {
@@ -75,50 +70,98 @@ export async function initMap(points) {
     maxBounds: MAX_BOUNDS,
     attributionControl: { compact: true },
     // No geolocation control anywhere: the app never asks for coordinates.
+    // Cheaper to composite, and we draw no 3D or rotated labels.
+    pitchWithRotate: false,
+    dragRotate: false,
+    refreshExpiredTiles: false,
+    fadeDuration: 0,
   });
 
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
   map.addControl(new maplibregl.ScaleControl({ unit: 'imperial' }), 'bottom-left');
 
-  const markers = new Map();
+  // A bad font or sprite shouldn't take the page down with it.
+  map.on('error', (e) => console.warn('[map]', e?.error?.message || e));
 
-  for (const anchor of points) {
-    const tags = (anchor.categories || []).map((id) => CATEGORY_BY_ID[id]).filter(Boolean);
-    if (!tags.length) continue;
+  const features = points.map(toFeature);
+  const byId = new Map(points.map((p) => [p.id, p]));
 
-    const el = makeMarkerEl(anchor, tags);
-    el.addEventListener('click', () => revealAnchor(anchor.id));
+  await new Promise((resolve) => map.once('load', resolve));
 
-    const marker = new maplibregl.Marker({ element: el })
-      .setLngLat([anchor.lon, anchor.lat])
-      .addTo(map);
+  /*
+   * One GeoJSON source instead of 323 DOM markers. Markers are
+   * absolutely-positioned elements that the browser must reposition on every
+   * frame of every pan and zoom; this draws on the GPU and keeps the DOM at
+   * a constant size no matter how much the dataset grows.
+   */
+  // Not clustered: every site is one point, drawn at the same size at every
+  // zoom. A cluster hides how many places are packed into a block, and this
+  // directory is read by people counting on seeing all of them.
+  map.addSource(SOURCE, {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features },
+  });
 
-    markers.set(anchor.id, { marker, el, categories: anchor.categories });
-  }
+  map.addLayer({
+    id: 'points',
+    type: 'circle',
+    source: SOURCE,
+    paint: {
+      'circle-color': primaryColorExpression(),
+      'circle-radius': 7,
+      'circle-stroke-color': '#0f1115',
+      'circle-stroke-width': 1.5,
+    },
+  });
 
-  // Keep the markers in step with the CSS-driven sidebar filters. Matches the
-  // list's rule: a site shows while any one of its tags is still checked.
+  // --- interaction ---------------------------------------------------------
+
+  map.on('click', 'points', (e) => {
+    const hit = e.features?.[0];
+    if (hit) revealAnchor(hit.properties.id);
+  });
+
+  map.on('mouseenter', 'points', () => { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'points', () => { map.getCanvas().style.cursor = ''; });
+
+  const popup = new maplibregl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+    offset: 12,
+  });
+
+  map.on('mouseenter', 'points', (e) => {
+    const hit = e.features?.[0];
+    if (!hit) return;
+    popup.setLngLat(hit.geometry.coordinates).setText(hit.properties.name).addTo(map);
+  });
+  map.on('mouseleave', 'points', () => popup.remove());
+
+  // --- filtering -----------------------------------------------------------
+
   const syncFilters = () => {
-    for (const { el, categories } of markers.values()) {
-      el.hidden = !categories.some((id) => {
-        const box = document.getElementById(`f-${id}`);
-        return box ? box.checked : true;
-      });
-    }
+    const on = new Set(
+      CATEGORIES.map((c) => c.id).filter((id) => document.getElementById(`f-${id}`)?.checked)
+    );
+    const visible = on.size === CATEGORIES.length
+      ? features
+      : features.filter((f) => byId.get(f.properties.id).categories.some((c) => on.has(c)));
+
+    map.getSource(SOURCE)?.setData({ type: 'FeatureCollection', features: visible });
   };
 
-  document
-    .querySelectorAll('.filter-input')
-    .forEach((box) => box.addEventListener('change', syncFilters));
+  for (const box of document.querySelectorAll('.filter-input')) {
+    box.addEventListener('change', syncFilters);
+  }
   syncFilters();
 
   // Opening a card from the list pans the map to match.
-  document.querySelectorAll('details.anchor').forEach((details) => {
+  for (const details of document.querySelectorAll('details.anchor')) {
     details.addEventListener('toggle', () => {
       if (!details.open) return;
-      const entry = markers.get(details.dataset.anchorId);
-      if (!entry) return;
-      map.easeTo({ center: entry.marker.getLngLat(), zoom: Math.max(map.getZoom(), 13) });
+      const point = byId.get(details.dataset.anchorId);
+      if (!point) return;
+      map.easeTo({ center: [point.lon, point.lat], zoom: Math.max(map.getZoom(), 14) });
     });
-  });
+  }
 }

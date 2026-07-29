@@ -10,10 +10,16 @@
     "prebuild": "node scripts/vendor-css.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "data": "node scripts/convert-tcmap.mjs",
+    "verify:links": "node scripts/verify-links.mjs",
+    "verify:osm": "node scripts/verify-osm.mjs"
   },
   "dependencies": {
     "astro": "^5.2.5",
     "maplibre-gl": "^5.1.0"
+  },
+  "devDependencies": {
+    "lucide-static": "^1.27.0"
   }
 }

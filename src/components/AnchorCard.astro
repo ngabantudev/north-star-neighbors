@@ -1,10 +1,19 @@
 ---
 import { CATEGORY_BY_ID } from '../data/categories.js';
+import { icon } from '../lib/icons.js';
 
 const { anchor } = Astro.props;
 const tags = anchor.categories.map((id) => CATEGORY_BY_ID[id]).filter(Boolean);
 const primary = tags[0];
 const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${anchor.city}`);
+
+// Rendered once per card; the SVG markup is baked in at build time.
+const phoneIcon = icon('phone', { size: 15 });
+const linkIcon = icon('external-link', { size: 15 });
+const navIcon = icon('navigation', { size: 15 });
+const clockIcon = icon('clock', { size: 13 });
+const transitIcon = icon('bus-front', { size: 13 });
+const warnIcon = icon('triangle-alert', { size: 13 });
 ---
 
 <details class="anchor" id={`anchor-${anchor.id}`} data-anchor-id={anchor.id}>
@@ -18,7 +27,7 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
       <span class="tags">
         {tags.map((t) => (
           <span class="tag" style={`--tag:${t.color}`}>
-            <span aria-hidden="true">{t.emoji}</span> {t.label}
+            <Fragment set:html={icon(t.icon, { size: 12 })} />{t.label}
           </span>
         ))}
       </span>
@@ -28,13 +37,15 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
   <div class="body">
     <p class="full-address">{anchor.address}<br />{anchor.city}</p>
 
-    <h4>Hours</h4>
+    <h4><Fragment set:html={clockIcon} />Hours</h4>
     {anchor.hours ? (
       <>
         <ul class="hours">
           {anchor.hours.map((h) => <li>{h}</li>)}
         </ul>
-        <p class="caveat">Quoted from the listing, unverified. Call ahead.</p>
+        <p class="caveat">
+          <Fragment set:html={warnIcon} />Quoted from the listing, unverified. Call ahead.
+        </p>
       </>
     ) : (
       <p class="unknown">
@@ -61,7 +72,7 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
 
     {anchor.transit && (
       <>
-        <h4>Transit</h4>
+        <h4><Fragment set:html={transitIcon} />Transit</h4>
         <p class="transit">{anchor.transit.replace(/,/g, ', ')}</p>
       </>
     )}
@@ -69,12 +80,12 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
     <div class="contact">
       {anchor.phone && (
         <a class="btn" href={`tel:${anchor.phone.replace(/[^0-9+]/g, '')}`}>
-          Call {anchor.phone}
+          <Fragment set:html={phoneIcon} />Call {anchor.phone}
         </a>
       )}
       {anchor.url && (
         <a class="btn" href={anchor.url} rel="noopener noreferrer nofollow" target="_blank">
-          Official page
+          <Fragment set:html={linkIcon} />Official page
         </a>
       )}
       <a
@@ -83,7 +94,7 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
         rel="noopener noreferrer nofollow"
         target="_blank"
       >
-        Directions
+        <Fragment set:html={navIcon} />Directions
       </a>
     </div>
 
@@ -98,6 +109,16 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
 
 <style>
   .anchor { border-bottom: 1px solid var(--line); }
+
+  /* Inline Lucide SVGs. They inherit colour from their container. */
+  .anchor :global(.icon) {
+    flex: none;
+    vertical-align: -0.125em;
+  }
+
+  h4 :global(.icon), .caveat :global(.icon) { margin-right: 5px; }
+  .tag :global(.icon) { margin-right: 4px; }
+  .btn :global(.icon) { margin-right: 7px; }
 
   summary {
     display: flex;
@@ -127,6 +148,8 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
 
   .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
   .tag {
+    display: inline-flex;
+    align-items: center;
     font-size: 0.68rem;
     line-height: 1.6;
     padding: 1px 7px;
@@ -142,6 +165,8 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
   .full-address { margin: 0 0 14px; font-size: 0.92rem; line-height: 1.45; }
 
   h4 {
+    display: flex;
+    align-items: center;
     margin: 14px 0 6px;
     font-size: 0.72rem;
     letter-spacing: 0.08em;
@@ -171,6 +196,8 @@ const mapsQuery = encodeURIComponent(`${anchor.name}, ${anchor.address}, ${ancho
   }
 
   .caveat {
+    display: flex;
+    align-items: center;
     margin: 8px 0 0;
     font-size: 0.76rem;
     color: var(--muted);

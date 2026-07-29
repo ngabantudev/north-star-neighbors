@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import AnchorCard from '../components/AnchorCard.astro';
 import anchors from '../data/anchors.json';
 import { CATEGORIES, CATEGORY_ORDER } from '../data/categories.js';
+import { icon } from '../lib/icons.js';
 
 const sorted = [...anchors].sort((a, b) => a.name.localeCompare(b.name));
 
@@ -64,7 +65,7 @@ const mapPoints = anchors.map((a) => ({
         {
           CATEGORIES.map((c) => (
             <label class="chip" for={`f-${c.id}`} style={`--chip:${c.color}`} title={c.blurb}>
-              <span class="emoji" aria-hidden="true">{c.emoji}</span>
+              <Fragment set:html={icon(c.icon, { size: 14 })} />
               <span class="chip-label">{c.label}</span>
               <span class="chip-count">{countFor(c.id)}</span>
             </label>
@@ -97,7 +98,7 @@ const mapPoints = anchors.map((a) => ({
               rel="noopener noreferrer"
               target="_blank"
             >
-              Donate to Rising Waters
+              <Fragment set:html={icon('heart', { size: 15 })} />Donate to Rising Waters
             </a>
             <a
               class="support-link"
@@ -221,6 +222,29 @@ const mapPoints = anchors.map((a) => ({
     .filter-input:focus-visible ~ .filters .chip { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .list { margin: 0; padding: 0; list-style: none; flex: 1 0 auto; }
+
+    /*
+     * 323 cards is a lot of layout and paint for a browser to do up front,
+     * and almost all of it is offscreen. content-visibility lets it skip
+     * rendering a row until the row is nearly in view; contain-intrinsic-size
+     * supplies a placeholder height so the scrollbar still behaves and the
+     * saved work isn't undone by constant re-measuring.
+     *
+     * The markup is unchanged, so this costs nothing where it isn't
+     * supported, and Ctrl+F still finds collapsed rows in Chromium.
+     */
+    .list > li {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 76px;
+    }
+
+    /* An open card is being read — never let it skip rendering. */
+    .list > li:has(details[open]) {
+      content-visibility: visible;
+      contain-intrinsic-size: none;
+    }
+
+    .donate :global(.icon), .chip :global(.icon) { flex: none; }
 
     .colophon {
       padding: 16px 14px 28px;
