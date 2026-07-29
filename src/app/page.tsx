@@ -14,6 +14,7 @@ import { useTemperatureLayer } from '@/components/TemperatureLayer';
 import { useWeatherLayer } from '@/components/WeatherLayerProvider';
 import { useWeatherMap } from '@/hooks/useWeatherMap';
 import { expireDrop } from '@/app/actions';
+import { fetchDrop } from '@/lib/dropClient';
 import { type DropSummary, type TravelMode } from '@/lib/types';
 import { TEMPERATURE_GRADIENT_CSS } from '@/lib/temperatureColor';
 import type { LatLngBounds } from '@/lib/weatherMapPoints';
@@ -104,12 +105,9 @@ function HomePageInner() {
 
   const refreshMine = useCallback(async () => {
     const results = await Promise.all(
-      records.map(async (r) => {
-        const res = await fetch(`/api/drops/${r.dropId}`);
-        if (!res.ok) return null;
-        const data: { drop: DropSummary } = await res.json();
-        return data.drop;
-      }),
+      // The ownership token is what authorizes reading a pin that's no longer
+      // on the public map — without it the server treats it as someone else's.
+      records.map((r) => fetchDrop(r.dropId, r.token)),
     );
     const found = results.filter((d): d is DropSummary => d !== null);
     setMyDropDetails(Object.fromEntries(found.map((d) => [d.id, d])));

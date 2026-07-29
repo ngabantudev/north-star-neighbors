@@ -1,3 +1,11 @@
+/**
+ * Header a client proves drop ownership with on the drop read routes. Lives
+ * here (not in dropAccess.ts) so the browser can import it without dragging
+ * the server-only db/crypto modules into the client bundle. See
+ * @/lib/dropAccess for the rule it feeds.
+ */
+export const DROP_TOKEN_HEADER = 'x-drop-token';
+
 export type DropCategory = 'produce' | 'coats' | 'medical' | 'water' | 'baby' | 'general';
 
 export type DropStatus = 'AVAILABLE' | 'CLAIMED' | 'COMPLETED' | 'HIDDEN';

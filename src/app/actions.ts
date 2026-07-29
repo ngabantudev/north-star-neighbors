@@ -441,9 +441,9 @@ export async function cancelDrop(input: { dropId: string; token: string; deviceH
       delete from drops
       where id = ${input.dropId}
         and (provider_token_hash = ${tokenHash} or claimant_token_hash = ${tokenHash})
-      returning id, anchor_id, categories, location_type
+      returning id, anchor_id, categories, location_type, provider_token_hash
     )
-    select d.categories, d.location_type, a.name as anchor_name
+    select d.categories, d.location_type, d.provider_token_hash, a.name as anchor_name
     from deleted d
     left join civic_anchors a on a.id = d.anchor_id
   `;
@@ -452,11 +452,16 @@ export async function cancelDrop(input: { dropId: string; token: string; deviceH
   const canceled = rows[0] as {
     categories: DropCategory[];
     location_type: DropLocationType;
+    provider_token_hash: string;
     anchor_name: string | null;
   };
 
   // Actor stays 'anonymous': both the provider and the claimant can cancel, so
-  // naming one would tell the feed who was holding the pin.
+  // naming one would tell the feed who was holding the pin. For the same reason
+  // no truncated token hash goes in the metadata either — a stable per-identity
+  // prefix would re-link every cancellation by the same person, defeating the
+  // anonymity the actor field is careful to preserve, and it sits in the one
+  // table whose whole purpose is to be published.
   await writeLedger({
     actorHandle: 'anonymous',
     eventType: 'CANCELED',
@@ -464,7 +469,7 @@ export async function cancelDrop(input: { dropId: string; token: string; deviceH
     anchorName: canceled.anchor_name,
     locationType: canceled.location_type,
     categories: canceled.categories,
-    metadata: { canceledByTokenHash: tokenHash.slice(0, 12) + '...' },
+    metadata: { canceledByRole: tokenHash === canceled.provider_token_hash ? 'provider' : 'claimant' },
   });
 
   return { ok: true, data: null };

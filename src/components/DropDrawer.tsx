@@ -9,6 +9,7 @@ import { AvatarBadge } from '@/components/AvatarBadge';
 import { formatCountdown } from '@/lib/time';
 import { formatDistance, osmDirectionsUrl } from '@/lib/distance';
 import { estimateEtaMinutes, haversineMeters } from '@/lib/routing';
+import { useDropPhoto } from '@/hooks/useDropPhoto';
 
 export interface MyDropRecord {
   dropId: string;
@@ -53,6 +54,7 @@ export function DropDrawer({
   const [remaining, setRemaining] = useState(() => new Date(drop.expiresAt).getTime() - Date.now());
   const [route, setRoute] = useState<RouteRequest | null>(null);
   const [routeError, setRouteError] = useState<string | null>(null);
+  const photoUrl = useDropPhoto(drop.id, drop.hasPhoto, myRecord?.token ?? null);
 
   useEffect(() => {
     const tick = () => setRemaining(new Date(drop.expiresAt).getTime() - Date.now());
@@ -160,10 +162,10 @@ export function DropDrawer({
         </button>
       </div>
 
-      {drop.hasPhoto && (
+      {photoUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={`/api/drops/${drop.id}/photo`}
+          src={photoUrl}
           alt="Photo of the supplies"
           className="mb-3 h-40 w-full rounded-lg object-cover ring-1 ring-slate-200"
         />
